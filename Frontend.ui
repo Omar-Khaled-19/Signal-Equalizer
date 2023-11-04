@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Signal Equalizer</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #1e1e2f;
@@ -83,7 +83,7 @@ color:white;</string>
          <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="iconSize">
          <size>
@@ -143,7 +143,7 @@ color:white;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Uinform_Range_Input_Signal_Graph">
+                     <widget class="PlotWidget" name="Uinform_Range_Input_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -180,7 +180,7 @@ color:white;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Uniform_Range_Input_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Uniform_Range_Input_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -236,7 +236,7 @@ color:white;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Uniform_Range_Output_Signal_Graph">
+                     <widget class="PlotWidget" name="Uniform_Range_Output_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -273,7 +273,7 @@ color:white;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Uniform_Range_Output_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Uniform_Range_Output_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -581,7 +581,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>../Task 1/Signal-Viewer/Assets/zoom-out.png</normaloff>../Task 1/Signal-Viewer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -782,7 +782,7 @@ border-radius: 14px;</string>
                     </property>
                     <layout class="QGridLayout" name="gridLayout_10">
                      <item row="3" column="1" rowspan="2">
-                      <widget class="QGraphicsView" name="Uniform_Range_Smoothing_Window_Graph"/>
+                      <widget class="PlotWidget" name="Uniform_Range_Smoothing_Window_Graph"/>
                      </item>
                      <item row="0" column="0" colspan="2">
                       <spacer name="verticalSpacer">
@@ -1896,7 +1896,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Musical_Instruments_Input_Signal_Graph">
+                     <widget class="PlotWidget" name="Musical_Instruments_Input_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -1933,7 +1933,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Musical_Instruments_Input_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Musical_Instruments_Input_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -1989,7 +1989,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Musical_Instruments_Output_Signal_Graph">
+                     <widget class="PlotWidget" name="Musical_Instruments_Output_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -2026,7 +2026,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Musical_Instruments_Output_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Musical_Instruments_Output_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -2897,7 +2897,7 @@ border-radius: 14px;</string>
                       </layout>
                      </item>
                      <item row="3" column="1" rowspan="2">
-                      <widget class="QGraphicsView" name="Musical_Instruments_Smoothing_Window_Graph"/>
+                      <widget class="PlotWidget" name="Musical_Instruments_Smoothing_Window_Graph"/>
                      </item>
                      <item row="2" column="0" colspan="2">
                       <spacer name="verticalSpacer_3">
@@ -3316,7 +3316,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Animal_Sounds_Input_Signal_Graph">
+                     <widget class="PlotWidget" name="Animal_Sounds_Input_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -3353,7 +3353,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Animal_Sounds_Input_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Animal_Sounds_Input_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -3409,7 +3409,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Animal_Sounds_Output_Signal_Graph">
+                     <widget class="PlotWidget" name="Animal_Sounds_Output_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -3446,7 +3446,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="Animal_Sounds_Output_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="Animal_Sounds_Output_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -3895,7 +3895,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>../Task 1/Signal-Viewer/Assets/zoom-out.png</normaloff>../Task 1/Signal-Viewer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4155,7 +4155,7 @@ border-radius: 14px;</string>
                       </layout>
                      </item>
                      <item row="3" column="1" rowspan="2">
-                      <widget class="QGraphicsView" name="Animal_Sounds_Smoothing_Window_Graph"/>
+                      <widget class="PlotWidget" name="Animal_Sounds_Smoothing_Window_Graph"/>
                      </item>
                      <item row="2" column="0" colspan="2">
                       <spacer name="verticalSpacer_5">
@@ -4719,7 +4719,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="ECG_Abnormalities_Input_Signal_Graph">
+                     <widget class="PlotWidget" name="ECG_Abnormalities_Input_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -4756,7 +4756,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="ECG_Abnormalities_Input_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="ECG_Abnormalities_Input_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -4812,7 +4812,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="ECG_Abnormalities_Output_Signal_Graph">
+                     <widget class="PlotWidget" name="ECG_Abnormalities_Output_Signal_Graph">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -4849,7 +4849,7 @@ border-radius: 14px;</string>
                      </widget>
                     </item>
                     <item row="1" column="0">
-                     <widget class="QGraphicsView" name="ECG_Abnormalities_Output_Signal_Spectrogram">
+                     <widget class="PlotWidget" name="ECG_Abnormalities_Output_Signal_Spectrogram">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                         <horstretch>0</horstretch>
@@ -5558,7 +5558,7 @@ border-radius: 14px;</string>
                       </layout>
                      </item>
                      <item row="3" column="1" rowspan="2">
-                      <widget class="QGraphicsView" name="ECG_Abnormalities_Smoothing_Window_Graph"/>
+                      <widget class="PlotWidget" name="ECG_Abnormalities_Smoothing_Window_Graph"/>
                      </item>
                      <item row="1" column="0" colspan="2">
                       <layout class="QGridLayout" name="gridLayout_73">
@@ -6065,6 +6065,13 @@ border-radius: 14px;</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
