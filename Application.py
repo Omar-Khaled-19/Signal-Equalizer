@@ -770,7 +770,7 @@ class Ui_Form(object):
         self.gridLayout_4.addWidget(self.frame_6, 3, 0, 1, 1)
         self.gridLayout_3.addWidget(self.frame_2, 0, 0, 1, 1)
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("../Task 2/Sampling-Theory-Studio/Assets/radio-waves.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon7.addPixmap(QtGui.QPixmap("Assets/radio-waves.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.addTab(self.widget, icon7, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
