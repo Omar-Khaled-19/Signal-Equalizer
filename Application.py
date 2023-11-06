@@ -2464,7 +2464,8 @@ class Ui_Form(object):
         self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: self.ECG_time_graph.reset())
         self.ECG_Abnormalities_Signal_Speed_Slider.valueChanged.connect(lambda: self.ECG_time_graph.update_speed())
         self.ECG_Abnormalities_Stop_Button.clicked.connect(lambda: self.ECG_time_graph.stop())
-
+        self.ECG_Abnormalities_Zooming_In_Button.clicked.connect(lambda: self.ECG_time_graph.zoomin())
+        self.ECG_Abnormalities_Zooming_Out_Button.clicked.connect(lambda: self.ECG_time_graph.zoomout())
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

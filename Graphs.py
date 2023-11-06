@@ -13,6 +13,7 @@ class TimeGraph:
         self.speed = 1
         self.X_Coordinates = []
         self.Y_Coordinates = []
+        self.stopped = False
 
     def load_csv(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -29,9 +30,9 @@ class TimeGraph:
             Record = wfdb.rdrecord(File_Path[:-4])
             self.Y_Coordinates = list(Record.p_signal[:1000, 0])
             self.X_Coordinates = list(np.arange(len(self.Y_Coordinates)))
+            self.stopped = False
             self.plot_signal()
-            self.UI.ECG_Abnormalities_Signal_Speed_Slider.setValue(1)
-
+            
     def plot_signal(self):
         self.graph_widget.setLimits(xMin=0, xMax=float('inf'))
         self.data_line = self.graph_widget.plot(self.X_Coordinates[:1], self.Y_Coordinates[:1],pen="g")
@@ -41,7 +42,7 @@ class TimeGraph:
         self.timer.start()
 
     def update_plot_data(self):
-        if not self.paused:    
+        if not self.paused and not self.stopped:    
             self.X_Points_Plotted += self.speed
             self.data_line.setData(self.X_Coordinates[0 : self.X_Points_Plotted + 1], self.Y_Coordinates[0 : self.X_Points_Plotted + 1])
             self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 100, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
@@ -63,7 +64,16 @@ class TimeGraph:
         self.speed = self.UI.ECG_Abnormalities_Signal_Speed_Slider.value()
 
     def stop(self):
+        self.stopped = True
         self.graph_widget.clear()
+        self.graph_widget.getViewBox().setXRange(0,100)
+        self.X_Points_Plotted = 0
+
+    def zoomin(self):
+        self.graph_widget.getViewBox().scaleBy((0.9, 0.9))
+
+    def zoomout(self):
+        self.graph_widget.getViewBox().scaleBy((1.1,1.1))
 
 
 class FrequencyGraph:
