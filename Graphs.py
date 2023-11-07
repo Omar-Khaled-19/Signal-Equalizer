@@ -1,7 +1,11 @@
 from PyQt5 import QtCore, QtGui
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
 import pandas as pd
 import wfdb, numpy as np
+from scipy.io import wavfile
+import pyaudio
 
 class TimeGraph:
     
@@ -10,25 +14,33 @@ class TimeGraph:
         self.graph_widget = graph_widget
         self.X_Points_Plotted = 0
         self.paused = False
-        self.speed = 1
+        self.speed = 10
         self.X_Coordinates = []
         self.Y_Coordinates = []
         self.stopped = False
 
-    def load_csv(self):
+    def load_wav(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        if File_Path:
-            Coordinates_List = ["x", "y"]
-            Signal = pd.read_csv(File_Path, usecols=Coordinates_List)
-            self.X_Coordinates = Signal["x"]
-            self.Y_Coordinates = Signal["y"]
-            self.plot_signal()
+        self.sample_rate, self.audio_data = wavfile.read(File_Path)
+
+        self.X_Coordinates = np.arange(len(self.audio_data)) / self.sample_rate
+        self.Y_Coordinates = self.audio_data
+        self.player = QMediaPlayer()
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+        self.plot_signal()
+
+        # Set up the audio player with pyaudio
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt16,  # or paFloat32 depending on your data
+                                  channels=1,
+                                  rate=self.sample_rate,
+                                  output=True)
 
     def load_ecg(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if File_Path:
             Record = wfdb.rdrecord(File_Path[:-4])
-            self.Y_Coordinates = list(Record.p_signal[:1000, 0])
+            self.Y_Coordinates = list(Record.p_signal[:, 0])
             self.X_Coordinates = list(np.arange(len(self.Y_Coordinates)))
             self.stopped = False
             self.plot_signal()
@@ -40,13 +52,23 @@ class TimeGraph:
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
+        self.player.play()
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:    
             self.X_Points_Plotted += self.speed
+            end_index = min(self.X_Points_Plotted, len(self.Y_Coordinates))
+
             self.data_line.setData(self.X_Coordinates[0 : self.X_Points_Plotted + 1], self.Y_Coordinates[0 : self.X_Points_Plotted + 1])
-            self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 100, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
+            if self.graph_widget == self.UI.ECG_Abnormalities_Input_Signal_Graph:
+                self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 200, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
+            else:
+                self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 1, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
         
+                start_byte = self.X_Points_Plotted * 2
+                end_byte = end_index * 2
+                self.stream.write(self.audio_data[start_byte:end_byte])
+
     def toggle_pause(self):
         self.paused = not self.paused
         icon = QtGui.QIcon()
@@ -60,8 +82,8 @@ class TimeGraph:
     def reset(self):
         self.X_Points_Plotted = 0
 
-    def update_speed(self):
-        self.speed = self.UI.ECG_Abnormalities_Signal_Speed_Slider.value()
+    def update_speed(self,slider):
+        self.speed = 10*slider.value()
 
     def stop(self):
         self.stopped = True
