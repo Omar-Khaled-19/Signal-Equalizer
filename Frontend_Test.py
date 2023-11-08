@@ -8,7 +8,7 @@ class Ui_Form(object):
         Form.resize(1333, 1500)
         Form.setMinimumSize(QtCore.QSize(0, 920))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../Sampling-Theory-Studio/Assets/performance.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("Assets/performance.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         Form.setStyleSheet("background-color: #1e1e2f;\n""color:white;\n""")
         self.gridLayout_2 = QtWidgets.QGridLayout(Form)
