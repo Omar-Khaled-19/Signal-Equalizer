@@ -213,7 +213,7 @@ class Ui_Form(object):
         self.Smoothing_Window_Frequency_Slider.setSizePolicy(sizePolicy)
         self.Smoothing_Window_Frequency_Slider.setMinimumSize(QtCore.QSize(0, 29))
         self.Smoothing_Window_Frequency_Slider.setMinimum(0)
-        self.Smoothing_Window_Frequency_Slider.setMaximum(10)
+        self.Smoothing_Window_Frequency_Slider.setMaximum(100)
         self.Smoothing_Window_Frequency_Slider.setSingleStep(0)
         self.Smoothing_Window_Frequency_Slider.setPageStep(0)
         self.Smoothing_Window_Frequency_Slider.setProperty("value", 0)
@@ -1908,6 +1908,15 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
         self.ECG_time_graph = TimeGraph(self,self.ECG_Abnormalities_Original_Signal_PlotWidget)
+        # doesnot make sense at all but leaving it here for the time
+        self.ECG_freq_graph = FrequencyGraph(self, self.ECG_Abnormalities_Frequency_Domain_PlotWidget, self.ECG_time_graph, self.Smoothing_Window_PlotWidget) 
+        self.Smoothing_Window_Gaussian_Radio_Button.clicked.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        self.Smoothing_Window_Rectangle_Radio_Button.clicked.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        self.Smoothing_Window_Hamming_Radio_Button.clicked.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        self.Smoothing_Window_Hanning_Radio_Button.clicked.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        self.Smoothing_Window_Frequency_Slider.valueChanged.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        self.Smoothing_Window_Amplitude_Slider.valueChanged.connect(lambda: self.ECG_freq_graph.plot_smoothing())
+        ##################################################################################
         self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: self.ECG_time_graph.load_ecg())
         self.ECG_Abnormalities_Play_Pause_Button.clicked.connect(lambda: self.ECG_time_graph.toggle_pause())
         self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: self.ECG_time_graph.reset())

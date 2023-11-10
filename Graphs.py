@@ -8,6 +8,9 @@ import wfdb, numpy as np
 from scipy.io import wavfile
 import pyaudio
 from scipy import signal
+from scipy.signal.windows import get_window
+from scipy.signal.windows import boxcar
+import math
 
 class TimeGraph:
     
@@ -20,6 +23,7 @@ class TimeGraph:
         self.X_Coordinates = []
         self.Y_Coordinates = []
         self.stopped = False
+        self.sample_rate = 0
 
     def load_wav(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -102,11 +106,51 @@ class TimeGraph:
 
 class FrequencyGraph:
 
-    def __init__(self):
-        pass
+    def __init__(self, ui, freq_widget, input_widget, smoothing_widget):
+        self.input_graph = input_widget
+        self.ui_window = ui
+        self.freq_graph = freq_widget
+        self.smoothing_graph = smoothing_widget
+        self.current_smoothing = None
+        self.sampling_rate = input_widget.sample_rate
+        self.x_coordinates = input_widget.X_Coordinates
+        
+    
+    def smoothing_window(self):
+        # Check which radio button is selected
+        if self.ui_window.Smoothing_Window_Hamming_Radio_Button.isChecked():
+            # Generate Hamming window
+            hamming_window = get_window('hamming', self.ui_window.Smoothing_Window_Frequency_Slider.value())
+            # Scale the Hamming window to the desired amplitude
+            scaled_hamming_window = self.ui_window.Smoothing_Window_Amplitude_Slider.value() * hamming_window / np.max(hamming_window)
+            return (scaled_hamming_window)
+        
+        elif self.ui_window.Smoothing_Window_Hanning_Radio_Button.isChecked():
+            # Generate Hanning window
+            hanning_window = get_window('hann', self.ui_window.Smoothing_Window_Frequency_Slider.value())
+            # Scale the Hanning window to the desired amplitude
+            scaled_hanning_window = self.ui_window.Smoothing_Window_Amplitude_Slider.value() * hanning_window / np.max(hanning_window)
+            return (scaled_hanning_window)
+        
+        elif self.ui_window.Smoothing_Window_Rectangle_Radio_Button.isChecked():
+            # generate and adjust the height as desired
+            rectangle_window = boxcar(self.ui_window.Smoothing_Window_Frequency_Slider.value()) * self.ui_window.Smoothing_Window_Amplitude_Slider.value()
+            return (rectangle_window)
+            
+        elif self.ui_window.Smoothing_Window_Gaussian_Radio_Button.isChecked():
+            std_dev = self.ui_window.Smoothing_Window_Frequency_Slider.value() / (2 * math.sqrt(2 * math.log(2)))
+            gaussian_window = get_window(('gaussian', std_dev), self.ui_window.Smoothing_Window_Frequency_Slider.value()) * self.ui_window.Smoothing_Window_Amplitude_Slider.value()
+            return (gaussian_window)
+         
+    def plot_smoothing(self):
+        self.current_smoothing = self.smoothing_window()
+        self.smoothing_graph.clear()
+        self.smoothing_graph.plot(self.current_smoothing)
 
-
-
+    def plot_freq(self):
+        fft_result = np.fft.ff(self.x_Coordinates)
+        frequencies = np.fft.fftfreq(len(fft_result), 1/self.sampling_rate)
+        self.freq_graph.plot(frequencies, np.abs(fft_result))
 
 class Spectrogram:
     
