@@ -1,6 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget
+from Graphs import TimeGraph, FrequencyGraph, Spectrogram
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -1905,6 +1906,24 @@ class Ui_Form(object):
         self.Animals_Sounds_Signal_Speed_Slider.sliderMoved['int'].connect(self.Animals_Sounds_Signal_Speed_LCD.display) # type: ignore
         self.ECG_Abnormalities_Signal_Speed_Slider.sliderMoved['int'].connect(self.ECG_Abnormalities_Signal_Speed_LCD.display) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
+
+        self.ECG_time_graph = TimeGraph(self,self.ECG_Abnormalities_Original_Signal_PlotWidget)
+        self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: self.ECG_time_graph.load_ecg())
+        self.ECG_Abnormalities_Play_Pause_Button.clicked.connect(lambda: self.ECG_time_graph.toggle_pause())
+        self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: self.ECG_time_graph.reset())
+        self.ECG_Abnormalities_Signal_Speed_Slider.valueChanged.connect(lambda: self.ECG_time_graph.update_speed(self.ECG_Abnormalities_Signal_Speed_Slider))
+        self.ECG_Abnormalities_Stop_Button.clicked.connect(lambda: self.ECG_time_graph.stop())
+        self.ECG_Abnormalities_Zooming_In_Button.clicked.connect(lambda: self.ECG_time_graph.zoomin())
+        self.ECG_Abnormalities_Zooming_Out_Button.clicked.connect(lambda: self.ECG_time_graph.zoomout())
+
+        self.Music_time_graph = TimeGraph(self,self.Musical_Instruments_Original_Signal_PlotWidget)
+        self.Musical_Instruments_Load_Signal_Button.clicked.connect(lambda: self.Music_time_graph.load_wav())
+        self.Musical_Instruments_Play_Pause_Button.clicked.connect(lambda: self.Music_time_graph.toggle_pause())
+        self.Musical_Instruments_Reset_Button.clicked.connect(lambda: self.Music_time_graph.reset())
+        self.Musical_Instruments_Signal_Speed_Slider_2.valueChanged.connect(lambda: self.Music_time_graph.update_speed(self.Musical_Instruments_Signal_Speed_Slider_2))
+        self.Musical_Instruments_Stop_Button.clicked.connect(lambda: self.Music_time_graph.stop())
+        self.Musical_Instruments_Zooming_In_Button.clicked.connect(lambda: self.Music_time_graph.zoomin())
+        self.Musical_Instruments_Zooming_Out_Button.clicked.connect(lambda: self.Music_time_graph.zoomout())
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

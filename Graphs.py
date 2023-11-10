@@ -3,9 +3,11 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
 import pandas as pd
+import pyqtgraph as pg
 import wfdb, numpy as np
 from scipy.io import wavfile
 import pyaudio
+from scipy import signal
 
 class TimeGraph:
     
@@ -60,7 +62,7 @@ class TimeGraph:
             end_index = min(self.X_Points_Plotted, len(self.Y_Coordinates))
 
             self.data_line.setData(self.X_Coordinates[0 : self.X_Points_Plotted + 1], self.Y_Coordinates[0 : self.X_Points_Plotted + 1])
-            if self.graph_widget == self.UI.ECG_Abnormalities_Input_Signal_Graph:
+            if self.graph_widget == self.UI.ECG_Abnormalities_Original_Signal_PlotWidget:
                 self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 200, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
             else:
                 self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 1, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
@@ -108,5 +110,22 @@ class FrequencyGraph:
 
 class Spectrogram:
     
-    def __init__(self):
+    def __init__(self, graph_widget, timegraph):
+        self.spectrogram_widget = graph_widget
+        self.timegraph = timegraph
+        self.image_item = pg.ImageItem()
+        self.spectrogram_widget.addItem(self.image_item)
+
+
+    def plot_spectrogram(self):
         pass
+        # sample_rate = 44100  # Sample rate in Hz
+        # duration = 100  # Duration in seconds
+        # freq = 44000  # Frequency in Hz
+        # t = np.linspace(0, duration, int(sample_rate * duration), endpoint=False)
+        # audio_data = np.sin(2 * np.pi * freq * t)
+
+        # f, t, Sxx = signal.spectrogram(audio_data, fs=sample_rate)
+        # self.image_item.setImage(Sxx)
+
+
