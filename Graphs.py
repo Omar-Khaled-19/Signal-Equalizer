@@ -23,7 +23,6 @@ class TimeGraph:
         self.X_Coordinates = []
         self.Y_Coordinates = []
         self.stopped = False
-        self.sample_rate = 0
 
     def load_wav(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -112,8 +111,8 @@ class FrequencyGraph:
         self.freq_graph = freq_widget
         self.smoothing_graph = smoothing_widget
         self.current_smoothing = None
-        self.sampling_rate = input_widget.sample_rate
-        self.x_coordinates = input_widget.X_Coordinates
+        #self.sampling_rate = input_widget.sample_rate
+        self.x_coordinates = 0
         
     
     def smoothing_window(self):
@@ -147,10 +146,32 @@ class FrequencyGraph:
         self.smoothing_graph.clear()
         self.smoothing_graph.plot(self.current_smoothing)
 
-    def plot_freq(self):
-        fft_result = np.fft.ff(self.x_Coordinates)
-        frequencies = np.fft.fftfreq(len(fft_result), 1/self.sampling_rate)
-        self.freq_graph.plot(frequencies, np.abs(fft_result))
+    def plot_frequency_domain(self):
+        # fft_result = np.fft.fft(signal)
+        # frequencies = np.fft.fftfreq(len(fft_result), 1/sampling_rate)
+        # self.freq_graph.plot.plot(frequencies, np.abs(fft_result))
+        self.x_coordinates = self.input_graph.X_Coordinates
+        signal = self.input_graph.Y_Coordinates
+        signal = np.array(signal)
+        dt = self.x_coordinates[1] - self.x_coordinates[0]
+        # if dt is None:   
+        #     dt = 1
+        #     t = np.arange(0, signal.shape[-1])
+        # else: #mosta7el teb2a b none f m4 needed awy, arga3laha ba3den
+        t = np.arange(0, signal.shape[-1]) * dt
+
+        if signal.shape[0] % 2 != 0:
+            t = t[0:-1]
+            signal = signal[0:-1]
+
+        fft_result = np.fft.fft(signal) / t.shape[0]  # Divided by size t for coherent magnitude
+        freq = np.fft.fftfreq(t.shape[0], d=dt)
+
+        # Plot analytic signal - right half of the frequency axis is needed only...
+        first_neg_index = np.argmax(freq < 0)
+        freq_axis_pos = freq[0:first_neg_index]
+        sig_fft_pos = 2 * fft_result[0:first_neg_index]  # *2 because of the magnitude of the analytic signal
+        self.freq_graph.plot(freq_axis_pos, np.abs(sig_fft_pos))
 
 class Spectrogram:
     

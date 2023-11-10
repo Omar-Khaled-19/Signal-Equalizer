@@ -1918,6 +1918,7 @@ class Ui_Form(object):
         self.Smoothing_Window_Amplitude_Slider.valueChanged.connect(lambda: self.ECG_freq_graph.plot_smoothing())
         ##################################################################################
         self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: self.ECG_time_graph.load_ecg())
+        self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: self.ECG_freq_graph.plot_frequency_domain())
         self.ECG_Abnormalities_Play_Pause_Button.clicked.connect(lambda: self.ECG_time_graph.toggle_pause())
         self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: self.ECG_time_graph.reset())
         self.ECG_Abnormalities_Signal_Speed_Slider.valueChanged.connect(lambda: self.ECG_time_graph.update_speed(self.ECG_Abnormalities_Signal_Speed_Slider))
