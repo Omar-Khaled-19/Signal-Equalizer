@@ -1,7 +1,7 @@
-import sys
+import sys, Modes
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget
-from Graphs import TimeGraph, FrequencyGraph, Spectrogram
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -1907,7 +1907,6 @@ class Ui_Form(object):
         self.ECG_Abnormalities_Signal_Speed_Slider.sliderMoved['int'].connect(self.ECG_Abnormalities_Signal_Speed_LCD.display) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-        self.ECG_time_graph = TimeGraph(self,self.ECG_Abnormalities_Original_Signal_PlotWidget)
         self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: self.ECG_time_graph.load_ecg())
         self.ECG_Abnormalities_Play_Pause_Button.clicked.connect(lambda: self.ECG_time_graph.toggle_pause())
         self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: self.ECG_time_graph.reset())
@@ -1916,7 +1915,6 @@ class Ui_Form(object):
         self.ECG_Abnormalities_Zooming_In_Button.clicked.connect(lambda: self.ECG_time_graph.zoomin())
         self.ECG_Abnormalities_Zooming_Out_Button.clicked.connect(lambda: self.ECG_time_graph.zoomout())
 
-        self.Music_time_graph = TimeGraph(self,self.Musical_Instruments_Original_Signal_PlotWidget)
         self.Musical_Instruments_Load_Signal_Button.clicked.connect(lambda: self.Music_time_graph.load_wav())
         self.Musical_Instruments_Play_Pause_Button.clicked.connect(lambda: self.Music_time_graph.toggle_pause())
         self.Musical_Instruments_Reset_Button.clicked.connect(lambda: self.Music_time_graph.reset())
@@ -2013,5 +2011,8 @@ if __name__ == "__main__":
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
+    MusicMode = Modes.MusicalMode(ui.Musical_Instruments_Original_Signal_PlotWidget, ui.Musical_Instruments_Output_Signal_PlotWidget, ui.Musical_Instruments_Frequency_Domain_PlotWidget, ui.Musical_Instruments_Original_Signal_Spectrogram, ui.Musical_Instruments_Output_Signal_Spectrogram, ui.Musical_Instruments_Instrument_1_Frequency__Slider, ui.Musical_Instruments_Instrument_2_Frequency__Slider, ui.Musical_Instruments_Instrument_3_Frequency__Slider, ui.Musical_Instruments_Instrument_4_Frequency__Slider)
+    AnimalMode = Modes.MusicalMode(ui.Animal_Sounds_Original_Signal_PlotWidget, ui.Animal_Sounds_Output_Signal_PlotWidget, ui.Animal_Sounds_Frequency_Domain_PlotWidget, ui.Animal_Sounds_Original_Signal_Spectrogram, ui.Animal_Sounds_Output_Signal_Spectrogram, ui.Animal_Sounds_Animal_1_Frequency_Slider, ui.Animal_Sounds_Animal_2_Frequency_Slider, ui.Animal_Sounds_Animal_3_Frequency_Slider, ui.Animal_Sounds_Animal_4_Frequency_Slider)
+    ECGMode = Modes.MusicalMode(ui.ECG_Abnormalities_Original_Signal_PlotWidget, ui.ECG_Abnormalities_Output_Signal_PlotWidget, ui.ECG_Abnormalities_Frequency_Domain_PlotWidget, ui.ECG_Abnormalities_Original_Signal_Spectrogram, ui.ECG_Abnormalities_Output_Signal_Spectrogram, ui.ECG_Abnormalities_Abnormal_ECG_1_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_2_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_3_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_4_Frequency_Slider)
     Form.show()
     sys.exit(app.exec_())

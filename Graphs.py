@@ -34,9 +34,7 @@ class TimeGraph:
         # Set up the audio player with pyaudio
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=pyaudio.paInt16,  # or paFloat32 depending on your data
-                                  channels=1,
-                                  rate=self.sample_rate,
-                                  output=True)
+                                  channels=1, rate=self.sample_rate, output=True)
 
     def load_ecg(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -101,9 +99,9 @@ class TimeGraph:
 
 
 class FrequencyGraph:
-
-    def __init__(self):
-        pass
+    def __init__(self, X_coor, Y_coor):
+        self.freq_domain_X_coordinates = X_coor
+        self.freq_domain_Y_coordinates = Y_coor
 
 
 
@@ -111,6 +109,7 @@ class FrequencyGraph:
 class Spectrogram:
     
     def __init__(self, graph_widget, timegraph):
+        # Instead of passing common elements more than one, how about all graphs in the same tab inherit from the tab the basic attributes??
         self.spectrogram_widget = graph_widget
         self.timegraph = timegraph
         self.image_item = pg.ImageItem()
