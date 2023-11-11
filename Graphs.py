@@ -13,9 +13,8 @@ from scipy.signal.windows import boxcar
 import math
 
 class TimeGraph:
-    
-    def __init__(self, ui ,graph_widget):
-        self.UI = ui
+
+    def __init__(self,graph_widget):
         self.graph_widget = graph_widget
         self.X_Points_Plotted = 0
         self.paused = False
@@ -37,9 +36,7 @@ class TimeGraph:
         # Set up the audio player with pyaudio
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=pyaudio.paInt16,  # or paFloat32 depending on your data
-                                  channels=1,
-                                  rate=self.sample_rate,
-                                  output=True)
+                                  channels=1, rate=self.sample_rate, output=True)
 
     def load_ecg(self):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -113,8 +110,8 @@ class FrequencyGraph:
         self.current_smoothing = None
         #self.sampling_rate = input_widget.sample_rate
         self.x_coordinates = 0
-        
-    
+
+
     def smoothing_window(self):
         # Check which radio button is selected
         if self.ui_window.Smoothing_Window_Hamming_Radio_Button.isChecked():
@@ -123,24 +120,24 @@ class FrequencyGraph:
             # Scale the Hamming window to the desired amplitude
             scaled_hamming_window = self.ui_window.Smoothing_Window_Amplitude_Slider.value() * hamming_window / np.max(hamming_window)
             return (scaled_hamming_window)
-        
+
         elif self.ui_window.Smoothing_Window_Hanning_Radio_Button.isChecked():
             # Generate Hanning window
             hanning_window = get_window('hann', self.ui_window.Smoothing_Window_Frequency_Slider.value())
             # Scale the Hanning window to the desired amplitude
             scaled_hanning_window = self.ui_window.Smoothing_Window_Amplitude_Slider.value() * hanning_window / np.max(hanning_window)
             return (scaled_hanning_window)
-        
+
         elif self.ui_window.Smoothing_Window_Rectangle_Radio_Button.isChecked():
             # generate and adjust the height as desired
             rectangle_window = boxcar(self.ui_window.Smoothing_Window_Frequency_Slider.value()) * self.ui_window.Smoothing_Window_Amplitude_Slider.value()
             return (rectangle_window)
-            
+
         elif self.ui_window.Smoothing_Window_Gaussian_Radio_Button.isChecked():
             std_dev = self.ui_window.Smoothing_Window_Frequency_Slider.value() / (2 * math.sqrt(2 * math.log(2)))
             gaussian_window = get_window(('gaussian', std_dev), self.ui_window.Smoothing_Window_Frequency_Slider.value()) * self.ui_window.Smoothing_Window_Amplitude_Slider.value()
             return (gaussian_window)
-         
+
     def plot_smoothing(self):
         self.current_smoothing = self.smoothing_window()
         self.smoothing_graph.clear()
@@ -154,7 +151,7 @@ class FrequencyGraph:
         signal = self.input_graph.Y_Coordinates
         signal = np.array(signal)
         dt = self.x_coordinates[1] - self.x_coordinates[0]
-        # if dt is None:   
+        # if dt is None:
         #     dt = 1
         #     t = np.arange(0, signal.shape[-1])
         # else: #mosta7el teb2a b none f m4 needed awy, arga3laha ba3den
@@ -176,6 +173,7 @@ class FrequencyGraph:
 class Spectrogram:
     
     def __init__(self, graph_widget, timegraph):
+        # Instead of passing common elements more than one, how about all graphs in the same tab inherit from the tab the basic attributes??
         self.spectrogram_widget = graph_widget
         self.timegraph = timegraph
         self.image_item = pg.ImageItem()
