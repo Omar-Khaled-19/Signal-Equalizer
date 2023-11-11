@@ -10,9 +10,8 @@ import pyaudio
 from scipy import signal
 
 class TimeGraph:
-    
-    def __init__(self, ui ,graph_widget):
-        self.UI = ui
+
+    def __init__(self,graph_widget):
         self.graph_widget = graph_widget
         self.X_Points_Plotted = 0
         self.paused = False
