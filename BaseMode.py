@@ -12,6 +12,7 @@ class BaseMode(ABC):
         self.slider2 = slider2
         self.slider3 = slider3
         self.slider4 = slider4
+        self.smoothing_window = None
 
     @abstractmethod
     def modify_frequency(self, value: int):
