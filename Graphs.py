@@ -2,12 +2,11 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import pandas as pd
 import pyqtgraph as pg
 import wfdb, numpy as np
 from scipy.io import wavfile
-import pyaudio
-from scipy import signal
+import bisect
+
 
 class TimeGraph:
     
@@ -22,23 +21,21 @@ class TimeGraph:
         self.stopped = False
 
     def load_wav(self):
+        self.graph_widget.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
+        
         self.sample_rate, self.audio_data = wavfile.read(File_Path)
 
         self.X_Coordinates = np.arange(len(self.audio_data)) / self.sample_rate
         self.Y_Coordinates = self.audio_data
+        
         self.player = QMediaPlayer()
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+
         self.plot_signal()
 
-        # Set up the audio player with pyaudio
-        self.p = pyaudio.PyAudio()
-        self.stream = self.p.open(format=pyaudio.paInt16,  # or paFloat32 depending on your data
-                                  channels=1,
-                                  rate=self.sample_rate,
-                                  output=True)
-
     def load_ecg(self):
+        self.graph_widget.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if File_Path:
             Record = wfdb.rdrecord(File_Path[:-4])
@@ -57,29 +54,34 @@ class TimeGraph:
         self.player.play()
 
     def update_plot_data(self):
-        if not self.paused and not self.stopped:    
-            self.X_Points_Plotted += self.speed
-            end_index = min(self.X_Points_Plotted, len(self.Y_Coordinates))
-
-            self.data_line.setData(self.X_Coordinates[0 : self.X_Points_Plotted + 1], self.Y_Coordinates[0 : self.X_Points_Plotted + 1])
+        if not self.paused and not self.stopped:             
             if self.graph_widget == self.UI.ECG_Abnormalities_Original_Signal_PlotWidget:
                 self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 200, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
+                self.X_Points_Plotted += self.speed
+                self.data_line.setData(self.X_Coordinates[0 : self.X_Points_Plotted + 1], self.Y_Coordinates[0 : self.X_Points_Plotted + 1])
+
             else:
-                self.graph_widget.getViewBox().setXRange(max(self.X_Coordinates[0: self.X_Points_Plotted + 1]) - 1, max(self.X_Coordinates[0: self.X_Points_Plotted + 1]))
-        
-                start_byte = self.X_Points_Plotted * 2
-                end_byte = end_index * 2
-                self.stream.write(self.audio_data[start_byte:end_byte])
+                sound_position = self.player.position()
+                sound_duration = self.player.duration()
+                progress = sound_position / sound_duration
+
+                target_x = int(progress * max(self.X_Coordinates))
+                target_index = bisect.bisect_left(self.X_Coordinates, target_x)
+
+                self.graph_widget.getViewBox().setXRange(target_x - 4, target_x)
+                self.data_line.setData(self.X_Coordinates[:target_index], self.Y_Coordinates[:target_index])
 
     def toggle_pause(self):
         self.paused = not self.paused
         icon = QtGui.QIcon()
         if not self.paused:
+            self.player.play()
             icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.UI.ECG_Abnormalities_Play_Pause_Button.setIcon(icon)
+            self.UI.Musical_Instruments_Play_Pause_Button.setIcon(icon)
         else:
+            self.player.pause()
             icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.UI.ECG_Abnormalities_Play_Pause_Button.setIcon(icon)
+            self.UI.Musical_Instruments_Play_Pause_Button.setIcon(icon)
 
     def reset(self):
         self.X_Points_Plotted = 0
