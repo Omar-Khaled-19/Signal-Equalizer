@@ -9,9 +9,8 @@ import bisect
 
 
 class TimeGraph:
-    
-    def __init__(self, ui ,graph_widget):
-        self.UI = ui
+
+    def __init__(self,graph_widget):
         self.graph_widget = graph_widget
         self.X_Points_Plotted = 0
         self.paused = False
@@ -103,9 +102,9 @@ class TimeGraph:
 
 
 class FrequencyGraph:
-
-    def __init__(self):
-        pass
+    def __init__(self, X_coor, Y_coor):
+        self.freq_domain_X_coordinates = X_coor
+        self.freq_domain_Y_coordinates = Y_coor
 
 
 
@@ -113,6 +112,7 @@ class FrequencyGraph:
 class Spectrogram:
     
     def __init__(self, graph_widget, timegraph):
+        # Instead of passing common elements more than one, how about all graphs in the same tab inherit from the tab the basic attributes??
         self.spectrogram_widget = graph_widget
         self.timegraph = timegraph
         self.image_item = pg.ImageItem()
