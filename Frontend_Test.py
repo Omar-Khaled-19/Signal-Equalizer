@@ -1923,6 +1923,14 @@ class Ui_Form(object):
         self.Musical_Instruments_Zooming_In_Button.clicked.connect(lambda: MusicMode.zoomin())
         self.Musical_Instruments_Zooming_Out_Button.clicked.connect(lambda: MusicMode.zoomout())
 
+        self.Animals_Sounds_Load_Signal_Button.clicked.connect(lambda: AnimalMode.load_signal())
+        self.Animals_Sounds_Play_Pause_Button.clicked.connect(lambda: AnimalMode.toggle_pause())
+        self.Animals_Sounds_Reset_Button.clicked.connect(lambda: AnimalMode.reset())
+        self.Animals_Sounds_Signal_Speed_Slider.valueChanged.connect(lambda: AnimalMode.update_speed(self.Animals_Sounds_Signal_Speed_Slider))
+        self.Animals_Sounds_Stop_Button.clicked.connect(lambda: AnimalMode.stop())
+        self.Animals_Sounds_Zooming_In_Button.clicked.connect(lambda: AnimalMode.zoomin())
+        self.Animals_Sounds_Zooming_Out_Button.clicked.connect(lambda: AnimalMode.zoomout())
+
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Signal Equalizer"))

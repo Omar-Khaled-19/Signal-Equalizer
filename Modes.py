@@ -88,7 +88,7 @@ class ECGMode(BaseMode.BaseMode):
                                                     max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
         
     def toggle_pause(self):
-        super().toggle_pause()
+        self.paused = not self.paused
         icon = QtGui.QIcon()
         if not self.paused:
             icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -96,4 +96,16 @@ class ECGMode(BaseMode.BaseMode):
         else:
             icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             self.ui.ECG_Abnormalities_Play_Pause_Button.setIcon(icon)
+
+    def reset(self):
+        self.X_Points_Plotted = 0
+
+    def update_speed(self,slider):
+        self.speed = 10 * slider.value()
+
+    def stop(self):
+        self.stopped = True
+        self.input_graph.clear()
+        self.input_graph.getViewBox().setXRange(0,100)
+        self.X_Points_Plotted = 0
 

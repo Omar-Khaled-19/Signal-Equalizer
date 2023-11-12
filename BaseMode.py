@@ -43,10 +43,9 @@ class BaseMode(ABC):
         self.time_domain_Y_coordinates = self.audio_data
         
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
-
+        self.stopped = False
         self.plot_signal()
-        
-            
+           
     def plot_signal(self):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
         self.data_line = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
@@ -62,6 +61,9 @@ class BaseMode(ABC):
             sound_duration = self.player.duration()
             progress = sound_position / sound_duration
 
+            if progress == 1:
+                self.stopped = True
+
             target_x = int(progress * max(self.time_domain_X_coordinates))
             target_index = bisect.bisect_left(self.time_domain_X_coordinates, target_x)
 
@@ -70,18 +72,26 @@ class BaseMode(ABC):
 
     def toggle_pause(self):
         self.paused = not self.paused
+        if self.paused:
+            self.player.pause()
+        else:
+            if not self.stopped:
+                self.player.play()
 
     def reset(self):
-        self.X_Points_Plotted = 0
+        self.stopped = False
+        self.player.stop()
+        self.player.setPosition(0)
+        self.player.play()
 
     def update_speed(self,slider):
-        self.speed = 10*slider.value()
+        pass
 
     def stop(self):
+        self.player.stop()
         self.stopped = True
         self.input_graph.clear()
-        self.input_graph.getViewBox().setXRange(0,100)
-        self.X_Points_Plotted = 0
+        self.input_graph.getViewBox().setXRange(0,4)
 
     def zoomin(self):
         self.input_graph.getViewBox().scaleBy((0.9, 0.9))
