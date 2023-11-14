@@ -4,8 +4,8 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
 import numpy as np
-from scipy.io import wavfile
 import bisect
+import librosa
 
 
 class BaseMode(ABC):
@@ -37,7 +37,7 @@ class BaseMode(ABC):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         
-        self.sample_rate, self.audio_data = wavfile.read(File_Path)
+        self.audio_data, self.sample_rate = librosa.load(File_Path)
 
         self.time_domain_X_coordinates = np.arange(len(self.audio_data)) / self.sample_rate
         self.time_domain_Y_coordinates = self.audio_data
@@ -86,7 +86,6 @@ class BaseMode(ABC):
 
     def update_speed(self,slider):
         self.player.setPlaybackRate(slider.value())
-
 
     def stop(self):
         self.player.stop()
