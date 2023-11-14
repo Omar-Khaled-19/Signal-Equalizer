@@ -85,7 +85,8 @@ class BaseMode(ABC):
         self.player.play()
 
     def update_speed(self,slider):
-        pass
+        self.player.setPlaybackRate(slider.value())
+
 
     def stop(self):
         self.player.stop()
