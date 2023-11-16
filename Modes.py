@@ -1,6 +1,5 @@
-import BaseMode
+import BaseMode, wfdb, numpy as np
 from PyQt5.QtWidgets import QFileDialog
-import wfdb, numpy as np
 from PyQt5 import QtGui
 
 class UniformMode(BaseMode.BaseMode):
@@ -12,6 +11,7 @@ class UniformMode(BaseMode.BaseMode):
         pass
 
     def toggle_pause(self):
+        # Why the whole function is not written in BaseMode?
         super().toggle_pause()
         icon = QtGui.QIcon()
         if not self.paused:
@@ -28,8 +28,15 @@ class MusicalMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
 
-    def modify_frequency(self, value: int):
-        pass
+    def modify_frequency(self, slider_value: int, slider: int):
+        if slider == 1:
+            super().modify_frequency(64, 500, slider_value)
+        elif slider == 2:
+            super().modify_frequency(250, 1000, slider_value)
+        elif slider == 3:
+            super().modify_frequency(1000, 2000, slider_value)
+        else:
+            super().modify_frequency(2000, 8000, slider_value)
 
     def toggle_pause(self):
         super().toggle_pause()
@@ -47,7 +54,7 @@ class AnimalMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
 
-    def modify_frequency(self, value: int):
+    def modify_frequency(self, slider: int):
         pass
 
     def toggle_pause(self):

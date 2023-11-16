@@ -1421,8 +1421,8 @@ class Ui_Form(object):
         self.Animals_Sounds_Animal_1_Frequency_Slider.setSizePolicy(sizePolicy)
         self.Animals_Sounds_Animal_1_Frequency_Slider.setMinimumSize(QtCore.QSize(50, 0))
         self.Animals_Sounds_Animal_1_Frequency_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
-        self.Animals_Sounds_Animal_1_Frequency_Slider.setMinimum(-2)
-        self.Animals_Sounds_Animal_1_Frequency_Slider.setMaximum(2)
+        self.Animals_Sounds_Animal_1_Frequency_Slider.setMinimum(0)
+        self.Animals_Sounds_Animal_1_Frequency_Slider.setMaximum(5)
         self.Animals_Sounds_Animal_1_Frequency_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Animals_Sounds_Animal_1_Frequency_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Animals_Sounds_Animal_1_Frequency_Slider.setObjectName("Animals_Sounds_Animal_1_Frequency_Slider")
@@ -1909,6 +1909,10 @@ class Ui_Form(object):
         self.Musical_Instruments_Signal_Speed_Slider.sliderMoved['int'].connect(self.Musical_Instruments_Signal_Speed_LCD.display) # type: ignore
         self.Animals_Sounds_Signal_Speed_Slider.sliderMoved['int'].connect(self.Animals_Sounds_Signal_Speed_LCD.display) # type: ignore
         self.ECG_Abnormalities_Signal_Speed_Slider.sliderMoved['int'].connect(self.ECG_Abnormalities_Signal_Speed_LCD.display) # type: ignore
+        self.Musical_Instruments_Instrument_1_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 1))
+        self.Musical_Instruments_Instrument_2_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 2))
+        self.Musical_Instruments_Instrument_3_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 3))
+        self.Musical_Instruments_Instrument_4_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 4))
         QtCore.QMetaObject.connectSlotsByName(Form)
 
        
@@ -1929,6 +1933,7 @@ class Ui_Form(object):
         stop.clicked.connect(lambda: mode.stop())
         zooming_in.clicked.connect(lambda: mode.zoomin())
         zooming_out.clicked.connect(lambda: mode.zoomout())
+
         
         
     def retranslateUi(self, Form):

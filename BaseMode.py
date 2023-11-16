@@ -3,14 +3,11 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np
-import bisect
-import librosa
+import numpy as np, bisect, librosa, math
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
-import math
 
-
+# Proposed Modifications = 3
 class BaseMode(ABC):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         self.ui = ui
@@ -21,6 +18,9 @@ class BaseMode(ABC):
         self.output_spectrogram = output_spectro
         self.time_domain_X_coordinates = []
         self.time_domain_Y_coordinates = []
+        self.freq_domain_X_coordinates = []
+        self.freq_domain_Y_coordinates = []
+        self.modified_freq_domain_Y_coordinates = []
         self.slider1 = slider1
         self.slider2 = slider2
         self.slider3 = slider3
@@ -33,13 +33,16 @@ class BaseMode(ABC):
         self.player = QMediaPlayer()
 
     @abstractmethod
-    def modify_frequency(self, value: int):
-        pass
+    def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
+        smoothing_factor = factor / 5.0
+        for i in self.modified_freq_domain_Y_coordinates[min_freq:max_freq]:
+            i *= smoothing_factor
+        self.plot_frequency_domain()
     
     def load_signal(self):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        
+        # Can it be audio_data, sample_rate = librosa.load(File_Path)
         self.audio_data, self.sample_rate = librosa.load(File_Path)
 
         self.time_domain_X_coordinates = np.arange(len(self.audio_data)) / self.sample_rate
@@ -47,6 +50,7 @@ class BaseMode(ABC):
         
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
         self.stopped = False
+        # Change play button to pause
         self.plot_signal()
            
     def plot_signal(self):
@@ -88,7 +92,7 @@ class BaseMode(ABC):
         self.player.setPosition(0)
         self.player.play()
 
-    def update_speed(self,slider):
+    def update_speed(self, slider):
         self.player.setPlaybackRate(slider.value())
 
     def stop(self):
@@ -110,31 +114,36 @@ class BaseMode(ABC):
             hamming_window = get_window('hamming', self.ui.Smoothing_Window_Frequency_Slider.value())
             # Scale the Hamming window to the desired amplitude
             scaled_hamming_window = self.ui.Smoothing_Window_Amplitude_Slider.value() * hamming_window / np.max(hamming_window)
-            return (scaled_hamming_window)
+            return scaled_hamming_window
 
         elif self.ui.Smoothing_Window_Hanning_Radio_Button.isChecked():
             # Generate Hanning window
             hanning_window = get_window('hann', self.ui.Smoothing_Window_Frequency_Slider.value())
             # Scale the Hanning window to the desired amplitude
             scaled_hanning_window = self.ui.Smoothing_Window_Amplitude_Slider.value() * hanning_window / np.max(hanning_window)
-            return (scaled_hanning_window)
+            return scaled_hanning_window
 
         elif self.ui.Smoothing_Window_Rectangle_Radio_Button.isChecked():
             # generate and adjust the height as desired
             rectangle_window = boxcar(self.ui.Smoothing_Window_Frequency_Slider.value()) * self.ui.Smoothing_Window_Amplitude_Slider.value()
-            return (rectangle_window)
+            return rectangle_window
 
         elif self.ui.Smoothing_Window_Gaussian_Radio_Button.isChecked():
             std_dev = self.ui.Smoothing_Window_Frequency_Slider.value() / (2 * math.sqrt(2 * math.log(2)))
             gaussian_window = get_window(('gaussian', std_dev), self.ui.Smoothing_Window_Frequency_Slider.value()) * self.ui.Smoothing_Window_Amplitude_Slider.value()
-            return (gaussian_window)
+            return gaussian_window
 
     def plot_smoothing(self):
+        # Can it be current_smoothing = self.smoothing_window()
         self.current_smoothing = self.smoothing_window()
         self.ui.Smoothing_Window_PlotWidget.clear()
         self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
 
     def plot_frequency_domain(self):
+        self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
+
+
+    def calculate_frequency_domain(self):
         # fft_result = np.fft.fft(signal)
         # frequencies = np.fft.fftfreq(len(fft_result), 1/sampling_rate)
         # self.freq_graph.plot.plot(frequencies, np.abs(fft_result))
@@ -155,7 +164,9 @@ class BaseMode(ABC):
 
         # Plot analytic signal - right half of the frequency axis is needed only...
         first_neg_index = np.argmax(freq < 0)
-        freq_axis_pos = freq[0:first_neg_index]
+        # freq_axis_pos = freq[0:first_neg_index]
+        self.freq_domain_X_coordinates = freq[0:first_neg_index]
         sig_fft_pos = 2 * fft_result[0:first_neg_index]  # *2 because of the magnitude of the analytic signal
-        self.frequency_graph.plot(freq_axis_pos, np.abs(sig_fft_pos))
+        self.freq_domain_Y_coordinates = np.abs(sig_fft_pos)
+        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
   
