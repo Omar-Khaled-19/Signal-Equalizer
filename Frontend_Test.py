@@ -213,7 +213,7 @@ class Ui_Form(object):
         self.Smoothing_Window_Frequency_Slider.setSizePolicy(sizePolicy)
         self.Smoothing_Window_Frequency_Slider.setMinimumSize(QtCore.QSize(0, 29))
         self.Smoothing_Window_Frequency_Slider.setMinimum(0)
-        self.Smoothing_Window_Frequency_Slider.setMaximum(10)
+        self.Smoothing_Window_Frequency_Slider.setMaximum(100)
         self.Smoothing_Window_Frequency_Slider.setSingleStep(0)
         self.Smoothing_Window_Frequency_Slider.setPageStep(0)
         self.Smoothing_Window_Frequency_Slider.setProperty("value", 0)
@@ -1911,30 +1911,26 @@ class Ui_Form(object):
         self.ECG_Abnormalities_Signal_Speed_Slider.sliderMoved['int'].connect(self.ECG_Abnormalities_Signal_Speed_LCD.display) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
 
-        self.ECG_Abnormalities_Load_Signal_Button.clicked.connect(lambda: ECGMode.load_signal())
-        self.ECG_Abnormalities_Play_Pause_Button.clicked.connect(lambda: ECGMode.toggle_pause())
-        self.ECG_Abnormalities_Reset_Button.clicked.connect(lambda: ECGMode.reset())
-        self.ECG_Abnormalities_Signal_Speed_Slider.valueChanged.connect(lambda: ECGMode.update_speed(self.ECG_Abnormalities_Signal_Speed_Slider))
-        self.ECG_Abnormalities_Stop_Button.clicked.connect(lambda: ECGMode.stop())
-        self.ECG_Abnormalities_Zooming_In_Button.clicked.connect(lambda: ECGMode.zoomin())
-        self.ECG_Abnormalities_Zooming_Out_Button.clicked.connect(lambda: ECGMode.zoomout())
-
-        self.Musical_Instruments_Load_Signal_Button.clicked.connect(lambda: MusicMode.load_signal())
-        self.Musical_Instruments_Play_Pause_Button.clicked.connect(lambda: MusicMode.toggle_pause())
-        self.Musical_Instruments_Reset_Button.clicked.connect(lambda: MusicMode.reset())
-        self.Musical_Instruments_Signal_Speed_Slider.valueChanged.connect(lambda: MusicMode.update_speed(self.Musical_Instruments_Signal_Speed_Slider))
-        self.Musical_Instruments_Stop_Button.clicked.connect(lambda: MusicMode.stop())
-        self.Musical_Instruments_Zooming_In_Button.clicked.connect(lambda: MusicMode.zoomin())
-        self.Musical_Instruments_Zooming_Out_Button.clicked.connect(lambda: MusicMode.zoomout())
-
-        self.Animals_Sounds_Load_Signal_Button.clicked.connect(lambda: AnimalMode.load_signal())
-        self.Animals_Sounds_Play_Pause_Button.clicked.connect(lambda: AnimalMode.toggle_pause())
-        self.Animals_Sounds_Reset_Button.clicked.connect(lambda: AnimalMode.reset())
-        self.Animals_Sounds_Signal_Speed_Slider.valueChanged.connect(lambda: AnimalMode.update_speed(self.Animals_Sounds_Signal_Speed_Slider))
-        self.Animals_Sounds_Stop_Button.clicked.connect(lambda: AnimalMode.stop())
-        self.Animals_Sounds_Zooming_In_Button.clicked.connect(lambda: AnimalMode.zoomin())
-        self.Animals_Sounds_Zooming_Out_Button.clicked.connect(lambda: AnimalMode.zoomout())
-
+       
+    def smoothing_connection(self, mode):
+        self.Smoothing_Window_Gaussian_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
+        self.Smoothing_Window_Rectangle_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
+        self.Smoothing_Window_Hamming_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
+        self.Smoothing_Window_Hanning_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
+        self.Smoothing_Window_Frequency_Slider.valueChanged.connect(lambda: mode.plot_smoothing())
+        self.Smoothing_Window_Amplitude_Slider.valueChanged.connect(lambda: mode.plot_smoothing())
+            
+    
+    def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider):
+        load.clicked.connect(lambda: mode.load_signal())
+        play.clicked.connect(lambda: mode.toggle_pause())
+        reset.clicked.connect(lambda: mode.reset())
+        slider.valueChanged.connect(lambda: mode.update_speed(slider))
+        stop.clicked.connect(lambda: mode.stop())
+        zooming_in.clicked.connect(lambda: mode.zoomin())
+        zooming_out.clicked.connect(lambda: mode.zoomout())
+        
+        
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Signal Equalizer"))
@@ -2026,5 +2022,11 @@ if __name__ == "__main__":
     MusicMode = Modes.MusicalMode(ui, ui.Musical_Instruments_Original_Signal_PlotWidget, ui.Musical_Instruments_Output_Signal_PlotWidget, ui.Musical_Instruments_Frequency_Domain_PlotWidget, ui.Musical_Instruments_Original_Signal_Spectrogram, ui.Musical_Instruments_Output_Signal_Spectrogram, ui.Musical_Instruments_Instrument_1_Frequency__Slider, ui.Musical_Instruments_Instrument_2_Frequency__Slider, ui.Musical_Instruments_Instrument_3_Frequency__Slider, ui.Musical_Instruments_Instrument_4_Frequency__Slider)
     AnimalMode = Modes.AnimalMode(ui, ui.Animals_Sounds_Original_Signal_PlotWidget, ui.Animals_Sounds_Output_Signal_PlotWidget, ui.Animals_Sounds_Frequency_Domain_PlotWidget, ui.Animals_Sounds_Original_Signal_Spectrogram, ui.Animals_Sounds_Output_Signal_Spectrogram, ui.Animals_Sounds_Animal_1_Frequency_Slider, ui.Animals_Sounds_Animal_2_Frequency_Slider, ui.Animals_Sounds_Animal_3_Frequency_Slider, ui.Animals_Sounds_Animal_4_Frequency_Slider)
     ECGMode = Modes.ECGMode(ui, ui.ECG_Abnormalities_Original_Signal_PlotWidget, ui.ECG_Abnormalities_Output_Signal_PlotWidget, ui.ECG_Abnormalities_Frequency_Domain_PlotWidget, ui.ECG_Abnormalities_Original_Signal_Spectrogram, ui.ECG_Abnormalities_Output_Signal_Spectrogram, ui.ECG_Abnormalities_Normal_ECG_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_1_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_2_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_3_Frequency_Slider)
+    ui.smoothing_connection(AnimalMode)
+    ui.smoothing_connection(ECGMode)
+    ui.smoothing_connection(MusicMode)
+    ui.tab_connections(AnimalMode, ui.Animals_Sounds_Load_Signal_Button, ui.Animals_Sounds_Play_Pause_Button, ui.Animals_Sounds_Reset_Button, ui.Animals_Sounds_Stop_Button, ui.Animals_Sounds_Zooming_In_Button, ui.Animals_Sounds_Zooming_Out_Button, ui.Animals_Sounds_Signal_Speed_Slider)
+    ui.tab_connections(ECGMode, ui.ECG_Abnormalities_Load_Signal_Button, ui.ECG_Abnormalities_Play_Pause_Button, ui.ECG_Abnormalities_Reset_Button, ui.ECG_Abnormalities_Stop_Button, ui.ECG_Abnormalities_Zooming_In_Button, ui.ECG_Abnormalities_Zooming_Out_Button, ui.ECG_Abnormalities_Signal_Speed_Slider)
+    ui.tab_connections(MusicMode, ui.Musical_Instruments_Load_Signal_Button, ui.Musical_Instruments_Play_Pause_Button, ui.Musical_Instruments_Reset_Button, ui.Musical_Instruments_Stop_Button, ui.Musical_Instruments_Zooming_In_Button, ui.Musical_Instruments_Zooming_Out_Button, ui.Musical_Instruments_Signal_Speed_Slider)
     Form.show()
     sys.exit(app.exec_())

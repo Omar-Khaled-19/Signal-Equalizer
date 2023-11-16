@@ -6,6 +6,9 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np
 import bisect
 import librosa
+from scipy.signal.windows import get_window
+from scipy.signal.windows import boxcar
+import math
 
 
 class BaseMode(ABC):
@@ -54,6 +57,7 @@ class BaseMode(ABC):
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
         self.player.play()
+        self.plot_frequency_domain()
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
@@ -98,3 +102,60 @@ class BaseMode(ABC):
 
     def zoomout(self):
         self.input_graph.getViewBox().scaleBy((1.1,1.1))
+
+    def smoothing_window(self):
+        # Check which radio button is selected
+        if self.ui.Smoothing_Window_Hamming_Radio_Button.isChecked():
+            # Generate Hamming window
+            hamming_window = get_window('hamming', self.ui.Smoothing_Window_Frequency_Slider.value())
+            # Scale the Hamming window to the desired amplitude
+            scaled_hamming_window = self.ui.Smoothing_Window_Amplitude_Slider.value() * hamming_window / np.max(hamming_window)
+            return (scaled_hamming_window)
+
+        elif self.ui.Smoothing_Window_Hanning_Radio_Button.isChecked():
+            # Generate Hanning window
+            hanning_window = get_window('hann', self.ui.Smoothing_Window_Frequency_Slider.value())
+            # Scale the Hanning window to the desired amplitude
+            scaled_hanning_window = self.ui.Smoothing_Window_Amplitude_Slider.value() * hanning_window / np.max(hanning_window)
+            return (scaled_hanning_window)
+
+        elif self.ui.Smoothing_Window_Rectangle_Radio_Button.isChecked():
+            # generate and adjust the height as desired
+            rectangle_window = boxcar(self.ui.Smoothing_Window_Frequency_Slider.value()) * self.ui.Smoothing_Window_Amplitude_Slider.value()
+            return (rectangle_window)
+
+        elif self.ui.Smoothing_Window_Gaussian_Radio_Button.isChecked():
+            std_dev = self.ui.Smoothing_Window_Frequency_Slider.value() / (2 * math.sqrt(2 * math.log(2)))
+            gaussian_window = get_window(('gaussian', std_dev), self.ui.Smoothing_Window_Frequency_Slider.value()) * self.ui.Smoothing_Window_Amplitude_Slider.value()
+            return (gaussian_window)
+
+    def plot_smoothing(self):
+        self.current_smoothing = self.smoothing_window()
+        self.ui.Smoothing_Window_PlotWidget.clear()
+        self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
+
+    def plot_frequency_domain(self):
+        # fft_result = np.fft.fft(signal)
+        # frequencies = np.fft.fftfreq(len(fft_result), 1/sampling_rate)
+        # self.freq_graph.plot.plot(frequencies, np.abs(fft_result))
+        signal = np.array(self.time_domain_Y_coordinates)
+        dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
+        # if dt is None:
+        #     dt = 1
+        #     t = np.arange(0, signal.shape[-1])
+        # else: #mosta7el teb2a b none f m4 needed awy, arga3laha ba3den
+        t = np.arange(0, signal.shape[-1]) * dt
+
+        if signal.shape[0] % 2 != 0:
+            t = t[0:-1]
+            signal = signal[0:-1]
+
+        fft_result = np.fft.fft(signal) / t.shape[0]  # Divided by size t for coherent magnitude
+        freq = np.fft.fftfreq(t.shape[0], d=dt)
+
+        # Plot analytic signal - right half of the frequency axis is needed only...
+        first_neg_index = np.argmax(freq < 0)
+        freq_axis_pos = freq[0:first_neg_index]
+        sig_fft_pos = 2 * fft_result[0:first_neg_index]  # *2 because of the magnitude of the analytic signal
+        self.frequency_graph.plot(freq_axis_pos, np.abs(sig_fft_pos))
+  
