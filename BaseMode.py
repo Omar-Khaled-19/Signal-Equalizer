@@ -35,8 +35,8 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
-        for i in range(min_freq, max_freq):
-            self.modified_freq_domain_Y_coordinates[i] = self.freq_domain_Y_coordinates[i] * smoothing_factor
+        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain()
     
     def load_signal(self):
@@ -144,34 +144,16 @@ class BaseMode(ABC):
 
     def plot_frequency_domain(self):
         self.frequency_graph.clear()
-        self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
+        self.frequency_graph.setLimits(xMin = 0, xMax = float('inf'))
+        self.frequency_graph.plot(self.freq_domain_X_coordinates, self.freq_domain_Y_coordinates)
 
 
     def calculate_frequency_domain(self):
-        # fft_result = np.fft.fft(signal)
-        # frequencies = np.fft.fftfreq(len(fft_result), 1/sampling_rate)
-        # self.freq_graph.plot.plot(frequencies, np.abs(fft_result))
-        signal = np.array(self.time_domain_Y_coordinates)
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
-        # if dt is None:
-        #     dt = 1
-        #     t = np.arange(0, signal.shape[-1])
-        # else: #mosta7el teb2a b none f m4 needed awy, arga3laha ba3den
-        t = np.arange(0, signal.shape[-1]) * dt
-
-        if signal.shape[0] % 2 != 0:
-            t = t[0:-1]
-            signal = signal[0:-1]
-
-        fft_result = np.fft.fft(signal) / t.shape[0]  # Divided by size t for coherent magnitude
-        freq = np.fft.fftfreq(t.shape[0], d=dt)
-
-        # Plot analytic signal - right half of the frequency axis is needed only...
-        first_neg_index = np.argmax(freq < 0)
-        # freq_axis_pos = freq[0:first_neg_index]
-        self.freq_domain_X_coordinates = freq[0:first_neg_index]
-        sig_fft_pos = 2 * fft_result[0:first_neg_index]  # *2 because of the magnitude of the analytic signal
-        self.freq_domain_Y_coordinates = np.abs(sig_fft_pos)
+        fft_result = np.fft.fft(self.time_domain_Y_coordinates)
+        frequencies = np.fft.fftfreq(len(fft_result), dt)
+        self.freq_domain_X_coordinates = frequencies
+        self.freq_domain_Y_coordinates = np.abs(fft_result)
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
         self.plot_frequency_domain()
   
