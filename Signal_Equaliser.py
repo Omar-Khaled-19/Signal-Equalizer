@@ -13,6 +13,7 @@ from mplwidget import MplWidget
 from pyqtgraph import PlotWidget
 
 
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
