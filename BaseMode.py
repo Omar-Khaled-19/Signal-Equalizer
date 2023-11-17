@@ -7,7 +7,7 @@ import numpy as np, bisect, librosa, math
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 
-# Proposed Modifications = 3
+# Proposed Modifications = 4
 class BaseMode(ABC):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         self.ui = ui
@@ -35,8 +35,8 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
-        for i in self.modified_freq_domain_Y_coordinates[min_freq:max_freq]:
-            i *= smoothing_factor
+        for i in range(min_freq, max_freq):
+            self.modified_freq_domain_Y_coordinates[i] = self.freq_domain_Y_coordinates[i] * smoothing_factor
         self.plot_frequency_domain()
     
     def load_signal(self):
@@ -61,13 +61,16 @@ class BaseMode(ABC):
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
         self.player.play()
-        self.plot_frequency_domain()
+        self.calculate_frequency_domain()
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
             sound_position = self.player.position()
             sound_duration = self.player.duration()
-            progress = sound_position / sound_duration
+            try:
+                progress = sound_position / sound_duration
+            except ZeroDivisionError:
+                progress = 0
 
             if progress == 1:
                 self.stopped = True
@@ -140,6 +143,7 @@ class BaseMode(ABC):
         self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
 
     def plot_frequency_domain(self):
+        self.frequency_graph.clear()
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
 
 
@@ -169,4 +173,5 @@ class BaseMode(ABC):
         sig_fft_pos = 2 * fft_result[0:first_neg_index]  # *2 because of the magnitude of the analytic signal
         self.freq_domain_Y_coordinates = np.abs(sig_fft_pos)
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
+        self.plot_frequency_domain()
   
