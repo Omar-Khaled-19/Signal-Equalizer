@@ -144,8 +144,8 @@ class BaseMode(ABC):
 
     def plot_frequency_domain(self):
         self.frequency_graph.clear()
-        self.frequency_graph.setLimits(xMin = 0, xMax = float('inf'))
-        self.frequency_graph.plot(self.freq_domain_X_coordinates, self.freq_domain_Y_coordinates)
+        self.frequency_graph.setLimits(xMin = 0, xMax = 10000)
+        self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
 
 
     def calculate_frequency_domain(self):
