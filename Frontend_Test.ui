@@ -106,7 +106,7 @@ color:white;
          <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>4</number>
         </property>
         <property name="iconSize">
          <size>
@@ -117,7 +117,7 @@ color:white;
         <widget class="QWidget" name="tab">
          <attribute name="icon">
           <iconset>
-           <normaloff>Signal-Equalizer/Assets/bell-curve.png</normaloff>Signal-Equalizer/Assets/bell-curve.png</iconset>
+           <normaloff>Assets/bell-curve.png</normaloff>Assets/bell-curve.png</iconset>
          </attribute>
          <attribute name="title">
           <string>Smoothing Window</string>
@@ -620,7 +620,7 @@ color:white;
          </property>
          <attribute name="icon">
           <iconset>
-           <normaloff>Signal-Equalizer/Assets/radio-waves.png</normaloff>Signal-Equalizer/Assets/radio-waves.png</iconset>
+           <normaloff>Assets/radio-waves.png</normaloff>Assets/radio-waves.png</iconset>
          </attribute>
          <attribute name="title">
           <string>Uniform Range</string>
@@ -645,7 +645,7 @@ color:white;
                </property>
                <layout class="QGridLayout" name="gridLayout_13">
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Uniform_Range_Original_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Uniform_Range_Original_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -702,7 +702,7 @@ color:white;
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Uniform_Range_Output_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Uniform_Range_Output_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -775,7 +775,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/rewind.png</normaloff>Signal-Equalizer/Assets/rewind.png</iconset>
+                         <normaloff>Assets/rewind.png</normaloff>Assets/rewind.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -893,7 +893,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoomin.png</normaloff>Signal-Equalizer/Assets/zoomin.png</iconset>
+                         <normaloff>Assets/zoomin.png</normaloff>Assets/zoomin.png</iconset>
                        </property>
                       </widget>
                      </item>
@@ -932,7 +932,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoom-out.png</normaloff>Signal-Equalizer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -1042,7 +1042,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/move-to.png</normaloff>Signal-Equalizer/Assets/move-to.png</iconset>
+                         <normaloff>Assets/move-to.png</normaloff>Assets/move-to.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -1105,7 +1105,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/invisible.png</normaloff>Signal-Equalizer/Assets/invisible.png</iconset>
+                         <normaloff>Assets/invisible.png</normaloff>Assets/invisible.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -1137,7 +1137,7 @@ color:white;
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/stop-button (2).png</normaloff>Signal-Equalizer/Assets/stop-button (2).png</iconset>
+                         <normaloff>Assets/stop-button (2).png</normaloff>Assets/stop-button (2).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -1170,7 +1170,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/play (1).png</normaloff>Signal-Equalizer/Assets/play (1).png</iconset>
+                         <normaloff>Assets/play (1).png</normaloff>Assets/play (1).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -1870,7 +1870,7 @@ border-radius: 14px;</string>
         <widget class="QWidget" name="tab_3">
          <attribute name="icon">
           <iconset>
-           <normaloff>Signal-Equalizer/Assets/music.png</normaloff>Signal-Equalizer/Assets/music.png</iconset>
+           <normaloff>Assets/music.png</normaloff>Assets/music.png</iconset>
          </attribute>
          <attribute name="title">
           <string>Musical Instruments</string>
@@ -1895,7 +1895,7 @@ border-radius: 14px;</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_19">
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Musical_Instruments_Original_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Musical_Instruments_Original_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -1952,7 +1952,7 @@ border-radius: 14px;</string>
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Musical_Instruments_Output_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Musical_Instruments_Output_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -2025,7 +2025,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/rewind.png</normaloff>Signal-Equalizer/Assets/rewind.png</iconset>
+                         <normaloff>Assets/rewind.png</normaloff>Assets/rewind.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2143,7 +2143,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoomin.png</normaloff>Signal-Equalizer/Assets/zoomin.png</iconset>
+                         <normaloff>Assets/zoomin.png</normaloff>Assets/zoomin.png</iconset>
                        </property>
                       </widget>
                      </item>
@@ -2182,7 +2182,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoom-out.png</normaloff>Signal-Equalizer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2292,7 +2292,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/move-to.png</normaloff>Signal-Equalizer/Assets/move-to.png</iconset>
+                         <normaloff>Assets/move-to.png</normaloff>Assets/move-to.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2355,7 +2355,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/invisible.png</normaloff>Signal-Equalizer/Assets/invisible.png</iconset>
+                         <normaloff>Assets/invisible.png</normaloff>Assets/invisible.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2387,7 +2387,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/stop-button (2).png</normaloff>Signal-Equalizer/Assets/stop-button (2).png</iconset>
+                         <normaloff>Assets/stop-button (2).png</normaloff>Assets/stop-button (2).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2420,7 +2420,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/play (1).png</normaloff>Signal-Equalizer/Assets/play (1).png</iconset>
+                         <normaloff>Assets/play (1).png</normaloff>Assets/play (1).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -2784,7 +2784,7 @@ border-radius: 14px;</string>
         <widget class="QWidget" name="tab_4">
          <attribute name="icon">
           <iconset>
-           <normaloff>Signal-Equalizer/Assets/animal.png</normaloff>Signal-Equalizer/Assets/animal.png</iconset>
+           <normaloff>Assets/animal.png</normaloff>Assets/animal.png</iconset>
          </attribute>
          <attribute name="title">
           <string>Animals Sounds</string>
@@ -2809,7 +2809,7 @@ border-radius: 14px;</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_25">
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Animals_Sounds_Original_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Animals_Sounds_Original_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -2866,7 +2866,7 @@ border-radius: 14px;</string>
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="Animals_Sounds_Output_Signal_Spectrogram">
+                 <widget class="MplWidget" name="Animals_Sounds_Output_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -2939,7 +2939,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/rewind.png</normaloff>Signal-Equalizer/Assets/rewind.png</iconset>
+                         <normaloff>Assets/rewind.png</normaloff>Assets/rewind.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3057,7 +3057,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoomin.png</normaloff>Signal-Equalizer/Assets/zoomin.png</iconset>
+                         <normaloff>Assets/zoomin.png</normaloff>Assets/zoomin.png</iconset>
                        </property>
                       </widget>
                      </item>
@@ -3096,7 +3096,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoom-out.png</normaloff>Signal-Equalizer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3206,7 +3206,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/move-to.png</normaloff>Signal-Equalizer/Assets/move-to.png</iconset>
+                         <normaloff>Assets/move-to.png</normaloff>Assets/move-to.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3269,7 +3269,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/invisible.png</normaloff>Signal-Equalizer/Assets/invisible.png</iconset>
+                         <normaloff>Assets/invisible.png</normaloff>Assets/invisible.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3301,7 +3301,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/stop-button (2).png</normaloff>Signal-Equalizer/Assets/stop-button (2).png</iconset>
+                         <normaloff>Assets/stop-button (2).png</normaloff>Assets/stop-button (2).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3334,7 +3334,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/play (1).png</normaloff>Signal-Equalizer/Assets/play (1).png</iconset>
+                         <normaloff>Assets/play (1).png</normaloff>Assets/play (1).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3698,7 +3698,7 @@ border-radius: 14px;</string>
         <widget class="QWidget" name="tab_5">
          <attribute name="icon">
           <iconset>
-           <normaloff>Signal-Equalizer/Assets/wave.png</normaloff>Signal-Equalizer/Assets/wave.png</iconset>
+           <normaloff>Assets/wave.png</normaloff>Assets/wave.png</iconset>
          </attribute>
          <attribute name="title">
           <string>ECG Abnormalities</string>
@@ -3723,7 +3723,7 @@ border-radius: 14px;</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_31">
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="ECG_Abnormalities_Original_Signal_Spectrogram">
+                 <widget class="MplWidget" name="ECG_Abnormalities_Original_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -3780,7 +3780,7 @@ border-radius: 14px;</string>
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="PlotWidget" name="ECG_Abnormalities_Output_Signal_Spectrogram">
+                 <widget class="MplWidget" name="ECG_Abnormalities_Output_Signal_Spectrogram">
                   <property name="maximumSize">
                    <size>
                     <width>680</width>
@@ -3853,7 +3853,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/rewind.png</normaloff>Signal-Equalizer/Assets/rewind.png</iconset>
+                         <normaloff>Assets/rewind.png</normaloff>Assets/rewind.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -3971,7 +3971,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoomin.png</normaloff>Signal-Equalizer/Assets/zoomin.png</iconset>
+                         <normaloff>Assets/zoomin.png</normaloff>Assets/zoomin.png</iconset>
                        </property>
                       </widget>
                      </item>
@@ -4010,7 +4010,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/zoom-out.png</normaloff>Signal-Equalizer/Assets/zoom-out.png</iconset>
+                         <normaloff>Assets/zoom-out.png</normaloff>Assets/zoom-out.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4120,7 +4120,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/move-to.png</normaloff>Signal-Equalizer/Assets/move-to.png</iconset>
+                         <normaloff>Assets/move-to.png</normaloff>Assets/move-to.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4183,7 +4183,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/invisible.png</normaloff>Signal-Equalizer/Assets/invisible.png</iconset>
+                         <normaloff>Assets/invisible.png</normaloff>Assets/invisible.png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4215,7 +4215,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/stop-button (2).png</normaloff>Signal-Equalizer/Assets/stop-button (2).png</iconset>
+                         <normaloff>Assets/stop-button (2).png</normaloff>Assets/stop-button (2).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4248,7 +4248,7 @@ border-radius: 14px;</string>
                        </property>
                        <property name="icon">
                         <iconset>
-                         <normaloff>Signal-Equalizer/Assets/play (1).png</normaloff>Signal-Equalizer/Assets/play (1).png</iconset>
+                         <normaloff>Assets/play (1).png</normaloff>Assets/play (1).png</iconset>
                        </property>
                        <property name="iconSize">
                         <size>
@@ -4620,7 +4620,12 @@ border-radius: 14px;</string>
   <customwidget>
    <class>PlotWidget</class>
    <extends>QGraphicsView</extends>
-   <header location="global">pyqtgraph</header>
+   <header>pyqtgraph</header>
+  </customwidget>
+  <customwidget>
+   <class>MplWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>mplwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
