@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
+import librosa
 import numpy as np, bisect, math
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
@@ -166,6 +167,7 @@ class BaseMode(ABC):
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
+        self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
         # Inverse Fourier transform to go back to the time domain
         self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
         self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
