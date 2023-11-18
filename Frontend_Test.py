@@ -1140,7 +1140,7 @@ class Ui_Form(object):
         self.Musical_Instruments_Instrument_4_Frequency__Slider.setOrientation(QtCore.Qt.Vertical)
         self.Musical_Instruments_Instrument_4_Frequency__Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Musical_Instruments_Instrument_4_Frequency__Slider.setObjectName("Musical_Instruments_Instrument_4_Frequency__Slider")
-        self.Musical_Instruments_Instrument_4_Frequency__Slider.setProperty("value", 5)
+        self.Musical_Instruments_Instrument_4_Frequency__Slider.setProperty("value", 0)
         self.verticalLayout_20.addWidget(self.Musical_Instruments_Instrument_4_Frequency__Slider)
         self.Musical_Instruments_Instrument_4_Label = QtWidgets.QLabel(self.groupBox_4)
         self.Musical_Instruments_Instrument_4_Label.setMinimumSize(QtCore.QSize(75, 0))

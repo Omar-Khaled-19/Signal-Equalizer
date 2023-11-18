@@ -37,7 +37,7 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
-        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
+        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain()
     
@@ -150,8 +150,13 @@ class BaseMode(ABC):
 
     def plot_frequency_domain(self):
         self.frequency_graph.clear()
-        self.frequency_graph.setLimits(xMin = 0, xMax = 10000)
+        self.frequency_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
+        self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
+        self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
+        # Inverse Fourier transform to go back to the time domain
+        time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
+        self.output_graph.plot(self.freq_domain_X_coordinates, np.real(time_domain_signal_modified))
 
 
     def calculate_frequency_domain(self):
@@ -160,7 +165,7 @@ class BaseMode(ABC):
         frequencies = np.fft.fftfreq(len(fft_result), dt)
         self.freq_domain_X_coordinates = frequencies
         self.freq_domain_Y_coordinates = np.abs(fft_result)
-        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
+        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
         self.plot_frequency_domain()
 
 
