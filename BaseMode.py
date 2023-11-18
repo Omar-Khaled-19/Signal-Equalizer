@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np, bisect, librosa, math
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
+from mplwidget import MplCanvas,MplWidget
 
 # Proposed Modifications = 4
 class BaseMode(ABC):
@@ -28,8 +29,9 @@ class BaseMode(ABC):
 
         self.X_Points_Plotted = 0
         self.paused = False
-        self.speed = 10
         self.stopped = False
+        self.hidden = False
+        self.speed = 10
         self.player = QMediaPlayer()
 
     @abstractmethod
@@ -80,6 +82,10 @@ class BaseMode(ABC):
 
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.data_line.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
+
+            if not self.hidden:
+                self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
+
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -156,4 +162,29 @@ class BaseMode(ABC):
         self.freq_domain_Y_coordinates = np.abs(fft_result)
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates
         self.plot_frequency_domain()
-  
+
+
+    def toggle_hide(self):
+        self.hidden = not self.hidden
+        self.input_spectrogram.canvas.clear_spectrogram()
+
+    def change_pause_icon(self,button):
+        icon = QtGui.QIcon()
+        if not self.paused:
+            icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            button.setIcon(icon)
+        else:
+            icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            button.setIcon(icon)
+
+    def change_hide_icon(self,button):
+        _translate = QtCore.QCoreApplication.translate
+        icon = QtGui.QIcon()
+        if not self.hidden:
+            icon.addPixmap(QtGui.QPixmap("Assets/invisible.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            button.setIcon(icon)
+            button.setText(_translate("Form", "   Hide Spectrogram"))
+        else:
+            icon.addPixmap(QtGui.QPixmap("Assets/eye.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            button.setIcon(icon)  
+            button.setText(_translate("Form", "   Show Spectrogram"))  

@@ -13,13 +13,11 @@ class UniformMode(BaseMode.BaseMode):
     def toggle_pause(self):
         # Why the whole function is not written in BaseMode?
         super().toggle_pause()
-        icon = QtGui.QIcon()
-        if not self.paused:
-            icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Uniform_Range_Play_Pause_Button.setIcon(icon)
-        else:
-            icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Uniform_Range_Play_Pause_Button.setIcon(icon)
+        self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
+
+    def toggle_hide(self):
+        super().toggle_hide()
+        self.change_hide_icon(self.ui.Uniform_Range_Hide_Show_Spectrogram_Button)
 
 
 
@@ -40,14 +38,11 @@ class MusicalMode(BaseMode.BaseMode):
 
     def toggle_pause(self):
         super().toggle_pause()
-        icon = QtGui.QIcon()
-        if not self.paused:
-            icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Musical_Instruments_Play_Pause_Button.setIcon(icon)
-        else:
-            icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Musical_Instruments_Play_Pause_Button.setIcon(icon)
+        self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
 
+    def toggle_hide(self):
+        super().toggle_hide()
+        self.change_hide_icon(self.ui.Musical_Instruments_Hide_Show_Spectrogram_Button)
 
 class AnimalMode(BaseMode.BaseMode):
 
@@ -59,13 +54,11 @@ class AnimalMode(BaseMode.BaseMode):
 
     def toggle_pause(self):
         super().toggle_pause()
-        icon = QtGui.QIcon()
-        if not self.paused:
-            icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Animals_Sounds_Play_Pause_Button.setIcon(icon)
-        else:
-            icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.Animals_Sounds_Play_Pause_Button.setIcon(icon)
+        self.change_pause_icon(self.ui.Animals_Sounds_Play_Pause_Button)
+
+    def toggle_hide(self):
+        super().toggle_hide()
+        self.change_hide_icon(self.ui.Animals_Sounds_Hide_Show_Spectrogram_Button)
 
 class ECGMode(BaseMode.BaseMode):
 
@@ -96,13 +89,7 @@ class ECGMode(BaseMode.BaseMode):
         
     def toggle_pause(self):
         self.paused = not self.paused
-        icon = QtGui.QIcon()
-        if not self.paused:
-            icon.addPixmap(QtGui.QPixmap("Assets/pause.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.ECG_Abnormalities_Play_Pause_Button.setIcon(icon)
-        else:
-            icon.addPixmap(QtGui.QPixmap("Assets/play (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-            self.ui.ECG_Abnormalities_Play_Pause_Button.setIcon(icon)
+        self.change_pause_icon(self.ui.ECG_Abnormalities_Hide_Show_Spectrogram_Button)
 
     def reset(self):
         self.X_Points_Plotted = 0
@@ -116,3 +103,6 @@ class ECGMode(BaseMode.BaseMode):
         self.input_graph.getViewBox().setXRange(0,100)
         self.X_Points_Plotted = 0
 
+    def toggle_hide(self):
+        super().toggle_hide()
+        self.change_hide_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)

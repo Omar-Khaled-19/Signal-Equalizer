@@ -1,6 +1,7 @@
 import sys, Modes
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget
+from mplwidget import MplWidget
 
 
 class Ui_Form(object):
@@ -268,7 +269,7 @@ class Ui_Form(object):
         self.frame_6.setObjectName("frame_6")
         self.gridLayout_13 = QtWidgets.QGridLayout(self.frame_6)
         self.gridLayout_13.setObjectName("gridLayout_13")
-        self.Uniform_Range_Original_Signal_Spectrogram = PlotWidget(self.frame_6)
+        self.Uniform_Range_Original_Signal_Spectrogram = MplWidget(self.frame_6)
         self.Uniform_Range_Original_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Uniform_Range_Original_Signal_Spectrogram.setObjectName("Uniform_Range_Original_Signal_Spectrogram")
         self.gridLayout_13.addWidget(self.Uniform_Range_Original_Signal_Spectrogram, 0, 1, 1, 1)
@@ -297,7 +298,7 @@ class Ui_Form(object):
         self.Uniform_Range_Output_Signal_PlotWidget.setMinimumSize(QtCore.QSize(750, 0))
         self.Uniform_Range_Output_Signal_PlotWidget.setObjectName("Uniform_Range_Output_Signal_PlotWidget")
         self.gridLayout_16.addWidget(self.Uniform_Range_Output_Signal_PlotWidget, 0, 0, 1, 1)
-        self.Uniform_Range_Output_Signal_Spectrogram = PlotWidget(self.frame_8)
+        self.Uniform_Range_Output_Signal_Spectrogram = MplWidget(self.frame_8)
         self.Uniform_Range_Output_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Uniform_Range_Output_Signal_Spectrogram.setObjectName("Uniform_Range_Output_Signal_Spectrogram")
         self.gridLayout_16.addWidget(self.Uniform_Range_Output_Signal_Spectrogram, 0, 1, 1, 1)
@@ -800,7 +801,7 @@ class Ui_Form(object):
         self.frame_11.setObjectName("frame_11")
         self.gridLayout_19 = QtWidgets.QGridLayout(self.frame_11)
         self.gridLayout_19.setObjectName("gridLayout_19")
-        self.Musical_Instruments_Original_Signal_Spectrogram = PlotWidget(self.frame_11)
+        self.Musical_Instruments_Original_Signal_Spectrogram = MplWidget(self.frame_11)
         self.Musical_Instruments_Original_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Musical_Instruments_Original_Signal_Spectrogram.setObjectName("Musical_Instruments_Original_Signal_Spectrogram")
         self.gridLayout_19.addWidget(self.Musical_Instruments_Original_Signal_Spectrogram, 0, 1, 1, 1)
@@ -829,7 +830,7 @@ class Ui_Form(object):
         self.Musical_Instruments_Output_Signal_PlotWidget.setMinimumSize(QtCore.QSize(750, 0))
         self.Musical_Instruments_Output_Signal_PlotWidget.setObjectName("Musical_Instruments_Output_Signal_PlotWidget")
         self.gridLayout_21.addWidget(self.Musical_Instruments_Output_Signal_PlotWidget, 0, 0, 1, 1)
-        self.Musical_Instruments_Output_Signal_Spectrogram = PlotWidget(self.frame_13)
+        self.Musical_Instruments_Output_Signal_Spectrogram = MplWidget(self.frame_13)
         self.Musical_Instruments_Output_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Musical_Instruments_Output_Signal_Spectrogram.setObjectName("Musical_Instruments_Output_Signal_Spectrogram")
         self.gridLayout_21.addWidget(self.Musical_Instruments_Output_Signal_Spectrogram, 0, 1, 1, 1)
@@ -1174,7 +1175,7 @@ class Ui_Form(object):
         self.frame_16.setObjectName("frame_16")
         self.gridLayout_25 = QtWidgets.QGridLayout(self.frame_16)
         self.gridLayout_25.setObjectName("gridLayout_25")
-        self.Animals_Sounds_Original_Signal_Spectrogram = PlotWidget(self.frame_16)
+        self.Animals_Sounds_Original_Signal_Spectrogram = MplWidget(self.frame_16)
         self.Animals_Sounds_Original_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Animals_Sounds_Original_Signal_Spectrogram.setObjectName("Animals_Sounds_Original_Signal_Spectrogram")
         self.gridLayout_25.addWidget(self.Animals_Sounds_Original_Signal_Spectrogram, 0, 1, 1, 1)
@@ -1203,7 +1204,7 @@ class Ui_Form(object):
         self.Animals_Sounds_Output_Signal_PlotWidget.setMinimumSize(QtCore.QSize(750, 0))
         self.Animals_Sounds_Output_Signal_PlotWidget.setObjectName("Animals_Sounds_Output_Signal_PlotWidget")
         self.gridLayout_27.addWidget(self.Animals_Sounds_Output_Signal_PlotWidget, 0, 0, 1, 1)
-        self.Animals_Sounds_Output_Signal_Spectrogram = PlotWidget(self.frame_18)
+        self.Animals_Sounds_Output_Signal_Spectrogram = MplWidget(self.frame_18)
         self.Animals_Sounds_Output_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.Animals_Sounds_Output_Signal_Spectrogram.setObjectName("Animals_Sounds_Output_Signal_Spectrogram")
         self.gridLayout_27.addWidget(self.Animals_Sounds_Output_Signal_Spectrogram, 0, 1, 1, 1)
@@ -1544,7 +1545,7 @@ class Ui_Form(object):
         self.frame_21.setObjectName("frame_21")
         self.gridLayout_31 = QtWidgets.QGridLayout(self.frame_21)
         self.gridLayout_31.setObjectName("gridLayout_31")
-        self.ECG_Abnormalities_Original_Signal_Spectrogram = PlotWidget(self.frame_21)
+        self.ECG_Abnormalities_Original_Signal_Spectrogram = MplWidget(self.frame_21)
         self.ECG_Abnormalities_Original_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.ECG_Abnormalities_Original_Signal_Spectrogram.setObjectName("ECG_Abnormalities_Original_Signal_Spectrogram")
         self.gridLayout_31.addWidget(self.ECG_Abnormalities_Original_Signal_Spectrogram, 0, 1, 1, 1)
@@ -1573,7 +1574,7 @@ class Ui_Form(object):
         self.ECG_Abnormalities_Output_Signal_PlotWidget.setMinimumSize(QtCore.QSize(750, 0))
         self.ECG_Abnormalities_Output_Signal_PlotWidget.setObjectName("ECG_Abnormalities_Output_Signal_PlotWidget")
         self.gridLayout_33.addWidget(self.ECG_Abnormalities_Output_Signal_PlotWidget, 0, 0, 1, 1)
-        self.ECG_Abnormalities_Output_Signal_Spectrogram = PlotWidget(self.frame_23)
+        self.ECG_Abnormalities_Output_Signal_Spectrogram = MplWidget(self.frame_23)
         self.ECG_Abnormalities_Output_Signal_Spectrogram.setMaximumSize(QtCore.QSize(680, 16777215))
         self.ECG_Abnormalities_Output_Signal_Spectrogram.setObjectName("ECG_Abnormalities_Output_Signal_Spectrogram")
         self.gridLayout_33.addWidget(self.ECG_Abnormalities_Output_Signal_Spectrogram, 0, 1, 1, 1)
@@ -1925,7 +1926,7 @@ class Ui_Form(object):
         self.Smoothing_Window_Amplitude_Slider.valueChanged.connect(lambda: mode.plot_smoothing())
             
     
-    def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider):
+    def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider, hide):
         load.clicked.connect(lambda: mode.load_signal())
         play.clicked.connect(lambda: mode.toggle_pause())
         reset.clicked.connect(lambda: mode.reset())
@@ -1933,6 +1934,7 @@ class Ui_Form(object):
         stop.clicked.connect(lambda: mode.stop())
         zooming_in.clicked.connect(lambda: mode.zoomin())
         zooming_out.clicked.connect(lambda: mode.zoomout())
+        hide.clicked.connect(lambda: mode.toggle_hide())
 
         
         
@@ -2030,8 +2032,8 @@ if __name__ == "__main__":
     ui.smoothing_connection(AnimalMode)
     ui.smoothing_connection(ECGMode)
     ui.smoothing_connection(MusicMode)
-    ui.tab_connections(AnimalMode, ui.Animals_Sounds_Load_Signal_Button, ui.Animals_Sounds_Play_Pause_Button, ui.Animals_Sounds_Reset_Button, ui.Animals_Sounds_Stop_Button, ui.Animals_Sounds_Zooming_In_Button, ui.Animals_Sounds_Zooming_Out_Button, ui.Animals_Sounds_Signal_Speed_Slider)
-    ui.tab_connections(ECGMode, ui.ECG_Abnormalities_Load_Signal_Button, ui.ECG_Abnormalities_Play_Pause_Button, ui.ECG_Abnormalities_Reset_Button, ui.ECG_Abnormalities_Stop_Button, ui.ECG_Abnormalities_Zooming_In_Button, ui.ECG_Abnormalities_Zooming_Out_Button, ui.ECG_Abnormalities_Signal_Speed_Slider)
-    ui.tab_connections(MusicMode, ui.Musical_Instruments_Load_Signal_Button, ui.Musical_Instruments_Play_Pause_Button, ui.Musical_Instruments_Reset_Button, ui.Musical_Instruments_Stop_Button, ui.Musical_Instruments_Zooming_In_Button, ui.Musical_Instruments_Zooming_Out_Button, ui.Musical_Instruments_Signal_Speed_Slider)
+    ui.tab_connections(AnimalMode, ui.Animals_Sounds_Load_Signal_Button, ui.Animals_Sounds_Play_Pause_Button, ui.Animals_Sounds_Reset_Button, ui.Animals_Sounds_Stop_Button, ui.Animals_Sounds_Zooming_In_Button, ui.Animals_Sounds_Zooming_Out_Button, ui.Animals_Sounds_Signal_Speed_Slider, ui.Animals_Sounds_Hide_Show_Spectrogram_Button)
+    ui.tab_connections(ECGMode, ui.ECG_Abnormalities_Load_Signal_Button, ui.ECG_Abnormalities_Play_Pause_Button, ui.ECG_Abnormalities_Reset_Button, ui.ECG_Abnormalities_Stop_Button, ui.ECG_Abnormalities_Zooming_In_Button, ui.ECG_Abnormalities_Zooming_Out_Button, ui.ECG_Abnormalities_Signal_Speed_Slider, ui.ECG_ABnormalities_Hide_Show_Spectrogram_Button)
+    ui.tab_connections(MusicMode, ui.Musical_Instruments_Load_Signal_Button, ui.Musical_Instruments_Play_Pause_Button, ui.Musical_Instruments_Reset_Button, ui.Musical_Instruments_Stop_Button, ui.Musical_Instruments_Zooming_In_Button, ui.Musical_Instruments_Zooming_Out_Button, ui.Musical_Instruments_Signal_Speed_Slider, ui.Musical_Instruments_Hide_Show_Spectrogram_Button)
     Form.show()
     sys.exit(app.exec_())
