@@ -22,6 +22,7 @@ class BaseMode(ABC):
         self.freq_domain_X_coordinates = []
         self.freq_domain_Y_coordinates = []
         self.modified_freq_domain_Y_coordinates = []
+        self.time_domain_signal_modified = []
         self.slider1 = slider1
         self.slider2 = slider2
         self.slider3 = slider3
@@ -64,6 +65,13 @@ class BaseMode(ABC):
         self.timer.start()
         self.player.play()
         self.calculate_frequency_domain()
+        self.plot_output(self.time_domain_Y_coordinates)
+        
+    def plot_output(self, Ycoordinates):
+        self.output_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
+        self.output_graph.clear()
+        self.output_graph.plot(self.time_domain_X_coordinates, Ycoordinates)
+
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
@@ -155,8 +163,12 @@ class BaseMode(ABC):
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
         # Inverse Fourier transform to go back to the time domain
-        time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
-        self.output_graph.plot(self.freq_domain_X_coordinates, np.real(time_domain_signal_modified))
+        self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
+        self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
+        self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
+        self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
+        self.plot_output( self.time_domain_signal_modified)
+        
 
 
     def calculate_frequency_domain(self):
