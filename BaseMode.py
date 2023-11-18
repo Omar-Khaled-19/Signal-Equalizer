@@ -3,8 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import librosa
-import numpy as np, bisect, math
+import numpy as np, bisect, math, librosa
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 from mplwidget import MplCanvas,MplWidget
