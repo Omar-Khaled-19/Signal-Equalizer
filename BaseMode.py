@@ -59,18 +59,21 @@ class BaseMode(ABC):
     def plot_signal(self):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
         self.data_line = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
+        self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
+        self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="g")
+        
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
         self.player.play()
         self.calculate_frequency_domain()
-        self.plot_output(self.time_domain_Y_coordinates)
         
-    def plot_output(self, Ycoordinates):
+    def plot_output(self, Xcoordinates, Ycoordinates):
+        self.reset()
         self.output_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.output_graph.clear()
-        self.output_graph.plot(self.time_domain_X_coordinates, Ycoordinates)
+        self.output_graph.plot(Xcoordinates, Ycoordinates)
 
 
     def update_plot_data(self):
@@ -90,6 +93,7 @@ class BaseMode(ABC):
 
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.data_line.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
+            self.data_line_out.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_signal_modified[:target_index])
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
@@ -167,7 +171,7 @@ class BaseMode(ABC):
         self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
         self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
-        self.plot_output( self.time_domain_signal_modified)
+        self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
         
 
 
