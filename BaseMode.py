@@ -39,7 +39,8 @@ class BaseMode(ABC):
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
-        self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
+        # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain()
     
     def load_signal(self):
