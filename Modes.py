@@ -6,9 +6,35 @@ class UniformMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
+        self.slider5 = ui.Uniform_Range_Frequency_Range_5_Slider
+        self.slider6 = ui.Uniform_Range_Frequency_Range_6_Slider
+        self.slider7 = ui.Uniform_Range_Frequency_Range_7_Slider
+        self.slider8 = ui.Uniform_Range_Frequency_Range_8_Slider
+        self.slider9 = ui.Uniform_Range_Frequency_Range_9_Slider
+        self.slider10 = ui.Uniform_Range_Frequency_Range_10_Slider
 
-    def modify_frequency(self, value: int):
-        pass
+
+    def modify_frequency(self, slider_value: int, slider: int):
+        if slider == 1:
+            super().modify_frequency(1000, 1100, slider_value)
+        elif slider == 2:
+            super().modify_frequency(1100, 1200, slider_value)
+        elif slider == 3:
+            super().modify_frequency(1200, 1300, slider_value)
+        elif slider == 4:
+            super().modify_frequency(1300, 1400, slider_value)
+        elif slider == 5:
+            super().modify_frequency(1400, 1500, slider_value)
+        elif slider == 6:
+            super().modify_frequency(1500, 1600, slider_value)
+        elif slider == 7:
+            super().modify_frequency(1600, 1700, slider_value)
+        elif slider == 8:
+            super().modify_frequency(1700, 1800, slider_value)
+        elif slider == 9:
+            super().modify_frequency(1800, 1900, slider_value)
+        else:
+            super().modify_frequency(1900, 2100, slider_value)
 
     def toggle_pause(self):
         # Why the whole function is not written in BaseMode?
@@ -49,8 +75,15 @@ class AnimalMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
 
-    def modify_frequency(self, slider: int):
-        pass
+    def modify_frequency(self, slider_value: int, slider: int):
+        if slider == 1:
+            super().modify_frequency(64, 500, slider_value)
+        elif slider == 2:
+            super().modify_frequency(500, 1010, slider_value)
+        elif slider == 3:
+            super().modify_frequency(1010, 2010, slider_value)
+        else:
+            super().modify_frequency(2010, 8000, slider_value)
 
     def toggle_pause(self):
         super().toggle_pause()
