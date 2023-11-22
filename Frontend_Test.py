@@ -1921,18 +1921,6 @@ class Ui_Form(object):
         self.Musical_Instruments_Signal_Speed_Slider.sliderMoved['int'].connect(self.Musical_Instruments_Signal_Speed_LCD.display) # type: ignore
         self.Animals_Sounds_Signal_Speed_Slider.sliderMoved['int'].connect(self.Animals_Sounds_Signal_Speed_LCD.display) # type: ignore
         self.ECG_Abnormalities_Signal_Speed_Slider.sliderMoved['int'].connect(self.ECG_Abnormalities_Signal_Speed_LCD.display) # type: ignore
-        self.Musical_Instruments_Instrument_1_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 1))
-        self.Musical_Instruments_Instrument_2_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 2))
-        self.Musical_Instruments_Instrument_3_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 3))
-        self.Musical_Instruments_Instrument_4_Frequency__Slider.valueChanged.connect(lambda value: MusicMode.modify_frequency(value, 4))
-        self.Animals_Sounds_Animal_1_Frequency_Slider.valueChanged.connect(lambda value: AnimalMode.modify_frequency(value, 1))
-        self.Animals_Sounds_Animal_2_Frequency_Slider.valueChanged.connect(lambda value: AnimalMode.modify_frequency(value, 2))
-        self.Animals_Sounds_Animal_3_Frequency_Slider.valueChanged.connect(lambda value: AnimalMode.modify_frequency(value, 3))
-        self.Animals_Sounds_Animal_4_Frequency_Slider.valueChanged.connect(lambda value: AnimalMode.modify_frequency(value, 4))
-        self.Uniform_Range_Frequency_Range_1_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 1))
-        self.Uniform_Range_Frequency_Range_2_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 2))
-        self.Uniform_Range_Frequency_Range_3_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 3))
-        self.Uniform_Range_Frequency_Range_4_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 4))
         self.Uniform_Range_Frequency_Range_5_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 5))
         self.Uniform_Range_Frequency_Range_6_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 6))
         self.Uniform_Range_Frequency_Range_7_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 7))
@@ -1951,7 +1939,7 @@ class Ui_Form(object):
         self.Smoothing_Window_Amplitude_Slider.valueChanged.connect(lambda: mode.plot_smoothing())
             
     
-    def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider, hide):
+    def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider, hide, slider1, slider2, slider3, slider4):
         load.clicked.connect(lambda: mode.load_signal())
         play.clicked.connect(lambda: mode.toggle_pause())
         reset.clicked.connect(lambda: mode.reset())
@@ -1960,6 +1948,10 @@ class Ui_Form(object):
         zooming_in.clicked.connect(lambda: mode.zoomin())
         zooming_out.clicked.connect(lambda: mode.zoomout())
         hide.clicked.connect(lambda: mode.toggle_hide())
+        slider1.valueChnaged.connect(lambda value: mode.modify_frequency(value, 1))
+        slider2.valueChnaged.connect(lambda value: mode.modify_frequency(value, 2))
+        slider3.valueChnaged.connect(lambda value: mode.modify_frequency(value, 3))
+        slider4.valueChnaged.connect(lambda value: mode.modify_frequency(value, 4))
 
         
         
@@ -2058,8 +2050,9 @@ if __name__ == "__main__":
     ui.smoothing_connection(AnimalMode)
     ui.smoothing_connection(ECGMode)
     ui.smoothing_connection(MusicMode)
-    ui.tab_connections(AnimalMode, ui.Animals_Sounds_Load_Signal_Button, ui.Animals_Sounds_Play_Pause_Button, ui.Animals_Sounds_Reset_Button, ui.Animals_Sounds_Stop_Button, ui.Animals_Sounds_Zooming_In_Button, ui.Animals_Sounds_Zooming_Out_Button, ui.Animals_Sounds_Signal_Speed_Slider, ui.Animals_Sounds_Hide_Show_Spectrogram_Button)
-    ui.tab_connections(ECGMode, ui.ECG_Abnormalities_Load_Signal_Button, ui.ECG_Abnormalities_Play_Pause_Button, ui.ECG_Abnormalities_Reset_Button, ui.ECG_Abnormalities_Stop_Button, ui.ECG_Abnormalities_Zooming_In_Button, ui.ECG_Abnormalities_Zooming_Out_Button, ui.ECG_Abnormalities_Signal_Speed_Slider, ui.ECG_ABnormalities_Hide_Show_Spectrogram_Button)
-    ui.tab_connections(MusicMode, ui.Musical_Instruments_Load_Signal_Button, ui.Musical_Instruments_Play_Pause_Button, ui.Musical_Instruments_Reset_Button, ui.Musical_Instruments_Stop_Button, ui.Musical_Instruments_Zooming_In_Button, ui.Musical_Instruments_Zooming_Out_Button, ui.Musical_Instruments_Signal_Speed_Slider, ui.Musical_Instruments_Hide_Show_Spectrogram_Button)
+    ui.tab_connections(UniformMode, ui.Uniform_Range_Load_Signal_Button, ui.Uniform_Range_Play_Pause_Button, ui.Uniform_Range_Reset_Button, ui.Uniform_Range_Stop_Button, ui.Uniform_Range_Zooming_In_Button, ui.Uniform_Range_Zooming_Out_Button, ui.Uniform_Range_Signal_Speed_Slider, ui.Uniform_Range_Hide_Show_Spectrogram_Button, ui.Uniform_Range_Frequency_Range_1_Slider, ui.Uniform_Range_Frequency_Range_2_Slider, ui.Uniform_Range_Frequency_Range_3_Slider, ui.Uniform_Range_Frequency_Range_4_Slider)
+    ui.tab_connections(AnimalMode, ui.Animals_Sounds_Load_Signal_Button, ui.Animals_Sounds_Play_Pause_Button, ui.Animals_Sounds_Reset_Button, ui.Animals_Sounds_Stop_Button, ui.Animals_Sounds_Zooming_In_Button, ui.Animals_Sounds_Zooming_Out_Button, ui.Animals_Sounds_Signal_Speed_Slider, ui.Animals_Sounds_Hide_Show_Spectrogram_Button, ui.Animals_Sounds_Animal_1_Frequency_Slider, ui.Animals_Sounds_Animal_2_Frequency_Slider, ui.Animals_Sounds_Animal_3_Frequency_Slider, ui.Animals_Sounds_Animal_4_Frequency_Slider)
+    ui.tab_connections(ECGMode, ui.ECG_Abnormalities_Load_Signal_Button, ui.ECG_Abnormalities_Play_Pause_Button, ui.ECG_Abnormalities_Reset_Button, ui.ECG_Abnormalities_Stop_Button, ui.ECG_Abnormalities_Zooming_In_Button, ui.ECG_Abnormalities_Zooming_Out_Button, ui.ECG_Abnormalities_Signal_Speed_Slider, ui.ECG_ABnormalities_Hide_Show_Spectrogram_Button, ui.ECG_Abnormalities_Abnormal_ECG_1_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_2_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_3_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_4_Frequency_Slider)
+    ui.tab_connections(MusicMode, ui.Musical_Instruments_Load_Signal_Button, ui.Musical_Instruments_Play_Pause_Button, ui.Musical_Instruments_Reset_Button, ui.Musical_Instruments_Stop_Button, ui.Musical_Instruments_Zooming_In_Button, ui.Musical_Instruments_Zooming_Out_Button, ui.Musical_Instruments_Signal_Speed_Slider, ui.Musical_Instruments_Hide_Show_Spectrogram_Button, ui.Musical_Instruments_Instrument_1_Frequency__Slider, ui.Musical_Instruments_Instrument_2_Frequency__Slider, ui.Musical_Instruments_Instrument_3_Frequency__Slider, ui.Musical_Instruments_Instrument_4_Frequency__Slider)
     Form.show()
     sys.exit(app.exec_())
