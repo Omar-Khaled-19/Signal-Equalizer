@@ -42,6 +42,7 @@ class BaseMode(ABC):
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain()
+        self.plot_smoothing(max_freq - min_freq, factor)
     
     def load_signal(self):
         self.input_graph.clear()
@@ -58,6 +59,7 @@ class BaseMode(ABC):
            
     def plot_signal(self):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
+        self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
         self.data_line = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
         self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
         self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="g")
@@ -91,6 +93,7 @@ class BaseMode(ABC):
             target_index = bisect.bisect_left(self.time_domain_X_coordinates, target_x)
 
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
+            self.output_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.data_line.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
             self.data_line_out.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_signal_modified[:target_index])
 
@@ -152,7 +155,7 @@ class BaseMode(ABC):
             gaussian_window = get_window(('gaussian', std_dev), self.ui.Smoothing_Window_Frequency_Slider.value()) * self.ui.Smoothing_Window_Amplitude_Slider.value()
             return gaussian_window
 
-    def plot_smoothing(self):
+    def plot_smoothing(self, width : int, height : int):
         # Can it be current_smoothing = self.smoothing_window()
         self.current_smoothing = self.smoothing_window()
         self.ui.Smoothing_Window_PlotWidget.clear()
