@@ -1,6 +1,5 @@
 import BaseMode, wfdb, numpy as np
 from PyQt5.QtWidgets import QFileDialog
-from PyQt5 import QtGui
 
 class UniformMode(BaseMode.BaseMode):
 
@@ -36,6 +35,10 @@ class UniformMode(BaseMode.BaseMode):
         else:
             super().modify_frequency(1900, 2100, slider_value)
 
+    def load_signal(self):
+        self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
+        super().load_signal()
+
     def toggle_pause(self):
         # Why the whole function is not written in BaseMode?
         super().toggle_pause()
@@ -62,6 +65,10 @@ class MusicalMode(BaseMode.BaseMode):
         else:
             super().modify_frequency(2000, 8000, slider_value)
 
+    def load_signal(self):
+        self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
+        super().load_signal()
+
     def toggle_pause(self):
         super().toggle_pause()
         self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
@@ -85,6 +92,10 @@ class AnimalMode(BaseMode.BaseMode):
         else:
             super().modify_frequency(2010, 8000, slider_value)
 
+    def load_signal(self):
+        self.change_pause_icon(self.ui.Animals_Sounds_Play_Pause_Button)
+        super().load_signal()
+
     def toggle_pause(self):
         super().toggle_pause()
         self.change_pause_icon(self.ui.Animals_Sounds_Play_Pause_Button)
@@ -103,6 +114,8 @@ class ECGMode(BaseMode.BaseMode):
 
     def load_signal(self):
         self.input_graph.clear()
+        self.X_Points_Plotted = 0
+        self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if File_Path:
             Record = wfdb.rdrecord(File_Path[:-4])
@@ -122,7 +135,7 @@ class ECGMode(BaseMode.BaseMode):
         
     def toggle_pause(self):
         self.paused = not self.paused
-        self.change_pause_icon(self.ui.ECG_Abnormalities_Hide_Show_Spectrogram_Button)
+        self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
 
     def reset(self):
         self.X_Points_Plotted = 0
@@ -138,4 +151,4 @@ class ECGMode(BaseMode.BaseMode):
 
     def toggle_hide(self):
         super().toggle_hide()
-        self.change_hide_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
+        self.change_hide_icon(self.ui.ECG_Abnormalities_Hide_Show_Spectrogram_Button)
