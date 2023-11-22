@@ -20,8 +20,10 @@ class MplCanvas(Canvas):
         self.ax.set_title('Spectrogram')
         self.draw()
 
-    def clear_spectrogram(self):
-        self.ax.cla()
+    def toggle_spectrogram(self):
+        current_visibility = self.ax.get_visible()
+        self.ax.set_visible(not current_visibility)
+        self.draw()
 
 class MplWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):

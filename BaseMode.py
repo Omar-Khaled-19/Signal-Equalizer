@@ -46,9 +46,9 @@ class BaseMode(ABC):
     def load_signal(self):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        audio_data, sample_rate = librosa.load(File_Path)
+        audio_data, self.sample_rate = librosa.load(File_Path)
 
-        self.time_domain_X_coordinates = np.arange(len(audio_data)) / sample_rate
+        self.time_domain_X_coordinates = np.arange(len(audio_data)) / self.sample_rate
         self.time_domain_Y_coordinates = audio_data
         
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
@@ -75,7 +75,6 @@ class BaseMode(ABC):
         self.output_graph.clear()
         self.output_graph.plot(Xcoordinates, Ycoordinates)
 
-
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
             sound_position = self.player.position()
@@ -97,7 +96,6 @@ class BaseMode(ABC):
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
-
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -174,8 +172,6 @@ class BaseMode(ABC):
         self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
         self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
         
-
-
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
         fft_result = np.fft.fft(self.time_domain_Y_coordinates)
@@ -185,10 +181,9 @@ class BaseMode(ABC):
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
         self.plot_frequency_domain()
 
-
     def toggle_hide(self):
         self.hidden = not self.hidden
-        self.input_spectrogram.canvas.clear_spectrogram()
+        self.input_spectrogram.canvas.toggle_spectrogram()
 
     def change_pause_icon(self,button):
         icon = QtGui.QIcon()
