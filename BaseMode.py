@@ -7,6 +7,7 @@ import numpy as np, bisect, math, librosa
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 from mplwidget import MplCanvas,MplWidget
+from scipy.io import wavfile
 
 # Proposed Modifications = 4
 class BaseMode(ABC):
@@ -38,7 +39,10 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
+        
+        #TODO: cover case of lossing old data for multiple conversions in single time
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
+        
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain()
@@ -61,9 +65,13 @@ class BaseMode(ABC):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
         self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
         self.data_line = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
-        self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
-        self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="g")
         
+        #TODO: change this setting, after calculating the actual time domain from the fourier inverse not taking a copy from origin
+        self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
+        
+        #TODO: with no conversions in the freq domain the output graph is not the same as the input
+        self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="g")
+
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.update_plot_data)
@@ -72,10 +80,11 @@ class BaseMode(ABC):
         self.calculate_frequency_domain()
         
     def plot_output(self, Xcoordinates, Ycoordinates):
-        self.reset()
-        self.output_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
-        self.output_graph.clear()
-        self.output_graph.plot(Xcoordinates, Ycoordinates)
+        pass
+        #for some reason the compiler never plot from the below commands, need further investigation, it plots from update plot only
+        #self.output_graph.getViewBox().setYRange(min(self.time_domain_signal_modified), max(self.time_domain_signal_modified))
+        #self.output_graph.clear()
+        #self.output_graph.plot(Xcoordinates, Ycoordinates, pen="r")
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
@@ -167,13 +176,24 @@ class BaseMode(ABC):
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
-        self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
+        
+        #TODO: the transperent box need to be plotted in the ui class and then change it is width from sliders value. commented until fix
+            #self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
+            
         # Inverse Fourier transform to go back to the time domain
         self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
         self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
-        self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
-        self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
+        
+        #TODO: check the limits again after fixing the plot in the output graph
+            #self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
+            
+        self.output_graph.getViewBox().setYRange(-0.4, 0.4)
+        #self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
+        
+        #TODO: need an update. this line convert the modified signal into wav file,
+        # also try to change the datatype into hexa to check if the sexaphone sound is fixed or not  
+        wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.float32))
         
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
