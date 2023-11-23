@@ -177,7 +177,7 @@ class BaseMode(ABC):
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
         
-        #TODO: the transperent box need to be plotted in the ui class and then change it is width from sliders value. commented until fix
+        #TODO: the transperent box need to be plotted in the ui class and then change it in width from sliders value. commented until fix
             #self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
             
         # Inverse Fourier transform to go back to the time domain
