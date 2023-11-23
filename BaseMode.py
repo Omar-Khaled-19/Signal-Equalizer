@@ -27,6 +27,7 @@ class BaseMode(ABC):
         self.slider2 = slider2
         self.slider3 = slider3
         self.slider4 = slider4
+        self.phases = []
 
         self.X_Points_Plotted = 0
         self.paused = False
@@ -99,7 +100,7 @@ class BaseMode(ABC):
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.output_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.data_line_in.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
-            self.data_line_out.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_signal_modified[:target_index])
+            self.data_line_out.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_signal_modified[:target_index].real)
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
@@ -177,12 +178,12 @@ class BaseMode(ABC):
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
         
-        #TODO: the transperent box need to be plotted in the ui class and then change it is width from sliders value. commented until fix
+        #TODO: the transperent box need to be plotted in the ui class and then change it in width from sliders value. commented until fix
             #self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
             
         # Inverse Fourier transform to go back to the time domain
-        self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates)
-        self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
+        self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates * np.exp(1j * self.phases))
+        #self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
         
         #TODO: check the limits again after fixing the plot in the output graph
@@ -193,7 +194,7 @@ class BaseMode(ABC):
         
         #TODO: need an update. this line convert the modified signal into wav file,
         # also try to change the datatype into hexa to check if the sexaphone sound is fixed or not  
-        wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.float32))
+        wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.complex64))
         
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
@@ -201,6 +202,7 @@ class BaseMode(ABC):
         frequencies = np.fft.fftfreq(len(fft_result), dt)
         self.freq_domain_X_coordinates = frequencies
         self.freq_domain_Y_coordinates = np.abs(fft_result)
+        self.phases = np.angle(fft_result)
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
         self.plot_frequency_domain()
 
