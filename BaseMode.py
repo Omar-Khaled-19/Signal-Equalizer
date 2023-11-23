@@ -108,6 +108,7 @@ class BaseMode(ABC):
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
+                self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:target_index],self.sample_rate)
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -207,6 +208,7 @@ class BaseMode(ABC):
     def toggle_hide(self):
         self.hidden = not self.hidden
         self.input_spectrogram.canvas.toggle_spectrogram()
+        self.output_spectrogram.canvas.toggle_spectrogram()
 
     def change_pause_icon(self,button):
         icon = QtGui.QIcon()
