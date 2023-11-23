@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np, bisect, math, librosa
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
-from mplwidget import MplCanvas,MplWidget
 from scipy.io import wavfile
 
 # Proposed Modifications = 4
@@ -36,6 +35,9 @@ class BaseMode(ABC):
         self.speed = 10
         self.player = QMediaPlayer()
 
+        self.input_graph.setXLink(self.output_graph)
+        self.input_graph.setYLink(self.output_graph)
+
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
@@ -56,21 +58,21 @@ class BaseMode(ABC):
         self.time_domain_X_coordinates = np.arange(len(audio_data)) / self.sample_rate
         self.time_domain_Y_coordinates = audio_data
         
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+        #self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))   DO NOT REMOVE THIS COMMENT
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
         self.stopped = False
-        # Change play button to pause
-        self.plot_signal()
+        self.plot_signals()
            
-    def plot_signal(self):
+    def plot_signals(self):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
         self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
-        self.data_line = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
         
+        self.data_line_in = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
+        #TODO: with no conversions in the freq domain the output graph is not the same as the input
+        self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="b")
+
         #TODO: change this setting, after calculating the actual time domain from the fourier inverse not taking a copy from origin
         self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
-        
-        #TODO: with no conversions in the freq domain the output graph is not the same as the input
-        self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="g")
 
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
@@ -78,13 +80,6 @@ class BaseMode(ABC):
         self.timer.start()
         self.player.play()
         self.calculate_frequency_domain()
-        
-    def plot_output(self, Xcoordinates, Ycoordinates):
-        pass
-        #for some reason the compiler never plot from the below commands, need further investigation, it plots from update plot only
-        #self.output_graph.getViewBox().setYRange(min(self.time_domain_signal_modified), max(self.time_domain_signal_modified))
-        #self.output_graph.clear()
-        #self.output_graph.plot(Xcoordinates, Ycoordinates, pen="r")
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:             
@@ -103,7 +98,7 @@ class BaseMode(ABC):
 
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.output_graph.getViewBox().setXRange(target_x - 4, target_x)
-            self.data_line.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
+            self.data_line_in.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
             self.data_line_out.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_signal_modified[:target_index])
 
             if not self.hidden:
@@ -132,6 +127,8 @@ class BaseMode(ABC):
         self.stopped = True
         self.input_graph.clear()
         self.input_graph.getViewBox().setXRange(0,4)
+        self.output_graph.clear()
+        self.output_graph.getViewBox().setXRange(0,4)
 
     def zoomin(self):
         self.input_graph.getViewBox().scaleBy((0.9, 0.9))
