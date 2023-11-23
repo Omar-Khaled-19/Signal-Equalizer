@@ -14,6 +14,7 @@ class UniformMode(BaseMode.BaseMode):
 
 
     def modify_frequency(self, slider_value: int, slider: int):
+        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(1000, 1100, slider_value)
         elif slider == 2:
@@ -56,6 +57,7 @@ class MusicalMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
 
     def modify_frequency(self, slider_value: int, slider: int):
+        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(64, 500, slider_value)
         elif slider == 2:
@@ -83,6 +85,7 @@ class AnimalMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
 
     def modify_frequency(self, slider_value: int, slider: int):
+        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(64, 500, slider_value)
         elif slider == 2:
@@ -110,6 +113,7 @@ class ECGMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
     
     def modify_frequency(self, value: int):
+        self.first_time_flag = False
         pass
 
     def load_signal(self):

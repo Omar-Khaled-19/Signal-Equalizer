@@ -37,13 +37,13 @@ class BaseMode(ABC):
 
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
+        self.first_time_flag = True # This checks if the signal is loaded for the first time
 
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
-        
-        #TODO: cover case of lossing old data for multiple conversions in single time
-        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
+
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
@@ -164,6 +164,8 @@ class BaseMode(ABC):
 
     def plot_smoothing(self, width : int, height : int):
         # Can it be current_smoothing = self.smoothing_window()
+        # TODO If current_smoothing is self attribute make sure to add it in (__init__), also use the parameters to draw the window accordingly
+        # Delete These comments when you're done
         self.current_smoothing = self.smoothing_window()
         self.ui.Smoothing_Window_PlotWidget.clear()
         self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
