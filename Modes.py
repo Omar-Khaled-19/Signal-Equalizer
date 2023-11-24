@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QFileDialog
 
 class UniformMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing= None)
         self.slider5 = ui.Uniform_Range_Frequency_Range_5_Slider
         self.slider6 = ui.Uniform_Range_Frequency_Range_6_Slider
         self.slider7 = ui.Uniform_Range_Frequency_Range_7_Slider
@@ -53,8 +53,8 @@ class UniformMode(BaseMode.BaseMode):
 
 class MusicalMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
 
     def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
@@ -81,8 +81,8 @@ class MusicalMode(BaseMode.BaseMode):
 
 class AnimalMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
 
     def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
@@ -109,8 +109,8 @@ class AnimalMode(BaseMode.BaseMode):
 
 class ECGMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
     
     def modify_frequency(self, value: int):
         self.first_time_flag = False
