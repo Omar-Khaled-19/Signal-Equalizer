@@ -68,7 +68,6 @@ class BaseMode(ABC):
         self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
         
         self.data_line_in = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
-        #TODO: with no conversions in the freq domain the output graph is not the same as the input
         self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="b")
 
         #TODO: change this setting, after calculating the actual time domain from the fourier inverse not taking a copy from origin
@@ -194,7 +193,7 @@ class BaseMode(ABC):
         
         #TODO: need an update. this line convert the modified signal into wav file,
         # also try to change the datatype into hexa to check if the saxaphone sound is fixed or not
-        wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.complex64))
+        wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.float32))
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
         self.player.play()
         
