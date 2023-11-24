@@ -1,52 +1,69 @@
+import sys
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.io import wavfile
-from scipy import fft, ifft
-from IPython.display import Audio
+import pyqtgraph as pg
+from PyQt5 import QtWidgets, QtGui, QtCore
 
-# Load the original audio file
-sample_rate, audio_data = wavfile.read('original_sound.wav')
+# Generate sample data
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
 
-# Extract the time-domain signal
-time = np.arange(len(audio_data)) / sample_rate
+# Create PyQtGraph application
+app = QtWidgets.QApplication([])
+win = QtWidgets.QMainWindow()
+central_widget = QtWidgets.QWidget()
+win.setCentralWidget(central_widget)
+grid_layout = QtWidgets.QGridLayout(central_widget)
 
-# Plot the original signal in the time domain
-plt.figure(figsize=(10, 4))
-plt.subplot(1, 2, 1)
-plt.plot(time, audio_data)
-plt.xlabel('Time (seconds)')
-plt.ylabel('Amplitude')
-plt.title('Original Signal')
+# Create the frame and grid layout
+frame_17 = QtWidgets.QFrame()
+frame_17.setFrameShape(QtWidgets.QFrame.StyledPanel)
+frame_17.setFrameShadow(QtWidgets.QFrame.Raised)
+frame_17.setObjectName("frame_17")
+grid_layout_26 = QtWidgets.QGridLayout(frame_17)
+grid_layout_26.setObjectName("gridLayout_26")
 
-# Perform the Fourier transform on the signal
-frequency_domain_signal = fft.fft(audio_data)
+# Create the plot widget
+Animals_Sounds_Frequency_Domain_PlotWidget = pg.PlotWidget()
+Animals_Sounds_Frequency_Domain_PlotWidget.setMinimumSize(QtCore.QSize(1231, 130))
+Animals_Sounds_Frequency_Domain_PlotWidget.setObjectName("Animals_Sounds_Frequency_Domain_PlotWidget")
+grid_layout_26.addWidget(Animals_Sounds_Frequency_Domain_PlotWidget, 0, 0, 1, 1)
 
-# Compute the magnitudes of the frequency components
-magnitudes = np.abs(frequency_domain_signal)
+# Plot the original signal
+curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(x, y, pen='b')
 
-# Determine the corresponding frequencies
-frequencies = fft.fftfreq(len(audio_data), 1/sample_rate)
+# Create a smoothing window box
+smoothing_window = pg.LinearRegionItem()
+smoothing_window.setRegion([x.min(), x.max()])
+Animals_Sounds_Frequency_Domain_PlotWidget.addItem(smoothing_window)
 
-# Find the indices corresponding to the frequency range to remove
-min_freq = 2
-max_freq = 19
-indices_to_remove = np.where((frequencies >= min_freq) & (frequencies <= max_freq))
+# Create a filtered signal plot
+filtered_curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(pen='r')
 
-# Set the magnitudes of the specified frequencies to zero
-magnitudes[indices_to_remove] = 0
+# Define update function
+def update():
+    # Get the region of the smoothing window
+    xmin, xmax = smoothing_window.getRegion()
+    
+    # Apply smoothing to the signal within the window
+    filtered_y = np.copy(y)
+    filtered_y[(x < xmin) | (x > xmax)] = 0.0
+    
+    # Update the filtered signal plot
+    filtered_curve.setData(x, filtered_y)
 
-# Perform the inverse Fourier transform to obtain the modified signal
-modified_signal = ifft.ifft(magnitudes)
+# Connect the update function to the region change signal of the smoothing window
+smoothing_window.sigRegionChanged.connect(update)
 
-# Plot the modified signal in the time domain
-plt.subplot(1, 2, 2)
-plt.plot(time, modified_signal.real)
-plt.xlabel('Time (seconds)')
-plt.ylabel('Amplitude')
-plt.title('Modified Signal')
+# Add the frame to the grid layout
+grid_layout.addWidget(frame_17)
 
-# Save the modified signal as a new audio file
-wavfile.write('modified_sound.wav', sample_rate, modified_signal.real.astype(np.int16))
+# Set the main window properties
+win.setWindowTitle("Signal with Smoothing Window")
+win.resize(800, 600)
 
-# Play the modified signal
-Audio('modified_sound.wav')
+# Start the PyQtGraph application
+if __name__ == '__main__':
+    update()
+    win.show()
+    if sys.flags.interactive != 1 or not hasattr(QtCore, 'PYQT_VERSION'):
+        QtWidgets.QApplication.instance().exec_()
