@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
+import numpy as np, bisect, math, librosa, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
@@ -59,13 +59,12 @@ class BaseMode(ABC):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(File_Path)
+        self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
-        
-        audio_file = "temp_audio.wav"
-        sf.write(audio_file, self.time_domain_Y_coordinates, self.sample_rate)
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
+
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
         self.player.play()
-        
+
         self.stopped = False
         self.plot_signals()
            
@@ -213,6 +212,7 @@ class BaseMode(ABC):
         self.phases = np.angle(fft_result)
         self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
         self.plot_frequency_domain()
+        sf.write("temp_audio.wav", self.modified_freq_domain_Y_coordinates, self.sample_rate)
 
     def toggle_hide(self):
         self.hidden = not self.hidden
