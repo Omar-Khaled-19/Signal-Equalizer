@@ -205,7 +205,7 @@ class BaseMode(ABC):
             # sf.write("temp_audio.wav", self.time_domain_signal_modified.real, self.sample_rate)
             # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("temp_audio.wav")))
             self.player.stop()
-            sd.play(self.time_domain_Y_coordinates.real, self.sample_rate)
+            sd.play(np.abs(self.time_domain_Y_coordinates), self.sample_rate)
 
         
     def calculate_frequency_domain(self):
