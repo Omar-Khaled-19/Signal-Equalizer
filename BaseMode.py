@@ -10,13 +10,19 @@ from scipy.io import wavfile
 import wave
 
 class BaseMode(ABC):
-    def __init__(self, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
-        self.time_graph = Modes.TimeGraph(input_time_graph, output_time_graph)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
+        self.ui = ui
+        self.input_graph = input_time_graph
+        self.output_graph = output_time_graph
         self.frequency_graph = frequency_graph
         self.input_spectrogram = input_spectro
         self.output_spectrogram = output_spectro
-        self.time_domain_X_coordinates = None
-        self.time_domain_Y_coordinates = None
+        self.time_domain_X_coordinates = []
+        self.time_domain_Y_coordinates = []
+        self.freq_domain_X_coordinates = []
+        self.freq_domain_Y_coordinates = []
+        self.modified_freq_domain_Y_coordinates = []
+        self.time_domain_signal_modified = []
         self.slider1 = slider1
         self.slider2 = slider2
         self.slider3 = slider3
@@ -37,8 +43,15 @@ class BaseMode(ABC):
         self.first_time_flag = True # This checks if the signal is loaded for the first time
 
     @abstractmethod
-    def modify_frequency(self, value: int):
-        pass
+    def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
+        smoothing_factor = factor / 5.0
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
+        
+        # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
+        self.plot_frequency_domain()
+        self.plot_smoothing(max_freq - min_freq, factor)
+    
     def load_signal(self):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
