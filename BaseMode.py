@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
+import numpy as np, bisect, math, librosa, soundfile as sf, sounddevice as sd
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
@@ -62,13 +62,12 @@ class BaseMode(ABC):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(File_Path)
+        self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
-        
-        audio_file = "temp_audio.wav"
-        sf.write(audio_file, self.time_domain_Y_coordinates, self.sample_rate)
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
+
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
         self.player.play()
-        
+
         self.stopped = False
         self.plot_signals()
            
@@ -200,7 +199,6 @@ class BaseMode(ABC):
             
         # Inverse Fourier transform to go back to the time domain
         self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates * np.exp(1j * self.phases))
-        #self.time_domain_signal_modified = np.real(self.time_domain_signal_modified)
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
         
         #TODO: check the limits again after fixing the plot in the output graph
@@ -211,9 +209,12 @@ class BaseMode(ABC):
         
         #TODO: need an update. this line convert the modified signal into wav file,
         # also try to change the datatype into hexa to check if the saxaphone sound is fixed or not
-        #wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.float32))
-        #self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
-        #self.player.play()
+        if not self.first_time_flag:
+            # sf.write("temp_audio.wav", self.time_domain_signal_modified.real, self.sample_rate)
+            # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("temp_audio.wav")))
+            self.player.stop()
+            sd.play(self.time_domain_Y_coordinates.real, self.sample_rate)
+
         
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
