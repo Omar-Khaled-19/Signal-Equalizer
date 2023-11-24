@@ -47,14 +47,14 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         self.min_range = min_freq
-        self.max_range = max_freq
+        self.max_range = max_freq - min_freq
+        self.uiSmoothing.Smoothing_Window_Frequency_Slider_2
         smoothing_factor = factor / 5.0
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain(1)
-        #self.ui.open_Smoothing_Window()
         self.plot_smoothing(max_freq - min_freq, factor)
         
     
@@ -166,16 +166,24 @@ class BaseMode(ABC):
             gaussian_window = get_window(('gaussian', std_dev), width) * height
             return gaussian_window
 
+    def get_currentSmoothing_window(self):
+        pass
+
+    
     def plot_smoothing(self, width = 100, height = 10):
         self.current_smoothing = self.smoothing_window(width, height)
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
-        
+         
     def apply_selector(self):
         # Create a smoothing window box
         smoothing_window = pg.LinearRegionItem()
-        smoothing_window.setRegion([self.min_range, self.max_range])
+        factor = ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() * 10) / 100)
+        smoothing_window.setRegion([self.min_range, self.min_range + (self.max_range * factor)])
+        smoothing_window.setMovable(False)  # Set movable property to False
         self.frequency_graph.addItem(smoothing_window)
+        filtered_curve = self.frequency_graph.plot(pen='r')
+        filtered_curve.setData(self.current_smoothing)
 
     def plot_frequency_domain(self, smoothing_flag=0):
         self.frequency_graph.clear()
