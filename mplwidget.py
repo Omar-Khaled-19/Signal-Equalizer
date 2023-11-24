@@ -1,28 +1,35 @@
 # Imports
 from PyQt5 import QtWidgets
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use('QT5Agg')
 class MplCanvas(Canvas):
     def __init__(self):
-        self.fig = Figure()
-        self.ax = self.fig.add_subplot(111)
-        Canvas.__init__(self, self.fig)
+        plt.rcParams['axes.facecolor'] = 'black'  #grouping the axes then making their background color black
+        plt.rc('axes', edgecolor='w')
+        plt.rc('xtick', color='w')
+        plt.rc('ytick', color='w')
+        plt.rcParams['savefig.facecolor'] = 'black' #grouping the figures in the graph then making their background color black
+        plt.rcParams["figure.autolayout"] = True
+        self.figure = plt.figure()
+        self.figure.patch.set_facecolor('black')
+        self.axes = self.figure.add_subplot()
+        Canvas.__init__(self, self.figure)
         Canvas.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         Canvas.updateGeometry(self)
 
     def plot_spectrogram(self, signal, fs):
-        self.ax.cla()
-        self.ax.specgram(signal, Fs=fs, cmap='viridis')
-        self.ax.set_xlabel('Time [s]')
-        self.ax.set_ylabel('Frequency [Hz]')
-        self.ax.set_title('Spectrogram')
+        self.axes.cla()
+        self.axes.specgram(signal, Fs=fs, cmap='viridis')
+        # self.axes.set_xlabel('Time [s]')
+        # self.ax.set_ylabel('Frequency [Hz]')
+        # self.ax.set_title('Spectrogram')
         self.draw()
 
     def toggle_spectrogram(self):
-        current_visibility = self.ax.get_visible()
-        self.ax.set_visible(not current_visibility)
+        current_visibility = self.axes.get_visible()
+        self.axes.set_visible(not current_visibility)
         self.draw()
 
 class MplWidget(QtWidgets.QWidget):

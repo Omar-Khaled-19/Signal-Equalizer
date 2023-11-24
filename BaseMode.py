@@ -8,7 +8,6 @@ from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 from scipy.io import wavfile
 
-# Proposed Modifications = 4
 class BaseMode(ABC):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
         self.ui = ui
@@ -35,16 +34,16 @@ class BaseMode(ABC):
         self.hidden = False
         self.speed = 10
         self.player = QMediaPlayer()
+        self.sample_rate = None
 
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
+        self.first_time_flag = True # This checks if the signal is loaded for the first time
 
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         smoothing_factor = factor / 5.0
-        
-        #TODO: cover case of lossing old data for multiple conversions in single time
-        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
@@ -59,8 +58,8 @@ class BaseMode(ABC):
         self.time_domain_X_coordinates = np.arange(len(audio_data)) / self.sample_rate
         self.time_domain_Y_coordinates = audio_data
         
-        #self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))   DO NOT REMOVE THIS COMMENT
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
         self.stopped = False
         self.plot_signals()
            
@@ -130,6 +129,7 @@ class BaseMode(ABC):
         self.input_graph.getViewBox().setXRange(0,4)
         self.output_graph.clear()
         self.output_graph.getViewBox().setXRange(0,4)
+        self.first_time_flag = True
 
     def zoomin(self):
         self.input_graph.getViewBox().scaleBy((0.9, 0.9))
@@ -165,6 +165,8 @@ class BaseMode(ABC):
 
     def plot_smoothing(self, width : int, height : int):
         # Can it be current_smoothing = self.smoothing_window()
+        # TODO If current_smoothing is self attribute make sure to add it in (__init__), also use the parameters to draw the window accordingly
+        # Delete These comments when you're done
         self.current_smoothing = self.smoothing_window()
         self.ui.Smoothing_Window_PlotWidget.clear()
         self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
@@ -191,8 +193,10 @@ class BaseMode(ABC):
         #self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
         
         #TODO: need an update. this line convert the modified signal into wav file,
-        # also try to change the datatype into hexa to check if the sexaphone sound is fixed or not  
+        # also try to change the datatype into hexa to check if the saxaphone sound is fixed or not
         wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.complex64))
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
+        self.player.play()
         
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
