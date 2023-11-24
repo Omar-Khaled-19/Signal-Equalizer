@@ -10,7 +10,7 @@ from scipy.io import wavfile
 import pyqtgraph as pg
 
 class BaseMode(ABC):
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4):
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing):
         self.ui = ui
         self.input_graph = input_time_graph
         self.output_graph = output_time_graph
@@ -29,6 +29,7 @@ class BaseMode(ABC):
         self.slider4 = slider4
         self.phases = []
         self.current_smoothing = 0
+        self.uiSmoothing = ui_smoothing
 
         self.X_Points_Plotted = 0
         self.paused = False
@@ -54,7 +55,9 @@ class BaseMode(ABC):
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain(1)
+        self.ui.open_Smoothing_Window()
         self.plot_smoothing(max_freq - min_freq, factor)
+        
     
     def load_signal(self):
         self.input_graph.clear()
@@ -137,36 +140,36 @@ class BaseMode(ABC):
     def zoomout(self):
         self.input_graph.getViewBox().scaleBy((1.1,1.1))
 
-    def smoothing_window(self, width, height):
+    def smoothing_window(self, width= 100 , height = 10):
         # Check which radio button is selected
-        if self.ui.Smoothing_Window_Hamming_Radio_Button.isChecked():
+        if self.uiSmoothing.Smoothing_Window_Hamming_Radio_Button.isChecked():
             # Generate Hamming window
             hamming_window = get_window('hamming', width)
             # Scale the Hamming window to the desired amplitude
             scaled_hamming_window = height * hamming_window / np.max(hamming_window)
             return scaled_hamming_window
 
-        elif self.ui.Smoothing_Window_Hanning_Radio_Button.isChecked():
+        elif self.uiSmoothing.Smoothing_Window_Hanning_Radio_Button.isChecked():
             # Generate Hanning window
             hanning_window = get_window('hann', width)
             # Scale the Hanning window to the desired amplitude
             scaled_hanning_window = height * hanning_window / np.max(hanning_window)
             return scaled_hanning_window
 
-        elif self.ui.Smoothing_Window_Rectangle_Radio_Button.isChecked():
+        elif self.uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.isChecked():
             # generate and adjust the height as desired
             rectangle_window = boxcar(width) * height
             return rectangle_window
 
-        elif self.ui.Smoothing_Window_Gaussian_Radio_Button.isChecked():
+        elif self.uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.isChecked():
             std_dev = width / (2 * math.sqrt(2 * math.log(2)))
             gaussian_window = get_window(('gaussian', std_dev), width) * height
             return gaussian_window
 
-    def plot_smoothing(self, width : int, height : int):
+    def plot_smoothing(self, width = 100, height = 10):
         self.current_smoothing = self.smoothing_window(width, height)
-        self.ui.Smoothing_Window_PlotWidget.clear()
-        self.ui.Smoothing_Window_PlotWidget.plot(self.current_smoothing)
+        self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
+        self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
         
     def apply_selector(self):
         # Create a smoothing window box

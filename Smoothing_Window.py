@@ -9,9 +9,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pyqtgraph import PlotWidget
 
 
 class Ui_Smoothing_Window(object):
+        
     def setupUi(self, Smoothing_Window):
         Smoothing_Window.setObjectName("Smoothing_Window")
         Smoothing_Window.resize(1308, 800)
@@ -115,14 +117,14 @@ class Ui_Smoothing_Window(object):
         self.gridLayout_13.addLayout(self.gridLayout_15, 2, 0, 1, 1)
         self.gridLayout_56 = QtWidgets.QGridLayout()
         self.gridLayout_56.setObjectName("gridLayout_56")
-        self.Smoothing_Window_Gaussian_Radio_Button_2 = QtWidgets.QRadioButton(self.groupBox_2)
-        self.Smoothing_Window_Gaussian_Radio_Button_2.setMinimumSize(QtCore.QSize(100, 29))
+        self.Smoothing_Window_Gaussian_Radio_Button = QtWidgets.QRadioButton(self.groupBox_2)
+        self.Smoothing_Window_Gaussian_Radio_Button.setMinimumSize(QtCore.QSize(100, 29))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.Smoothing_Window_Gaussian_Radio_Button_2.setFont(font)
-        self.Smoothing_Window_Gaussian_Radio_Button_2.setObjectName("Smoothing_Window_Gaussian_Radio_Button_2")
-        self.gridLayout_56.addWidget(self.Smoothing_Window_Gaussian_Radio_Button_2, 0, 8, 1, 1)
+        self.Smoothing_Window_Gaussian_Radio_Button.setFont(font)
+        self.Smoothing_Window_Gaussian_Radio_Button.setObjectName("Smoothing_Window_Gaussian_Radio_Button_2")
+        self.gridLayout_56.addWidget(self.Smoothing_Window_Gaussian_Radio_Button, 0, 8, 1, 1)
         self.label_40 = QtWidgets.QLabel(self.groupBox_2)
         font = QtGui.QFont()
         font.setBold(True)
@@ -132,32 +134,32 @@ class Ui_Smoothing_Window(object):
         self.gridLayout_56.addWidget(self.label_40, 0, 0, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_56.addItem(spacerItem1, 0, 3, 1, 1)
-        self.Smoothing_Window_Rectangle_Radio_Button_2 = QtWidgets.QRadioButton(self.groupBox_2)
-        self.Smoothing_Window_Rectangle_Radio_Button_2.setMinimumSize(QtCore.QSize(100, 29))
+        self.Smoothing_Window_Rectangle_Radio_Button = QtWidgets.QRadioButton(self.groupBox_2)
+        self.Smoothing_Window_Rectangle_Radio_Button.setMinimumSize(QtCore.QSize(100, 29))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.Smoothing_Window_Rectangle_Radio_Button_2.setFont(font)
-        self.Smoothing_Window_Rectangle_Radio_Button_2.setObjectName("Smoothing_Window_Rectangle_Radio_Button_2")
-        self.gridLayout_56.addWidget(self.Smoothing_Window_Rectangle_Radio_Button_2, 0, 2, 1, 1)
+        self.Smoothing_Window_Rectangle_Radio_Button.setFont(font)
+        self.Smoothing_Window_Rectangle_Radio_Button.setObjectName("Smoothing_Window_Rectangle_Radio_Button_2")
+        self.gridLayout_56.addWidget(self.Smoothing_Window_Rectangle_Radio_Button, 0, 2, 1, 1)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_56.addItem(spacerItem2, 0, 1, 1, 1)
-        self.Smoothing_Window_Hanning_Radio_Button_2 = QtWidgets.QRadioButton(self.groupBox_2)
-        self.Smoothing_Window_Hanning_Radio_Button_2.setMinimumSize(QtCore.QSize(100, 29))
+        self.Smoothing_Window_Hanning_Radio_Button = QtWidgets.QRadioButton(self.groupBox_2)
+        self.Smoothing_Window_Hanning_Radio_Button.setMinimumSize(QtCore.QSize(100, 29))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.Smoothing_Window_Hanning_Radio_Button_2.setFont(font)
-        self.Smoothing_Window_Hanning_Radio_Button_2.setObjectName("Smoothing_Window_Hanning_Radio_Button_2")
-        self.gridLayout_56.addWidget(self.Smoothing_Window_Hanning_Radio_Button_2, 0, 6, 1, 1)
-        self.Smoothing_Window_Hamming_Radio_Button_2 = QtWidgets.QRadioButton(self.groupBox_2)
-        self.Smoothing_Window_Hamming_Radio_Button_2.setMinimumSize(QtCore.QSize(100, 29))
+        self.Smoothing_Window_Hanning_Radio_Button.setFont(font)
+        self.Smoothing_Window_Hanning_Radio_Button.setObjectName("Smoothing_Window_Hanning_Radio_Button_2")
+        self.gridLayout_56.addWidget(self.Smoothing_Window_Hanning_Radio_Button, 0, 6, 1, 1)
+        self.Smoothing_Window_Hamming_Radio_Button = QtWidgets.QRadioButton(self.groupBox_2)
+        self.Smoothing_Window_Hamming_Radio_Button.setMinimumSize(QtCore.QSize(100, 29))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.Smoothing_Window_Hamming_Radio_Button_2.setFont(font)
-        self.Smoothing_Window_Hamming_Radio_Button_2.setObjectName("Smoothing_Window_Hamming_Radio_Button_2")
-        self.gridLayout_56.addWidget(self.Smoothing_Window_Hamming_Radio_Button_2, 0, 4, 1, 1)
+        self.Smoothing_Window_Hamming_Radio_Button.setFont(font)
+        self.Smoothing_Window_Hamming_Radio_Button.setObjectName("Smoothing_Window_Hamming_Radio_Button_2")
+        self.gridLayout_56.addWidget(self.Smoothing_Window_Hamming_Radio_Button, 0, 4, 1, 1)
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_56.addItem(spacerItem3, 0, 5, 1, 1)
         spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -171,23 +173,40 @@ class Ui_Smoothing_Window(object):
         self.gridLayout_2.addWidget(self.groupBox_2, 0, 0, 1, 1)
         self.gridLayout_10.addWidget(self.frame_6, 1, 0, 1, 1)
         self.gridLayout_3.addWidget(self.frame_2, 0, 0, 1, 1)
-
+        
+        self.gridLayout_56 = QtWidgets.QGridLayout()
+        self.gridLayout_56.setObjectName("gridLayout_56")
+        self.gridLayout_13.addLayout(self.gridLayout_56, 0, 0, 1, 1)
+        # Add Apply button with a more compact size, the specified style, and increased font size
+        self.apply_button = QtWidgets.QPushButton(self.groupBox_2)
+        self.apply_button.setMinimumSize(QtCore.QSize(80, 25))  # Adjusted size
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setPointSize(11)  # Set the font size
+        self.apply_button.setFont(font)
+        self.apply_button.setObjectName("apply_button")
+        self.apply_button.setText("Apply")  # Set the button text
+        self.apply_button.setStyleSheet("background-color:#3366ff;")  # Set the button style
+        self.gridLayout_13.addWidget(self.apply_button, 3, 0, 1, 1)  # Adjusted row number
+        self.gridLayout_12.addLayout(self.gridLayout_13, 1, 0, 1, 1)
         self.retranslateUi(Smoothing_Window)
         self.Smoothing_Window_Frequency_Slider_2.valueChanged['int'].connect(self.Animal_Sounds_Window_Frequency_LCD_2.display) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Smoothing_Window)
-
+        
     def retranslateUi(self, Smoothing_Window):
         _translate = QtCore.QCoreApplication.translate
+        self.apply_button.setText(_translate("Smoothing_Window", "Apply"))  # Set the button text in retranslateUi
         Smoothing_Window.setWindowTitle(_translate("Smoothing_Window", "Form"))
         self.label_3.setText(_translate("Smoothing_Window", "Smoothing Window Graph"))
         self.groupBox_2.setTitle(_translate("Smoothing_Window", "Smoothing Window Control"))
         self.label_42.setText(_translate("Smoothing_Window", "Window Frequency"))
-        self.Smoothing_Window_Gaussian_Radio_Button_2.setText(_translate("Smoothing_Window", "Gaussian"))
+        self.Smoothing_Window_Gaussian_Radio_Button.setText(_translate("Smoothing_Window", "Gaussian"))
         self.label_40.setText(_translate("Smoothing_Window", "Smoothing Window Type"))
-        self.Smoothing_Window_Rectangle_Radio_Button_2.setText(_translate("Smoothing_Window", "Rectangle"))
-        self.Smoothing_Window_Hanning_Radio_Button_2.setText(_translate("Smoothing_Window", "Hanning"))
-        self.Smoothing_Window_Hamming_Radio_Button_2.setText(_translate("Smoothing_Window", "Hamming"))
-from pyqtgraph import PlotWidget
+        self.Smoothing_Window_Rectangle_Radio_Button.setText(_translate("Smoothing_Window", "Rectangle"))
+        self.Smoothing_Window_Hanning_Radio_Button.setText(_translate("Smoothing_Window", "Hanning"))
+        self.Smoothing_Window_Hamming_Radio_Button.setText(_translate("Smoothing_Window", "Hamming"))
+
 
 
 if __name__ == "__main__":
