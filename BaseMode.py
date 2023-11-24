@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa
+import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 from scipy.io import wavfile
@@ -34,7 +34,7 @@ class BaseMode(ABC):
         self.hidden = False
         self.speed = 10
         self.player = QMediaPlayer()
-        self.sample_rate = None
+        self.sample_rate = 44100
 
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
@@ -53,12 +53,31 @@ class BaseMode(ABC):
     def load_signal(self):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        audio_data, self.sample_rate = librosa.load(File_Path)
-
-        self.time_domain_X_coordinates = np.arange(len(audio_data)) / self.sample_rate
-        self.time_domain_Y_coordinates = audio_data
-        
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+        # TODO for OMAR KHALED: Revise Plotting given we changed the library that reads the wav file,
+        #   although both return the same thing
+        """
+        Both soundfile sf.read() and librosa.load() return the same 2 parameters when reading a .wav file.
+        Below I will leave this part from the documentation of Both Libraries
+        Returns 2 things:	
+        ============= Soundfile Documentation for sf.read() ===================================
+            1-) audiodata (numpy.ndarray or type(out)) – A two-dimensional (frames x channels) NumPy array is returned. 
+            If the sound file has only one channel, a one-dimensional array is returned. 
+            Use always_2d=True to return a two-dimensional array anyway.
+            2-)  samplerate (int) – The sample rate of the audio file.
+             ============= Librosa Documentation for librosa.load() ===================================
+            Returns 2 things:
+                1-) ynp.ndarray [shape=(n,) or (…, n)]
+                audio time series. Multi-channel is supported.
+                
+                2-) srnumber > 0 [scalar]
+                sampling rate of y
+            =====================================================================================
+        """
+        # audio_data, self.sample_rate = librosa.load(File_Path)
+        self.time_domain_Y_coordinates, self.sample_rate = sf.read(File_Path)
+        self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
+        sd.play(self.time_domain_Y_coordinates, self.sample_rate) # Here shines the power of sounddevice, it plays the sound given numpy array
+        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
         # self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
         self.stopped = False
         self.plot_signals()
@@ -69,7 +88,6 @@ class BaseMode(ABC):
         
         self.data_line_in = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
         self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="b")
-
         #TODO: change this setting, after calculating the actual time domain from the fourier inverse not taking a copy from origin
         self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
 
@@ -77,7 +95,7 @@ class BaseMode(ABC):
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
-        self.player.play()
+        # self.player.play()
         self.calculate_frequency_domain()
 
     def update_plot_data(self):
@@ -195,7 +213,7 @@ class BaseMode(ABC):
         # also try to change the datatype into hexa to check if the saxaphone sound is fixed or not
         wavfile.write('modified_signal.wav', self.sample_rate, self.time_domain_signal_modified.astype(np.float32))
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
-        self.player.play()
+        #self.player.play()
         
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
