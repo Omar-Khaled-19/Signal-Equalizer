@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QFileDialog
 import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
-from scipy.io import wavfile
 import pyqtgraph as pg
 
 class BaseMode(ABC):
@@ -64,9 +63,12 @@ class BaseMode(ABC):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(File_Path)
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
-        sd.play(self.time_domain_Y_coordinates, self.sample_rate) # Here shines the power of sounddevice, it plays the sound given numpy array
-        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
-        # self.player.setMedia(QMediaContent(QUrl.fromLocalFile('modified_signal.wav')))
+        
+        audio_file = "temp_audio.wav"
+        sf.write(audio_file, self.time_domain_Y_coordinates, self.sample_rate)
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
+        self.player.play()
+        
         self.stopped = False
         self.plot_signals()
            
@@ -81,7 +83,6 @@ class BaseMode(ABC):
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.update_plot_data)
         self.timer.start()
-        # self.player.play()
         self.calculate_frequency_domain()
 
     def update_plot_data(self):
