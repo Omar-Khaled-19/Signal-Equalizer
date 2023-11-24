@@ -28,7 +28,7 @@ class MplCanvas(Canvas):
         self.draw()
 
     def toggle_spectrogram(self):
-        current_visibility = self.ax.get_visible()
+        current_visibility = self.axes.get_visible()
         self.axes.set_visible(not current_visibility)
         self.draw()
 
