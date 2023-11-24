@@ -48,14 +48,13 @@ class BaseMode(ABC):
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         self.min_range = min_freq
         self.max_range = max_freq - min_freq
-        self.uiSmoothing.Smoothing_Window_Frequency_Slider_2
         smoothing_factor = factor / 5.0
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
         self.plot_frequency_domain(1)
-        self.plot_smoothing(max_freq - min_freq, factor)
+        #self.plot_smoothing(max_freq - min_freq, factor)
         
     
     def load_signal(self):
@@ -187,8 +186,8 @@ class BaseMode(ABC):
 
     def plot_frequency_domain(self, smoothing_flag=0):
         self.frequency_graph.clear()
-        if smoothing_flag == 1:
-            self.apply_selector()  
+        # if smoothing_flag == 1:
+        #     self.apply_selector()
         self.frequency_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
