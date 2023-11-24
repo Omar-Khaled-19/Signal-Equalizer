@@ -53,6 +53,7 @@ class BaseMode(ABC):
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -max_freq)] *= smoothing_factor
         self.plot_frequency_domain(1)
         #self.plot_smoothing(max_freq - min_freq, factor)
         
@@ -212,7 +213,7 @@ class BaseMode(ABC):
             # sf.write("temp_audio.wav", self.time_domain_signal_modified.real, self.sample_rate)
             # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("temp_audio.wav")))
             self.player.stop()
-            sd.play(np.abs(self.time_domain_signal_modified), self.sample_rate)
+            sd.play(self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
 
         
     def calculate_frequency_domain(self):
