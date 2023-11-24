@@ -126,12 +126,12 @@ class ECGMode(BaseMode.BaseMode):
             self.time_domain_Y_coordinates = list(Record.p_signal[:, 0])
             self.time_domain_X_coordinates = list(np.arange(len(self.time_domain_Y_coordinates)))
             self.stopped = False
-            self.plot_signal()
+            self.plot_signals()
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:
             self.X_Points_Plotted += self.speed
-            self.data_line.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], 
+            self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], 
                                 self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
             
             self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 200, 
