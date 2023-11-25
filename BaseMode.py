@@ -110,17 +110,6 @@ class BaseMode(ABC):
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:target_index],self.sample_rate)
         
-        # if not self.paused and not self.stopped:
-        #     self.X_Points_Plotted += 1
-        #     self.input_graph.getViewBox().setXRange(self.X_Points_Plotted - 4, self.X_Points_Plotted)
-        #     self.output_graph.getViewBox().setXRange(self.X_Points_Plotted - 4, self.X_Points_Plotted)
-        #     self.data_line_in.setData(self.time_domain_X_coordinates[:self.X_Points_Plotted + 1], self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1])
-        #     self.data_line_out.setData(self.time_domain_X_coordinates[:self.X_Points_Plotted], self.time_domain_signal_modified[:self.X_Points_Plotted].real)
-            
-        #     if not self.hidden:
-        #         self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted],self.sample_rate)
-        #         self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted],self.sample_rate)
-
     def toggle_pause(self):
         self.paused = not self.paused
         if self.paused:

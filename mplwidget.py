@@ -22,9 +22,7 @@ class MplCanvas(Canvas):
     def plot_spectrogram(self, signal, fs):
         self.axes.cla()
         self.axes.specgram(signal, Fs=fs, cmap='viridis')
-        # self.axes.set_xlabel('Time [s]')
-        # self.ax.set_ylabel('Frequency [Hz]')
-        # self.ax.set_title('Spectrogram')
+        self.axes.set_ylim(0, 10000)
         self.draw()
 
     def toggle_spectrogram(self):
