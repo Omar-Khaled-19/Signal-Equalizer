@@ -3,6 +3,7 @@ from pyqtgraph import PlotWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Smoothing_Window import Ui_Smoothing_Window
 from mplwidget import MplWidget
+import time
 
 
 
@@ -14,7 +15,13 @@ class Ui_SignalEqualizer(object):
         
     def open_Smoothing_Window(self):
         self.window.show()
+        
     
+    def close_Smoothing_Window(self):
+        # Sleep for 2 seconds
+        time.sleep(2)
+        self.window.close()
+        
     
     def setupUi(self, SignalEqualizer):
         SignalEqualizer.setObjectName("SignalEqualizer")
@@ -2242,6 +2249,7 @@ class Ui_SignalEqualizer(object):
         
     def smoothing_connection(self, mode, uiSmoothing):
         uiSmoothing.apply_button.clicked.connect(lambda: mode.plot_smoothing())
+        uiSmoothing.apply_button.clicked.connect(lambda: self.close_Smoothing_Window())
         uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Hamming_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
