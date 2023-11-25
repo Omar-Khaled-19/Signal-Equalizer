@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, soundfile as sf, sounddevice as sd
+import numpy as np, bisect, math, librosa, sounddevice as sd
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
@@ -29,7 +29,7 @@ class BaseMode(ABC):
         self.phases = []
         self.current_smoothing = 0
         self.uiSmoothing = ui_smoothing
-
+        self.chosen_range = None # This equals minimum freq + range chosen from smoothing window
         self.X_Points_Plotted = 0
         self.paused = False
         self.stopped = False
@@ -38,7 +38,6 @@ class BaseMode(ABC):
         self.player = QMediaPlayer()
         self.sample_rate = 44100
         self.min_range = 0
-        self.max_range = 0
 
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
@@ -47,15 +46,14 @@ class BaseMode(ABC):
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         self.min_range = min_freq
-        self.max_range = max_freq - min_freq
+        max_range = max_freq - min_freq
         smoothing_factor = factor / 5.0
-        range = int ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10) * self.max_range + self.min_range)
-        self.current_smoothing = self.smoothing_window(range, smoothing_factor)
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)]
-        
-        # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)] *= self.current_smoothing
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -range)] *= self.current_smoothing
+        self.chosen_range = int ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10) * max_range + self.min_range)
+        self.current_smoothing = self.smoothing_window(len(self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]), smoothing_factor)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]
+
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)] *= self.current_smoothing
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -self.chosen_range)] *= self.current_smoothing
         self.plot_frequency_domain(1)
         
     
@@ -166,6 +164,7 @@ class BaseMode(ABC):
             std_dev = width / (2 * math.sqrt(2 * math.log(2)))
             gaussian_window = get_window(('gaussian', std_dev), width) * height
             return gaussian_window
+        return None
 
     def get_currentSmoothing_window(self):
         pass
@@ -179,8 +178,7 @@ class BaseMode(ABC):
     def apply_selector(self):
         # Create a smoothing window box
         selector = pg.LinearRegionItem()
-        factor = self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10
-        selector.setRegion([self.min_range, self.min_range + (self.max_range * factor)])
+        selector.setRegion([self.min_range, self.chosen_range])
         selector.setMovable(False)  # Set movable property to False
         self.frequency_graph.addItem(selector)
         filtered_curve = self.frequency_graph.plot(pen='r')

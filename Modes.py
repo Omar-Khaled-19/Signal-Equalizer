@@ -65,7 +65,7 @@ class MusicalMode(BaseMode.BaseMode):
         elif slider == 3:
             super().modify_frequency(1000, 2000, slider_value)
         else:
-            super().modify_frequency(2000, 8000, slider_value)
+            super().modify_frequency(2000, 10000, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
