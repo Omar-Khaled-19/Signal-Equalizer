@@ -49,13 +49,14 @@ class BaseMode(ABC):
         self.min_range = min_freq
         self.max_range = max_freq - min_freq
         smoothing_factor = factor / 5.0
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
+        range = int ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10) * self.max_range + self.min_range)
+        self.current_smoothing = self.smoothing_window(range, smoothing_factor)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)]
         
         # self.modified_freq_domain_Y_coordinates = list(np.array(self.modified_freq_domain_Y_coordinates[min_freq:max_freq + 1]) * self.smoothing_window() * smoothing_factor)
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= smoothing_factor
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -max_freq)] *= smoothing_factor
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= range)] *= self.current_smoothing
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -range)] *= self.current_smoothing
         self.plot_frequency_domain(1)
-        #self.plot_smoothing(max_freq - min_freq, factor)
         
     
     def load_signal(self):
@@ -177,41 +178,31 @@ class BaseMode(ABC):
          
     def apply_selector(self):
         # Create a smoothing window box
-        smoothing_window = pg.LinearRegionItem()
-        factor = ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() * 10) / 100)
-        smoothing_window.setRegion([self.min_range, self.min_range + (self.max_range * factor)])
-        smoothing_window.setMovable(False)  # Set movable property to False
-        self.frequency_graph.addItem(smoothing_window)
+        selector = pg.LinearRegionItem()
+        factor = self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10
+        selector.setRegion([self.min_range, self.min_range + (self.max_range * factor)])
+        selector.setMovable(False)  # Set movable property to False
+        self.frequency_graph.addItem(selector)
         filtered_curve = self.frequency_graph.plot(pen='r')
         filtered_curve.setData(self.current_smoothing)
+        
+        
 
     def plot_frequency_domain(self, smoothing_flag=0):
         self.frequency_graph.clear()
-        # if smoothing_flag == 1:
-        #     self.apply_selector()
+        if smoothing_flag == 1:
+            self.apply_selector()
         self.frequency_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
         
-        #TODO: the transperent box need to be plotted in the ui class and then change it in width from sliders value. commented until fix
-            #self.frequency_graph.gca().add_patch(self.frequency_graph.Rectangle((0, 0), 5, 2, edgecolor='r', facecolor='none', alpha=1))
-            
         # Inverse Fourier transform to go back to the time domain
         self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates * np.exp(1j * self.phases))
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
-        
-        #TODO: check the limits again after fixing the plot in the output graph
-            #self.output_graph.setLimits(yMin = min(self.time_domain_signal_modified), yMax = max(self.time_domain_signal_modified))
             
         self.output_graph.getViewBox().setYRange(-0.4, 0.4)
-        #self.plot_output(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1])
-        
-        #TODO: need an update. this line convert the modified signal into wav file,
-        # also try to change the datatype into hexa to check if the saxaphone sound is fixed or not
         if not self.first_time_flag:
-            # sf.write("temp_audio.wav", self.time_domain_signal_modified.real, self.sample_rate)
-            # self.player.setMedia(QMediaContent(QUrl.fromLocalFile("temp_audio.wav")))
             self.player.stop()
             sd.play(self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
 

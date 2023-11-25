@@ -1,61 +1,99 @@
 import sys
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import Qt
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from PyQt5 import QtWidgets, QtGui, QtCore
+from scipy.signal import get_window
+import math
 
+# Generate sample data
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Matplotlib Rectangle in PyQtGraph")
-        self.setGeometry(100, 100, 800, 600)
+# Create PyQtGraph application
+app = QtWidgets.QApplication([])
+win = QtWidgets.QMainWindow()
+central_widget = QtWidgets.QWidget()
+win.setCentralWidget(central_widget)
+grid_layout = QtWidgets.QGridLayout(central_widget)
 
-        # Create a PyQtGraph plot widget
-        self.plot_widget = pg.PlotWidget(self)
-        self.setCentralWidget(self.plot_widget)
+# Create the frame and grid layout
+frame_17 = QtWidgets.QFrame()
+frame_17.setFrameShape(QtWidgets.QFrame.StyledPanel)
+frame_17.setFrameShadow(QtWidgets.QFrame.Raised)
+frame_17.setObjectName("frame_17")
+grid_layout_26 = QtWidgets.QGridLayout(frame_17)
+grid_layout_26.setObjectName("gridLayout_26")
 
-        # Generate some random data for the plot
-        x = np.linspace(0, 10, 100)
-        y = np.sin(x)
+# Create the plot widget
+Animals_Sounds_Frequency_Domain_PlotWidget = pg.PlotWidget()
+Animals_Sounds_Frequency_Domain_PlotWidget.setMinimumSize(QtCore.QSize(1231, 130))
+Animals_Sounds_Frequency_Domain_PlotWidget.setObjectName("Animals_Sounds_Frequency_Domain_PlotWidget")
+grid_layout_26.addWidget(Animals_Sounds_Frequency_Domain_PlotWidget, 0, 0, 1, 1)
 
-        # Plot the data using PyQtGraph
-        self.plot_widget.plot(x, y)
+# Plot the original signal
+original_curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(x, y, pen='b')
 
-        # Create a Matplotlib figure and axes
-        self.fig, self.ax = plt.subplots()
+# Create a smoothing window box
+smoothing_window = pg.LinearRegionItem()
+smoothing_window.setRegion([x.min(), x.max()])
+Animals_Sounds_Frequency_Domain_PlotWidget.addItem(smoothing_window)
 
-        # Draw a rectangle using Matplotlib
-        rect = Rectangle((2, -0.5), 3, 1, facecolor='red', alpha=0.5)
-        self.ax.add_patch(rect)
+# Create a filtered signal plot
+filtered_curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(pen='r')
 
-        # Get the Matplotlib figure canvas and initialize it
-        self.canvas = self.fig.canvas
-        self.canvas.draw()
+# Create a Gaussian overlay
+gaussian_curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot()
 
-        # Convert the Matplotlib canvas to a PyQtGraph widget
-        self.matplotlib_widget = self.canvas.native
+# Define update function
+def update():
+    # Get the region of the smoothing window
+    xmin, xmax = smoothing_window.getRegion()
+    
+    # Apply smoothing to the signal within the window
+    filtered_y = np.copy(y)
+    filtered_y[(x < xmin) | (x > xmax)] = 0.0
+    
+    # Update the filtered signal plot
+    filtered_curve.setData(x, filtered_y)
+    
+    # Overlay Gaussian-Hamming-Hanning on the plot
+    window_width = xmax - xmin
+    height = 1.0  # You can adjust the height as needed
+    
+    # Create a Gaussian window
+    std_dev = window_width / (2 * math.sqrt(2 * math.log(2)))
+    gaussian_window = get_window(('gaussian', std_dev), len(x)) * height
+    
+    # Create a Hamming window
+    hamming_window = get_window('hamming', len(x)) * height
+    
+    # Create a Hanning window
+    hanning_window = get_window('hann', len(x)) * height
+    
+    # Combine the windows (you can adjust the weights as needed)
+    combined_window = 0.5 * gaussian_window + 0.25 * hamming_window + 0.25 * hanning_window
+    
+    # Update the Gaussian-Hamming-Hanning overlay
+    gaussian_curve.setData(x, combined_window)
+    
+    # Update the original signal plot within the smoothing window
+    original_y = np.copy(y)
+    original_y[(x < xmin) | (x > xmax)] = np.nan  # Set values outside the window to NaN
+    original_curve.setData(x, original_y)
 
-        # Set the position and size of the Matplotlib widget within the PyQtGraph plot widget
-        self.matplotlib_widget.setGeometry(100, 100, 200, 150)
+# Connect the update function to the region change signal of the smoothing window
+smoothing_window.sigRegionChanged.connect(update)
 
-        # Add the Matplotlib widget to the PyQtGraph plot widget
-        self.plot_widget.addItem(self.matplotlib_widget)
+# Add the frame to the grid layout
+grid_layout.addWidget(frame_17)
 
-        # Disable the interaction on the Matplotlib widget to prevent conflicts with PyQtGraph
-        self.matplotlib_widget.setFlag(Qt.ItemIsMovable, False)
-        self.matplotlib_widget.setFlag(Qt.ItemIsSelectable, False)
-        self.matplotlib_widget.setFlag(Qt.ItemIsFocusable, False)
+# Set the main window properties
+win.setWindowTitle("Signal with Smoothing Window and Gaussian-Hamming-Hanning Overlay")
+win.resize(800, 600)
 
- # Draw a transparent box above the frequency domain
-    box_width = frq[-1] / 4
-    box_height = max(abs(fft_signal)) / 4
-    plt.gca().add_patch(plt.Rectangle((0, 0), box_width, box_height, edgecolor='r', facecolor='none', alpha=1))
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec_())
+# Start the PyQtGraph application
+if __name__ == '__main__':
+    update()
+    win.show()
+    if sys.flags.interactive != 1 or not hasattr(QtCore, 'PYQT_VERSION'):
+        QtWidgets.QApplication.instance().exec_()

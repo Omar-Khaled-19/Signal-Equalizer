@@ -1,69 +1,45 @@
-import sys
 import numpy as np
-import pyqtgraph as pg
-from PyQt5 import QtWidgets, QtGui, QtCore
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+import sounddevice as sd
 
-# Generate sample data
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+# Parameters
+duration = 5  # Duration of the signal in seconds
+sample_rate = 44100  # Sample rate (number of samples per second)
+frequency = 440  # Frequency of the signal in Hz
 
-# Create PyQtGraph application
-app = QtWidgets.QApplication([])
-win = QtWidgets.QMainWindow()
-central_widget = QtWidgets.QWidget()
-win.setCentralWidget(central_widget)
-grid_layout = QtWidgets.QGridLayout(central_widget)
+# Generate the signal
+t = np.linspace(0, duration, int(duration * sample_rate), endpoint=False)
+signal = np.sin(2 * np.pi * frequency * t)
 
-# Create the frame and grid layout
-frame_17 = QtWidgets.QFrame()
-frame_17.setFrameShape(QtWidgets.QFrame.StyledPanel)
-frame_17.setFrameShadow(QtWidgets.QFrame.Raised)
-frame_17.setObjectName("frame_17")
-grid_layout_26 = QtWidgets.QGridLayout(frame_17)
-grid_layout_26.setObjectName("gridLayout_26")
+# Initialize the figure and plot
+fig, ax = plt.subplots()
+line, = ax.plot([], [], lw=2)
+ax.set_xlim(0, duration)
+ax.set_ylim(-1, 1)
+ax.set_xlabel('Time (s)')
+ax.set_ylabel('Amplitude')
 
-# Create the plot widget
-Animals_Sounds_Frequency_Domain_PlotWidget = pg.PlotWidget()
-Animals_Sounds_Frequency_Domain_PlotWidget.setMinimumSize(QtCore.QSize(1231, 130))
-Animals_Sounds_Frequency_Domain_PlotWidget.setObjectName("Animals_Sounds_Frequency_Domain_PlotWidget")
-grid_layout_26.addWidget(Animals_Sounds_Frequency_Domain_PlotWidget, 0, 0, 1, 1)
+# Callback function for updating the line
+def update_line(frame):
+    line.set_data(t[:frame], signal[:frame])
+    return line,
 
-# Plot the original signal
-curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(x, y, pen='b')
+# Initialize the audio stream
+stream = sd.OutputStream(samplerate=sample_rate, channels=1)
 
-# Create a smoothing window box
-smoothing_window = pg.LinearRegionItem()
-smoothing_window.setRegion([x.min(), x.max()])
-Animals_Sounds_Frequency_Domain_PlotWidget.addItem(smoothing_window)
+# Callback function for playing audio
+def play_audio(outdata, frames, time, status):
+    if frames:
+        outdata[:, 0] = signal[:frames]
 
-# Create a filtered signal plot
-filtered_curve = Animals_Sounds_Frequency_Domain_PlotWidget.plot(pen='r')
+# Start the animation
+ani = FuncAnimation(fig, update_line, frames=len(t), interval=10, blit=True)
 
-# Define update function
-def update():
-    # Get the region of the smoothing window
-    xmin, xmax = smoothing_window.getRegion()
-    
-    # Apply smoothing to the signal within the window
-    filtered_y = np.copy(y)
-    filtered_y[(x < xmin) | (x > xmax)] = 0.0
-    
-    # Update the filtered signal plot
-    filtered_curve.setData(x, filtered_y)
+# Start playing the audio
+with stream:
+ # Start the audio playback with the callback function
+    sd.play(callback=play_audio, channels=1, samplerate=sample_rate)
 
-# Connect the update function to the region change signal of the smoothing window
-smoothing_window.sigRegionChanged.connect(update)
-
-# Add the frame to the grid layout
-grid_layout.addWidget(frame_17)
-
-# Set the main window properties
-win.setWindowTitle("Signal with Smoothing Window")
-win.resize(800, 600)
-
-# Start the PyQtGraph application
-if __name__ == '__main__':
-    update()
-    win.show()
-    if sys.flags.interactive != 1 or not hasattr(QtCore, 'PYQT_VERSION'):
-        QtWidgets.QApplication.instance().exec_()
+# Show the plot
+plt.show()
