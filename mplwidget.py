@@ -4,6 +4,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('QT5Agg')
+import warnings
+
 class MplCanvas(Canvas):
     def __init__(self):
         plt.rcParams['axes.facecolor'] = 'black'  #grouping the axes then making their background color black
@@ -20,10 +22,13 @@ class MplCanvas(Canvas):
         Canvas.updateGeometry(self)
 
     def plot_spectrogram(self, signal, fs):
-        self.axes.cla()
-        self.axes.specgram(signal, Fs=fs, cmap='viridis')
-        self.axes.set_ylim(0, 10000)
-        self.draw()
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=UserWarning)
+            
+            self.axes.cla()
+            self.axes.specgram(signal, Fs=fs, cmap='viridis')
+            self.axes.set_ylim(0, 10000)
+            self.draw()
 
     def toggle_spectrogram(self):
         current_visibility = self.axes.get_visible()
