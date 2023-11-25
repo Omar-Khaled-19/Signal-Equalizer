@@ -3,10 +3,11 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, sounddevice as sd
+import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
+import os
 
 class BaseMode(ABC):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing):
@@ -38,6 +39,7 @@ class BaseMode(ABC):
         self.player = QMediaPlayer()
         self.sample_rate = 44100
         self.min_range = 0
+        self.c = 0
 
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
@@ -84,6 +86,7 @@ class BaseMode(ABC):
         self.calculate_frequency_domain()
 
     def update_plot_data(self):
+        
         if not self.paused and not self.stopped:             
             sound_position = self.player.position()
             sound_duration = self.player.duration()
@@ -106,6 +109,17 @@ class BaseMode(ABC):
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:target_index],self.sample_rate)
+        
+        # if not self.paused and not self.stopped:
+        #     self.X_Points_Plotted += 1
+        #     self.input_graph.getViewBox().setXRange(self.X_Points_Plotted - 4, self.X_Points_Plotted)
+        #     self.output_graph.getViewBox().setXRange(self.X_Points_Plotted - 4, self.X_Points_Plotted)
+        #     self.data_line_in.setData(self.time_domain_X_coordinates[:self.X_Points_Plotted + 1], self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1])
+        #     self.data_line_out.setData(self.time_domain_X_coordinates[:self.X_Points_Plotted], self.time_domain_signal_modified[:self.X_Points_Plotted].real)
+            
+        #     if not self.hidden:
+        #         self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted],self.sample_rate)
+        #         self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted],self.sample_rate)
 
     def toggle_pause(self):
         self.paused = not self.paused
@@ -165,11 +179,7 @@ class BaseMode(ABC):
             gaussian_window = get_window(('gaussian', std_dev), width) * height
             return gaussian_window
         return None
-
-    def get_currentSmoothing_window(self):
-        pass
-
-    
+ 
     def plot_smoothing(self, width = 100, height = 10):
         self.current_smoothing = self.smoothing_window(width, height)
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
@@ -184,8 +194,6 @@ class BaseMode(ABC):
         filtered_curve = self.frequency_graph.plot(pen='r')
         filtered_curve.setData(self.current_smoothing)
         
-        
-
     def plot_frequency_domain(self, smoothing_flag=0):
         self.frequency_graph.clear()
         if smoothing_flag == 1:
@@ -202,9 +210,18 @@ class BaseMode(ABC):
         self.output_graph.getViewBox().setYRange(-0.4, 0.4)
         if not self.first_time_flag:
             self.player.stop()
-            sd.play(self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
 
-        
+            #sd.play(self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
+            audio_file = f"temp_audio{self.c}.wav"
+            self.c += 1
+            sf.write(audio_file, self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
+
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
+            self.player.play()
+
+            for i in range(self.c - 1):
+                os.remove(f"temp_audio{i}.wav")
+      
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
         fft_result = np.fft.fft(self.time_domain_Y_coordinates)
