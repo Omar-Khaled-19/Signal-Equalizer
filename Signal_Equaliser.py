@@ -2228,7 +2228,12 @@ class Ui_SignalEqualizer(object):
         self.statusbar = QtWidgets.QStatusBar(SignalEqualizer)
         self.statusbar.setObjectName("statusbar")
         SignalEqualizer.setStatusBar(self.statusbar)
-
+        self.Uniform_Range_Frequency_Range_5_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 5))
+        self.Uniform_Range_Frequency_Range_6_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 6))
+        self.Uniform_Range_Frequency_Range_7_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 7))
+        self.Uniform_Range_Frequency_Range_8_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 8))
+        self.Uniform_Range_Frequency_Range_9_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 9))
+        self.Uniform_Range_Frequency_Range_10_Slider.valueChanged.connect(lambda value: UniformMode.modify_frequency(value, 10))
         self.retranslateUi(SignalEqualizer)
         self.tabWidget.setCurrentIndex(0)
         self.Uniform_Range_Signal_Speed_Slider.valueChanged['int'].connect(
