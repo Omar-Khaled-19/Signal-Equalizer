@@ -133,7 +133,7 @@ class ECGMode(BaseMode.BaseMode):
             self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], 
                                 self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
             
-            self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 200, 
+            self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 1000, 
                                                     max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
         
     def toggle_pause(self):
