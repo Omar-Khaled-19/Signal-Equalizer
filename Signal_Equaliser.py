@@ -1,10 +1,8 @@
-import sys, Modes
+import sys, Modes, time
 from pyqtgraph import PlotWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Smoothing_Window import Ui_Smoothing_Window
 from mplwidget import MplWidget
-import time
-
 
 
 class Ui_SignalEqualizer(object):
@@ -465,6 +463,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_1_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_1_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_1_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_1_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_1_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_1_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_1_Slider.setObjectName("Uniform_Range_Frequency_Range_1_Slider")
@@ -491,6 +490,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_2_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_2_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_2_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_2_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_2_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_2_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_2_Slider.setObjectName("Uniform_Range_Frequency_Range_2_Slider")
@@ -517,6 +517,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_3_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_3_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_3_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_3_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_3_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_3_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_3_Slider.setObjectName("Uniform_Range_Frequency_Range_3_Slider")
@@ -543,6 +544,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_4_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_4_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_4_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_4_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_4_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_4_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_4_Slider.setObjectName("Uniform_Range_Frequency_Range_4_Slider")
@@ -569,6 +571,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_5_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_5_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_5_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_5_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_5_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_5_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_5_Slider.setObjectName("Uniform_Range_Frequency_Range_5_Slider")
@@ -595,6 +598,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_6_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_6_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_6_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_6_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_6_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_6_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_6_Slider.setObjectName("Uniform_Range_Frequency_Range_6_Slider")
@@ -621,6 +625,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_7_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_7_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_7_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_7_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_7_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_7_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_7_Slider.setObjectName("Uniform_Range_Frequency_Range_7_Slider")
@@ -647,6 +652,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_8_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_8_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_8_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_8_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_8_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_8_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_8_Slider.setObjectName("Uniform_Range_Frequency_Range_8_Slider")
@@ -673,6 +679,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_9_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_9_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_9_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_9_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_9_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_9_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_9_Slider.setObjectName("Uniform_Range_Frequency_Range_9_Slider")
@@ -699,6 +706,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_10_Slider.setMaximumSize(QtCore.QSize(35, 16777215))
         self.Uniform_Range_Frequency_Range_10_Slider.setMinimum(0)
         self.Uniform_Range_Frequency_Range_10_Slider.setMaximum(5)
+        self.Uniform_Range_Frequency_Range_10_Slider.setValue(5)
         self.Uniform_Range_Frequency_Range_10_Slider.setOrientation(QtCore.Qt.Vertical)
         self.Uniform_Range_Frequency_Range_10_Slider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.Uniform_Range_Frequency_Range_10_Slider.setObjectName("Uniform_Range_Frequency_Range_10_Slider")

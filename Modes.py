@@ -41,7 +41,6 @@ class UniformMode(BaseMode.BaseMode):
         super().load_signal()
 
     def toggle_pause(self):
-        # Why the whole function is not written in BaseMode?
         super().toggle_pause()
         self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
 
