@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFileDialog
 class UniformMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing= None)
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
         self.slider5 = ui.Uniform_Range_Frequency_Range_5_Slider
         self.slider6 = ui.Uniform_Range_Frequency_Range_6_Slider
         self.slider7 = ui.Uniform_Range_Frequency_Range_7_Slider
