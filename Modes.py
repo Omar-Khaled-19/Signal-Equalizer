@@ -135,7 +135,11 @@ class ECGMode(BaseMode.BaseMode):
             
             self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 1000, 
                                                     max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
-        
+
+            if not self.hidden:
+                self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)
+                self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted + 1],self.sample_rate)
+
     def toggle_pause(self):
         self.paused = not self.paused
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)

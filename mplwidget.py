@@ -37,8 +37,10 @@ class MplCanvas(Canvas):
 
 class MplWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtWidgets.QWidget.__init__(self, parent)
-        self.canvas = MplCanvas()
-        self.vbl = QtWidgets.QVBoxLayout()
-        self.vbl.addWidget(self.canvas)
-        self.setLayout(self.vbl)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=UserWarning)
+            QtWidgets.QWidget.__init__(self, parent)
+            self.canvas = MplCanvas()
+            self.vbl = QtWidgets.QVBoxLayout()
+            self.vbl.addWidget(self.canvas)
+            self.setLayout(self.vbl)
