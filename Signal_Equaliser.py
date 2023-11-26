@@ -2378,9 +2378,9 @@ class Ui_SignalEqualizer(object):
         self.ECG_Abnormalities_Load_Signal_Button.setText(_translate("SignalEqualizer", "   Load Signal"))
         self.groupBox_6.setTitle(_translate("SignalEqualizer", "ECG Abnormalities Frequencies"))
         self.ECG_Abnormalities_Normal_ECG_Label.setText(_translate("SignalEqualizer", "     Normal ECG"))
-        self.ECG_Abnormalities_Abnormal_ECG_1_Label.setText(_translate("SignalEqualizer", "Abnormal ECG 1"))
-        self.ECG_Abnormalities_Abnormal_ECG_2_Label.setText(_translate("SignalEqualizer", "Abnormal ECG 2"))
-        self.ECG_Abnormalities_Abnormal_ECG_3_Label.setText(_translate("SignalEqualizer", "Abnormal ECG 3"))
+        self.ECG_Abnormalities_Abnormal_ECG_1_Label.setText(_translate("SignalEqualizer", "myocrodial infaration"))
+        self.ECG_Abnormalities_Abnormal_ECG_2_Label.setText(_translate("SignalEqualizer", "hyperkalemia"))
+        self.ECG_Abnormalities_Abnormal_ECG_3_Label.setText(_translate("SignalEqualizer", "atrial fibrosis"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ECG_Abnormalities_Tab),_translate("SignalEqualizer", "ECG Abnormalities"))
 
 

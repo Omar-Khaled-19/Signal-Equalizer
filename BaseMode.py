@@ -180,9 +180,7 @@ class BaseMode(ABC):
         selector.setRegion([self.min_range, self.chosen_range])
         selector.setMovable(False)  # Set movable property to False
         self.frequency_graph.addItem(selector)
-        filtered_curve = self.frequency_graph.plot(pen='r')
-        filtered_curve.setData(self.current_smoothing)
-        
+
     def plot_frequency_domain(self, smoothing_flag=0):
         self.frequency_graph.clear()
         if smoothing_flag == 1:
