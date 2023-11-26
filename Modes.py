@@ -111,9 +111,16 @@ class ECGMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
     
-    def modify_frequency(self, value: int):
+    def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
-        pass
+        if slider == 1:
+            super().modify_frequency(0, 200, slider_value)
+        elif slider == 2:
+            super().modify_frequency(200, 250, slider_value)
+        elif slider == 3:
+            super().modify_frequency(250, 300, slider_value)
+        else:
+            super().modify_frequency(300, 500, slider_value)
 
     def load_signal(self):
         self.input_graph.clear()
