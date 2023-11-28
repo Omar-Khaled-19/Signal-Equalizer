@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, sounddevice as sd, soundfile as sf
+import numpy as np, bisect, math, librosa, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
@@ -181,11 +181,11 @@ class BaseMode(ABC):
         selector.setMovable(False)  # Set movable property to False
         self.frequency_graph.addItem(selector)
 
-    def plot_frequency_domain(self, smoothing_flag=0):
+    def plot_frequency_domain(self, smoothing_flag=0, minX = 0, maxX = 1000):
         self.frequency_graph.clear()
         if smoothing_flag == 1:
             self.apply_selector()
-        self.frequency_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
+        self.frequency_graph.setLimits(xMin = minX, xMax = maxX)
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)

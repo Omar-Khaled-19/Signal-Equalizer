@@ -16,25 +16,25 @@ class UniformMode(BaseMode.BaseMode):
     def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
         if slider == 1:
-            super().modify_frequency(1000, 1100, slider_value)
+            super().modify_frequency(1050, 1150, slider_value)
         elif slider == 2:
-            super().modify_frequency(1100, 1200, slider_value)
+            super().modify_frequency(1150, 1250, slider_value)
         elif slider == 3:
-            super().modify_frequency(1200, 1300, slider_value)
+            super().modify_frequency(1250, 1350, slider_value)
         elif slider == 4:
-            super().modify_frequency(1300, 1400, slider_value)
+            super().modify_frequency(1350, 1450, slider_value)
         elif slider == 5:
-            super().modify_frequency(1400, 1500, slider_value)
+            super().modify_frequency(1450, 1550, slider_value)
         elif slider == 6:
-            super().modify_frequency(1500, 1600, slider_value)
+            super().modify_frequency(1550, 1650, slider_value)
         elif slider == 7:
-            super().modify_frequency(1600, 1700, slider_value)
+            super().modify_frequency(1650, 1750, slider_value)
         elif slider == 8:
-            super().modify_frequency(1700, 1800, slider_value)
+            super().modify_frequency(1750, 1850, slider_value)
         elif slider == 9:
-            super().modify_frequency(1800, 1900, slider_value)
+            super().modify_frequency(1850, 1950, slider_value)
         else:
-            super().modify_frequency(1900, 2100, slider_value)
+            super().modify_frequency(1950, 2050, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
@@ -48,7 +48,8 @@ class UniformMode(BaseMode.BaseMode):
         super().toggle_hide()
         self.change_hide_icon(self.ui.Uniform_Range_Hide_Show_Spectrogram_Button)
 
-
+    def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
+        super().plot_frequency_domain(minX=1090, maxX=2100)
 
 class MusicalMode(BaseMode.BaseMode):
 
@@ -78,6 +79,9 @@ class MusicalMode(BaseMode.BaseMode):
         super().toggle_hide()
         self.change_hide_icon(self.ui.Musical_Instruments_Hide_Show_Spectrogram_Button)
 
+    def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
+        super().plot_frequency_domain(minX=30, maxX=10000)
+
 class AnimalMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
@@ -106,6 +110,8 @@ class AnimalMode(BaseMode.BaseMode):
         super().toggle_hide()
         self.change_hide_icon(self.ui.Animals_Sounds_Hide_Show_Spectrogram_Button)
 
+    def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
+        super().plot_frequency_domain(minX=60, maxX=4100)
 class ECGMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
@@ -166,3 +172,6 @@ class ECGMode(BaseMode.BaseMode):
     def toggle_hide(self):
         super().toggle_hide()
         self.change_hide_icon(self.ui.ECG_Abnormalities_Hide_Show_Spectrogram_Button)
+
+    def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
+        super().plot_frequency_domain(minX=0, maxX=500)
