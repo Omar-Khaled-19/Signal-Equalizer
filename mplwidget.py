@@ -24,7 +24,7 @@ class MplCanvas(Canvas):
     def plot_spectrogram(self, signal, fs):
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=UserWarning)
-            
+            warnings.filterwarnings("ignore", category=RuntimeWarning)
             self.axes.cla()
             self.axes.specgram(signal, Fs=fs, cmap='viridis')
             self.axes.set_ylim(0, 10000)
@@ -37,10 +37,8 @@ class MplCanvas(Canvas):
 
 class MplWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        with warnings.catch_warnings():
-            warnings.filterwarnings("ignore", category=UserWarning)
-            QtWidgets.QWidget.__init__(self, parent)
-            self.canvas = MplCanvas()
-            self.vbl = QtWidgets.QVBoxLayout()
-            self.vbl.addWidget(self.canvas)
-            self.setLayout(self.vbl)
+        QtWidgets.QWidget.__init__(self, parent)
+        self.canvas = MplCanvas()
+        self.vbl = QtWidgets.QVBoxLayout()
+        self.vbl.addWidget(self.canvas)
+        self.setLayout(self.vbl)

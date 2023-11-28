@@ -197,17 +197,17 @@ class BaseMode(ABC):
         self.output_graph.getViewBox().setYRange(-0.4, 0.4)
         if not self.first_time_flag:
             self.player.stop()
-
-            #sd.play(self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
-            audio_file = f"temp_audio{self.c}.wav"
+            
             self.c += 1
-            sf.write(audio_file, self.time_domain_signal_modified.astype(np.float32), self.sample_rate)
+            audio_file = f"temp_audio{self.c}.wav"
+            if (self.c != 1):
+                os.remove(f"temp_audio{self.c-1}.wav")
+
+            real_signal = np.real(self.time_domain_signal_modified)
+            sf.write(audio_file, real_signal.astype(np.float32), self.sample_rate)
 
             self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
             self.player.play()
-
-            for i in range(self.c - 1):
-                os.remove(f"temp_audio{i}.wav")
       
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
