@@ -40,7 +40,7 @@ class BaseMode(ABC):
         self.sample_rate = 44100
         self.min_range = 0
         self.c = 0
-
+        self.is_sound = True
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
         self.first_time_flag = True # This checks if the signal is loaded for the first time
@@ -63,7 +63,7 @@ class BaseMode(ABC):
         self.input_graph.clear()
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(File_Path)
-        self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
+        # self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
 
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
@@ -195,12 +195,12 @@ class BaseMode(ABC):
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
             
         self.output_graph.getViewBox().setYRange(-0.4, 0.4)
-        if not self.first_time_flag:
+        if not self.first_time_flag and self.is_sound:
             self.player.stop()
             
             self.c += 1
             audio_file = f"temp_audio{self.c}.wav"
-            if (self.c != 1):
+            if self.c != 1:
                 os.remove(f"temp_audio{self.c-1}.wav")
 
             real_signal = np.real(self.time_domain_signal_modified)

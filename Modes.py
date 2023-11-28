@@ -115,8 +115,9 @@ class AnimalMode(BaseMode.BaseMode):
 class ECGMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+        self.duration = None
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
-    
+        self.is_sound = False
     def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
         if slider == 1:
@@ -135,20 +136,32 @@ class ECGMode(BaseMode.BaseMode):
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if File_Path:
             Record = wfdb.rdrecord(File_Path[:-4])
+            self.sample_rate = Record.fs
+            self.duration = Record.sig_len / self.sample_rate  # Duration in seconds
             self.time_domain_Y_coordinates = list(Record.p_signal[:, 0])
-            self.time_domain_X_coordinates = list(np.arange(len(self.time_domain_Y_coordinates)))
+            self.time_domain_X_coordinates = np.linspace(0, self.duration, len(self.time_domain_Y_coordinates), endpoint=False)
             self.stopped = False
             self.plot_signals()
 
     def update_plot_data(self):
+        # Masa2 el 3ennab ya Omar :), I hope this comment finds you well, Delete all comments after Done
         if not self.paused and not self.stopped:
             self.X_Points_Plotted += self.speed
-            self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], 
-                                self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
-            
-            self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 1000, 
-                                                    max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
+            self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
 
+            # I have added the line below as there was no plotting for the output graph at all
+            self.data_line_out.setData(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1], self.time_domain_signal_modified[0: self.X_Points_Plotted + 1].real)
+
+            # TODO
+            # I have Commented the line below as it was not getting correct viewBox
+            # self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 1000, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
+
+            # TODO
+            # The following 2 lines are just arbitrary, please delete after fixing the 2 viewBoxes for input & output
+            self.input_graph.getViewBox().setXRange(1, 5)
+            self.output_graph.getViewBox().setXRange(1, 5)
+
+            # That's it A7la mesa 3lek mooooah
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted + 1],self.sample_rate)
@@ -173,5 +186,13 @@ class ECGMode(BaseMode.BaseMode):
         super().toggle_hide()
         self.change_hide_icon(self.ui.ECG_Abnormalities_Hide_Show_Spectrogram_Button)
 
+    def calculate_frequency_domain(self):
+        fft_result = np.fft.fft(self.time_domain_Y_coordinates)
+        self.freq_domain_X_coordinates = np.fft.fftfreq(len(self.time_domain_Y_coordinates), d=1 / self.sample_rate)  # Frequency values corresponding to the FFT result
+        self.freq_domain_Y_coordinates = np.abs(fft_result)
+        self.phases = np.angle(fft_result)
+        self.modified_freq_domain_Y_coordinates = self.freq_domain_Y_coordinates.copy()
+        self.plot_frequency_domain()
+
     def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
-        super().plot_frequency_domain(minX=0, maxX=500)
+        super().plot_frequency_domain(minX=0, maxX=300)
