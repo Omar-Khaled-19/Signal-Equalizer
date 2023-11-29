@@ -35,16 +35,14 @@ class BaseMode(ABC):
         self.paused = False
         self.stopped = False
         self.hidden = False
-        self.speed = 10
         self.player = QMediaPlayer()
         self.sample_rate = 44100
         self.min_range = 0
         self.c = 0
-        self.is_sound = True
+        self.output_sound = False
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
-        self.first_time_flag = True # This checks if the signal is loaded for the first time
-
+       
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         self.min_range = min_freq
@@ -61,12 +59,12 @@ class BaseMode(ABC):
     
     def load_signal(self):
         self.input_graph.clear()
-        File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        self.time_domain_Y_coordinates, self.sample_rate = librosa.load(File_Path)
+        self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
+        self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
         # self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
 
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(File_Path)))
+        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.File_Path)))
         self.player.play()
 
         self.stopped = False
@@ -77,7 +75,6 @@ class BaseMode(ABC):
         self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
         self.data_line_in = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
         self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="b")
-        #self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
 
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
@@ -195,20 +192,19 @@ class BaseMode(ABC):
         self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
             
         self.output_graph.getViewBox().setYRange(-0.4, 0.4)
-        if not self.first_time_flag and self.is_sound:
-            self.player.stop()
             
-            self.c += 1
-            audio_file = f"temp_audio{self.c}.wav"
-            if self.c != 1:
-                os.remove(f"temp_audio{self.c-1}.wav")
+        self.c += 1
+        self.audio_file = f"temp_audio{self.c}.wav"
+        if self.c != 1:
+            os.remove(f"temp_audio{self.c-1}.wav")
 
-            real_signal = np.real(self.time_domain_signal_modified)
-            sf.write(audio_file, real_signal.astype(np.float32), self.sample_rate)
+        real_signal = np.real(self.time_domain_signal_modified)
+        sf.write(self.audio_file, real_signal.astype(np.float32), self.sample_rate)
 
-            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(audio_file)))
+        if self.output_sound:
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.audio_file)))
             self.player.play()
-      
+
     def calculate_frequency_domain(self):
         dt = self.time_domain_X_coordinates[1] - self.time_domain_X_coordinates[0]
         fft_result = np.fft.fft(self.time_domain_Y_coordinates)
@@ -223,6 +219,22 @@ class BaseMode(ABC):
         self.hidden = not self.hidden
         self.input_spectrogram.canvas.toggle_spectrogram()
         self.output_spectrogram.canvas.toggle_spectrogram()
+
+    def toggle_sound(self,radio):
+        Original = {self.ui.Uniform_Range_Original_Signal_Sound_Radio_Button, self.ui.Musical_Instruments_Original_Signal_Sound_Radio_Button,
+                    self.ui.Animals_Sounds_Original_Signal_Sound_Radio_Button}
+
+        if radio in Original:
+            self.output_sound = False
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.File_Path)))
+            self.player.play()
+        else:
+            self.output_sound = True
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.audio_file)))
+            self.player.play()
+
+        if self.stopped:
+            self.reset()
 
     def change_pause_icon(self,button):
         icon = QtGui.QIcon()

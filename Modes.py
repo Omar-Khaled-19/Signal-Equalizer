@@ -144,24 +144,14 @@ class ECGMode(BaseMode.BaseMode):
             self.plot_signals()
 
     def update_plot_data(self):
-        # Masa2 el 3ennab ya Omar :), I hope this comment finds you well, Delete all comments after Done
         if not self.paused and not self.stopped:
-            self.X_Points_Plotted += self.speed
+            self.X_Points_Plotted += 100
             self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
-
-            # I have added the line below as there was no plotting for the output graph at all
             self.data_line_out.setData(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1], self.time_domain_signal_modified[0: self.X_Points_Plotted + 1].real)
 
-            # TODO
-            # I have Commented the line below as it was not getting correct viewBox
-            # self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 1000, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
-
-            # TODO
-            # The following 2 lines are just arbitrary, please delete after fixing the 2 viewBoxes for input & output
-            self.input_graph.getViewBox().setXRange(1, 5)
-            self.output_graph.getViewBox().setXRange(1, 5)
-
-            # That's it A7la mesa 3lek mooooah
+            self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
+            self.output_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
+            
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted + 1],self.sample_rate)
@@ -174,7 +164,7 @@ class ECGMode(BaseMode.BaseMode):
         self.X_Points_Plotted = 0
 
     def update_speed(self,slider):
-        self.speed = 10 * slider.value()
+        self.speed = 100 * slider.value()
 
     def stop(self):
         self.stopped = True
