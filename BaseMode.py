@@ -30,7 +30,6 @@ class BaseMode(ABC):
         self.phases = []
         self.current_smoothing = 0
         self.uiSmoothing = ui_smoothing
-        self.chosen_range = None # This equals minimum freq + range chosen from smoothing window
         self.X_Points_Plotted = 0
         self.paused = False
         self.stopped = False
@@ -38,23 +37,24 @@ class BaseMode(ABC):
         self.player = QMediaPlayer()
         self.sample_rate = 44100
         self.min_range = 0
+        self.max_range = 0
         self.c = 0
         self.output_sound = False
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
+        self.File_Path = None
        
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
         self.min_range = min_freq
-        max_range = max_freq - min_freq
+        self.max_range = max_freq
         smoothing_factor = factor / 5.0
-        self.chosen_range = int ((self.uiSmoothing.Std_Dev_slider.value() / 10) * max_range + self.min_range)
-        self.current_smoothing = self.smoothing_window(len(self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]), smoothing_factor)
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]
+        self.current_smoothing = self.smoothing_window(len(self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]), smoothing_factor)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)]
 
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)] *= self.current_smoothing
-        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -self.chosen_range)] *= self.current_smoothing
-        self.plot_frequency_domain(1)
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= self.current_smoothing
+        self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -max_freq)] *= self.current_smoothing
+        self.plot_frequency_domain(smoothing_flag=1)
         
     
     def load_signal(self):
@@ -107,7 +107,7 @@ class BaseMode(ABC):
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:target_index],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:target_index],self.sample_rate)
-        
+
     def toggle_pause(self):
         self.paused = not self.paused
         if self.paused:
@@ -132,7 +132,8 @@ class BaseMode(ABC):
         self.input_graph.getViewBox().setXRange(0,4)
         self.output_graph.clear()
         self.output_graph.getViewBox().setXRange(0,4)
-        self.first_time_flag = True
+        self.frequency_graph.clear()
+        self.frequency_graph.getViewBox().setXRange(0,4)
 
     def zoomin(self):
         self.input_graph.getViewBox().scaleBy((0.9, 0.9))
@@ -180,11 +181,11 @@ class BaseMode(ABC):
     def apply_selector(self):
         # Create a smoothing window box
         selector = pg.LinearRegionItem()
-        selector.setRegion([self.min_range, self.chosen_range])
+        selector.setRegion([self.min_range, self.max_range])
         selector.setMovable(False)  # Set movable property to False
         self.frequency_graph.addItem(selector)
 
-    def plot_frequency_domain(self, smoothing_flag=0, minX = 0, maxX = 1000):
+    def plot_frequency_domain(self, smoothing_flag=1, minX = 0, maxX = 1000):
         self.frequency_graph.clear()
         if smoothing_flag == 1:
             self.apply_selector()

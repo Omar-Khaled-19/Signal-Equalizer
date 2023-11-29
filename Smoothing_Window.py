@@ -170,7 +170,6 @@ class Ui_Smoothing_Window(object):
         self.gridLayout_13.addLayout(self.gridLayout_56, 0, 0, 1, 1)
         # Add Apply button with a more compact size, the specified style, and increased font size
         self.apply_button = QtWidgets.QPushButton(self.groupBox_2)
-        self.apply_button.clicked.connect(lambda: self.close())
         self.apply_button.setMinimumSize(QtCore.QSize(80, 25))  # Adjusted size
         font = QtGui.QFont()
         font.setBold(True)

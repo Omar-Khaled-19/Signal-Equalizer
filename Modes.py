@@ -14,7 +14,6 @@ class UniformMode(BaseMode.BaseMode):
 
 
     def modify_frequency(self, slider_value: int, slider: int):
-        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(1050, 1150, slider_value)
         elif slider == 2:
@@ -57,11 +56,10 @@ class MusicalMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
 
     def modify_frequency(self, slider_value: int, slider: int):
-        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(64, 500, slider_value)
         elif slider == 2:
-            super().modify_frequency(250, 1000, slider_value)
+            super().modify_frequency(400, 1000, slider_value)
         elif slider == 3:
             super().modify_frequency(1000, 2000, slider_value)
         else:
@@ -88,7 +86,6 @@ class AnimalMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
 
     def modify_frequency(self, slider_value: int, slider: int):
-        self.first_time_flag = False
         if slider == 1:
             super().modify_frequency(64, 500, slider_value)
         elif slider == 2:
@@ -119,9 +116,8 @@ class ECGMode(BaseMode.BaseMode):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
         self.is_sound = False
     def modify_frequency(self, slider_value: int, slider: int):
-        self.first_time_flag = False
         if slider == 1:
-            super().modify_frequency(0, 50, slider_value) # P54 rec2
+            super().modify_frequency(0, 60, slider_value) # P54 rec2
         elif slider == 2:
             super().modify_frequency(95, 105, slider_value) # P88 rec3
         elif slider == 3:

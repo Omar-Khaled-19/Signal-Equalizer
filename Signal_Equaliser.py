@@ -16,8 +16,6 @@ class Ui_SignalEqualizer(object):
         
     
     def close_Smoothing_Window(self):
-        # Sleep for 2 seconds
-        time.sleep(2)
         self.window.close()
         
     
