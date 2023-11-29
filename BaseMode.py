@@ -48,7 +48,7 @@ class BaseMode(ABC):
         self.min_range = min_freq
         max_range = max_freq - min_freq
         smoothing_factor = factor / 5.0
-        self.chosen_range = int ((self.uiSmoothing.Smoothing_Window_Frequency_Slider_2.value() / 10) * max_range + self.min_range)
+        self.chosen_range = int ((self.uiSmoothing.Std_Dev_slider.value() / 10) * max_range + self.min_range)
         self.current_smoothing = self.smoothing_window(len(self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]), smoothing_factor)
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)] = self.freq_domain_Y_coordinates.copy()[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= self.chosen_range)]
 
@@ -59,6 +59,7 @@ class BaseMode(ABC):
     
     def load_signal(self):
         self.input_graph.clear()
+        self.frequency_graph.clear()
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
         # self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
@@ -161,8 +162,9 @@ class BaseMode(ABC):
             return rectangle_window
 
         elif self.uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.isChecked():
-            std_dev = width / (2 * math.sqrt(2 * math.log(2)))
-            gaussian_window = get_window(('gaussian', std_dev), width) * height
+            self.uiSmoothing.Std_Dev_slider.setEnabled(True)
+            # std_dev = width / (2 * math.sqrt(2 * math.log(2)))
+            gaussian_window = get_window(('gaussian', 6), 100) * 10
             return gaussian_window
         return None
  
@@ -170,7 +172,11 @@ class BaseMode(ABC):
         self.current_smoothing = self.smoothing_window(width, height)
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
-         
+
+    def plot_gauss(self, slider_value : int):
+        self.current_smoothing = get_window(('gaussian', slider_value), 100) * 10
+        self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
+        self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
     def apply_selector(self):
         # Create a smoothing window box
         selector = pg.LinearRegionItem()

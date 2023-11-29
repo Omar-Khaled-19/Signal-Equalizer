@@ -2261,7 +2261,7 @@ class Ui_SignalEqualizer(object):
         uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Hamming_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Hanning_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
-        uiSmoothing.Smoothing_Window_Frequency_Slider_2.valueChanged.connect(lambda: mode.plot_smoothing())
+        uiSmoothing.Std_Dev_slider.valueChanged.connect(lambda value: mode.plot_gauss(value))
 
     def retranslateUi(self, SignalEqualizer):
         _translate = QtCore.QCoreApplication.translate

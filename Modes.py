@@ -121,16 +121,17 @@ class ECGMode(BaseMode.BaseMode):
     def modify_frequency(self, slider_value: int, slider: int):
         self.first_time_flag = False
         if slider == 1:
-            super().modify_frequency(0, 200, slider_value)
+            super().modify_frequency(0, 50, slider_value) # P54 rec2
         elif slider == 2:
-            super().modify_frequency(200, 250, slider_value)
+            super().modify_frequency(95, 105, slider_value) # P88 rec3
         elif slider == 3:
-            super().modify_frequency(250, 300, slider_value)
+            super().modify_frequency(140, 160, slider_value) #P68 rec2
         else:
-            super().modify_frequency(300, 500, slider_value)
+            super().modify_frequency(198, 202, slider_value) #P24 rec2  Bonus: P11 rec1 (248- 250 Hz)
 
     def load_signal(self):
         self.input_graph.clear()
+        self.frequency_graph.clear()
         self.X_Points_Plotted = 0
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
         File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
@@ -185,4 +186,4 @@ class ECGMode(BaseMode.BaseMode):
         self.plot_frequency_domain()
 
     def plot_frequency_domain(self, smoothing_flag=0, minX=0, maxX=1000):
-        super().plot_frequency_domain(minX=0, maxX=300)
+        super().plot_frequency_domain(minX=0, maxX=250)
