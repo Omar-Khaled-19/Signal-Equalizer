@@ -27,7 +27,7 @@ class MplCanvas(Canvas):
             warnings.filterwarnings("ignore", category=RuntimeWarning)
             self.axes.cla()
             self.axes.specgram(signal, Fs=fs, cmap='viridis')
-            self.axes.set_ylim(0, 10000)
+            self.axes.set_ylim(0)
             self.draw()
 
     def toggle_spectrogram(self):
