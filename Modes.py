@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QFileDialog
 
 class UniformMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
         self.slider5 = ui.Uniform_Range_Frequency_Range_5_Slider
         self.slider6 = ui.Uniform_Range_Frequency_Range_6_Slider
         self.slider7 = ui.Uniform_Range_Frequency_Range_7_Slider
@@ -52,8 +52,8 @@ class UniformMode(BaseMode.BaseMode):
 
 class MusicalMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
 
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:
@@ -82,8 +82,8 @@ class MusicalMode(BaseMode.BaseMode):
 
 class AnimalMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
 
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:
@@ -111,9 +111,9 @@ class AnimalMode(BaseMode.BaseMode):
         super().plot_frequency_domain(minX=60, maxX=4100)
 class ECGMode(BaseMode.BaseMode):
 
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing):
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         self.duration = None
-        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing)
+        super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
         self.is_sound = False
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:

@@ -10,7 +10,7 @@ import pyqtgraph as pg
 import os
 
 class BaseMode(ABC):
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing):
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing, Original_Spectrogram_Label, Modified_Spectrogram_Label):
         self.ui = ui
         self.input_graph = input_time_graph
         self.output_graph = output_time_graph
@@ -43,6 +43,8 @@ class BaseMode(ABC):
         self.input_graph.setXLink(self.output_graph)
         self.input_graph.setYLink(self.output_graph)
         self.File_Path = None
+        self.Original_Spectrogram_Label = Original_Spectrogram_Label
+        self.Modified_Spectrogram_Label = Modified_Spectrogram_Label
        
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
@@ -223,9 +225,18 @@ class BaseMode(ABC):
         self.plot_frequency_domain()
 
     def toggle_hide(self):
-        self.hidden = not self.hidden
-        self.input_spectrogram.canvas.toggle_spectrogram()
-        self.output_spectrogram.canvas.toggle_spectrogram()
+        if not self.hidden:
+            self.hidden = not self.hidden
+            self.input_spectrogram.setVisible(False)
+            self.Original_Spectrogram_Label.setVisible(False)
+            self.output_spectrogram.setVisible(False)
+            self.Modified_Spectrogram_Label.setVisible(False)
+        else:
+            self.hidden = not self.hidden
+            self.input_spectrogram.setVisible(True)
+            self.Original_Spectrogram_Label.setVisible(True)
+            self.output_spectrogram.setVisible(True)
+            self.Modified_Spectrogram_Label.setVisible(True)
 
     def toggle_sound(self,radio):
         Original = {self.ui.Uniform_Range_Original_Signal_Sound_Radio_Button, self.ui.Musical_Instruments_Original_Signal_Sound_Radio_Button,

@@ -30,11 +30,6 @@ class MplCanvas(Canvas):
             self.axes.set_ylim(0)
             self.draw()
 
-    def toggle_spectrogram(self):
-        current_visibility = self.axes.get_visible()
-        self.axes.set_visible(not current_visibility)
-        self.draw()
-
 class MplWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
