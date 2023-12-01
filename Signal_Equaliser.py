@@ -2363,8 +2363,6 @@ class Ui_SignalEqualizer(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ECG_Abnormalities_Tab),_translate("SignalEqualizer", "ECG Abnormalities"))
 
 
-
-
 if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
