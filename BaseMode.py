@@ -78,6 +78,8 @@ class BaseMode(ABC):
         self.output_graph.setLimits(xMin = 0 ,xMax = float('inf') )
         self.data_line_in = self.input_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_Y_coordinates[:1],pen="g")
         self.data_line_out = self.output_graph.plot(self.time_domain_X_coordinates[:1], self.time_domain_signal_modified[:1],pen="b")
+ 
+        self.output_graph.getViewBox().setYRange(-0.4, 0.4)
 
         self.timer = QtCore.QTimer()
         self.timer.setInterval(100)
@@ -101,6 +103,9 @@ class BaseMode(ABC):
             target_x = int(progress * max(self.time_domain_X_coordinates))
             target_index = bisect.bisect_left(self.time_domain_X_coordinates, target_x)
 
+            # Inverse Fourier transform to go back to the time domain
+            self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates * np.exp(1j * self.phases))
+        
             self.input_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.output_graph.getViewBox().setXRange(target_x - 4, target_x)
             self.data_line_in.setData(self.time_domain_X_coordinates[:target_index], self.time_domain_Y_coordinates[:target_index])
@@ -180,6 +185,7 @@ class BaseMode(ABC):
         self.current_smoothing = get_window(('gaussian', slider_value), 100) * 10
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
+    
     def apply_selector(self):
         # Create a smoothing window box
         selector = pg.LinearRegionItem()
@@ -195,13 +201,10 @@ class BaseMode(ABC):
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
-        
-        # Inverse Fourier transform to go back to the time domain
-        self.time_domain_signal_modified = np.fft.ifft(self.modified_freq_domain_Y_coordinates * np.exp(1j * self.phases))
-        self.output_graph.setLimits(xMin = 0, xMax = max(self.freq_domain_X_coordinates))
             
-        self.output_graph.getViewBox().setYRange(-0.4, 0.4)
-            
+        self.generate_sound()    
+
+    def generate_sound(self):
         self.c += 1
         self.audio_file = f"temp_audio{self.c}.wav"
         if self.c != 1:
