@@ -1,6 +1,8 @@
 # Signal Equalizer
 
 Welcome to Signal Equalizer, a Python desktop application for signal processing with four different modes: Uniform Range, Musical Instruments, Animal Sounds, and ECG Signals. This application allows users to load signals, visualize them dynamically, analyze their frequencies in the Fourier domain, and manipulate the signal using sliders for frequency components.
+![image](https://github.com/Omar-Khaled-19/Signal-Equalizer/assets/66066832/a131dd2f-8515-4b56-b477-2491481c0ae7)
+
 
 ## Features
 
