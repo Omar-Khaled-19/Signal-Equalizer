@@ -2314,7 +2314,7 @@ class Ui_SignalEqualizer(object):
         self.groupBox_4.setTitle(_translate("SignalEqualizer", "Instruments Frequencies"))
         self.Musical_Instruments_Instrument_1_Label.setText(_translate("SignalEqualizer", "    Drum"))
         self.Musical_Instruments_Instrument_2_Label.setText(_translate("SignalEqualizer", " Elec. Guitar"))
-        self.Musical_Instruments_Instrument_3_Label.setText(_translate("SignalEqualizer", "   Violin"))
+        self.Musical_Instruments_Instrument_3_Label.setText(_translate("SignalEqualizer", "     Violin"))
         self.Musical_Instruments_Instrument_4_Label.setText(_translate("SignalEqualizer", "Saxaphone"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Musical_Instruments_Tab),_translate("SignalEqualizer", "Musical Instruments"))
         self.label_15.setText(_translate("SignalEqualizer", "Original Signal"))
