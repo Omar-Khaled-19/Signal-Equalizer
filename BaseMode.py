@@ -65,8 +65,8 @@ class BaseMode(ABC):
         self.output_graph.clear()
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
-        # self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
+        self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
 
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.File_Path)))
         self.player.play()

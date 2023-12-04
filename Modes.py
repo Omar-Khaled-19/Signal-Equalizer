@@ -57,13 +57,13 @@ class MusicalMode(BaseMode.BaseMode):
 
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:
-            super().modify_frequency(64, 500, slider_value)
+            super().modify_frequency(2000, 2500, slider_value)
         elif slider == 2:
-            super().modify_frequency(400, 1000, slider_value)
+            super().modify_frequency(2500, 3500, slider_value)
         elif slider == 3:
-            super().modify_frequency(1000, 2000, slider_value)
+            super().modify_frequency(3500, 5000, slider_value)
         else:
-            super().modify_frequency(2000, 10000, slider_value)
+            super().modify_frequency(5000, 10000, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
@@ -133,10 +133,10 @@ class ECGMode(BaseMode.BaseMode):
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if self.File_Path:
-            Record = wfdb.rdrecord(self.File_Path[:-4])
-            self.sample_rate = Record.fs
-            self.duration = Record.sig_len / self.sample_rate  # Duration in seconds
-            self.time_domain_Y_coordinates = list(Record.p_signal[:, 0])
+            record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[1])
+            self.sample_rate = record_fields['fs']
+            self.duration = record_fields['sig_len'] / self.sample_rate  # Duration in seconds
+            self.time_domain_Y_coordinates = list(record_data[:, 0])
             self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
             self.time_domain_X_coordinates = np.linspace(0, self.duration, len(self.time_domain_Y_coordinates), endpoint=False)
             self.stopped = False
