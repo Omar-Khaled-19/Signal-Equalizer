@@ -62,6 +62,7 @@ class BaseMode(ABC):
     def load_signal(self):
         self.input_graph.clear()
         self.frequency_graph.clear()
+        self.output_graph.clear()
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
         # self.modified_freq_domain_Y_coordinates = self.time_domain_Y_coordinates.copy()

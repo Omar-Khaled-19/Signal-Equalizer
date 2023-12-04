@@ -128,14 +128,16 @@ class ECGMode(BaseMode.BaseMode):
     def load_signal(self):
         self.input_graph.clear()
         self.frequency_graph.clear()
+        self.output_graph.clear()
         self.X_Points_Plotted = 0
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
-        File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        if File_Path:
-            Record = wfdb.rdrecord(File_Path[:-4])
+        self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
+        if self.File_Path:
+            Record = wfdb.rdrecord(self.File_Path[:-4])
             self.sample_rate = Record.fs
             self.duration = Record.sig_len / self.sample_rate  # Duration in seconds
             self.time_domain_Y_coordinates = list(Record.p_signal[:, 0])
+            self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
             self.time_domain_X_coordinates = np.linspace(0, self.duration, len(self.time_domain_Y_coordinates), endpoint=False)
             self.stopped = False
             self.plot_signals()
