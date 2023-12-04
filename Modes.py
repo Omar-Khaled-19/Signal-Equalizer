@@ -144,13 +144,14 @@ class ECGMode(BaseMode.BaseMode):
 
     def update_plot_data(self):
         if not self.paused and not self.stopped:
-            self.X_Points_Plotted += 100
+            self.X_Points_Plotted += 50
             self.data_line_in.setData(self.time_domain_X_coordinates[0 : self.X_Points_Plotted + 1], self.time_domain_Y_coordinates[0 : self.X_Points_Plotted + 1])
             self.data_line_out.setData(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1], self.time_domain_signal_modified[0: self.X_Points_Plotted + 1].real)
 
             self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
             self.output_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
-            
+            self.frequency_graph.getViewBox().setYRange(0,2000)
+
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)
                 self.output_spectrogram.canvas.plot_spectrogram(self.time_domain_signal_modified[:self.X_Points_Plotted + 1],self.sample_rate)
