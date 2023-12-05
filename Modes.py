@@ -117,13 +117,13 @@ class ECGMode(BaseMode.BaseMode):
         self.is_sound = False
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:
-            super().modify_frequency(0, 60, slider_value) # P54 rec2
+            super().modify_frequency(0, 50, slider_value) # P54 rec2
         elif slider == 2:
-            super().modify_frequency(95, 105, slider_value) # P88 rec3
+            super().modify_frequency(50, 100, slider_value) # Atrial Fibrillation
         elif slider == 3:
-            super().modify_frequency(140, 160, slider_value) #P68 rec2
+            super().modify_frequency(50, 450, slider_value) # Myocardial infarction
         else:
-            super().modify_frequency(198, 202, slider_value) #P24 rec2  Bonus: P11 rec1 (248- 250 Hz)
+            super().modify_frequency(50, 400, slider_value) # Arrhythmia Fetus
 
     def load_signal(self):
         self.input_graph.clear()
@@ -133,7 +133,7 @@ class ECGMode(BaseMode.BaseMode):
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if self.File_Path:
-            record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[1])
+            record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[0])
             self.sample_rate = record_fields['fs']
             self.duration = record_fields['sig_len'] / self.sample_rate  # Duration in seconds
             self.time_domain_Y_coordinates = list(record_data[:, 0])
@@ -150,7 +150,7 @@ class ECGMode(BaseMode.BaseMode):
 
             self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
             self.output_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
-            self.frequency_graph.getViewBox().setYRange(0,2000)
+            # self.frequency_graph.getViewBox().setYRange(0,2000)
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)
