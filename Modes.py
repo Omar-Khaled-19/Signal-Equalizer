@@ -11,29 +11,11 @@ class UniformMode(BaseMode.BaseMode):
         self.slider8 = ui.Uniform_Range_Frequency_Range_8_Slider
         self.slider9 = ui.Uniform_Range_Frequency_Range_9_Slider
         self.slider10 = ui.Uniform_Range_Frequency_Range_10_Slider
-
+        self.frequency_ranges = {1: (1050, 1150), 2: (1150, 1250), 3: (1250, 1350), 4: (1350, 1450), 5: (1450, 1550), 6: (1550, 1650), 7: (1650, 1750), 8: (1750, 1850), 9: (1850, 1950), 10: (1950, 2050)}
 
     def modify_frequency(self, slider_value: int, slider: int):
-        if slider == 1:
-            super().modify_frequency(1050, 1150, slider_value)
-        elif slider == 2:
-            super().modify_frequency(1150, 1250, slider_value)
-        elif slider == 3:
-            super().modify_frequency(1250, 1350, slider_value)
-        elif slider == 4:
-            super().modify_frequency(1350, 1450, slider_value)
-        elif slider == 5:
-            super().modify_frequency(1450, 1550, slider_value)
-        elif slider == 6:
-            super().modify_frequency(1550, 1650, slider_value)
-        elif slider == 7:
-            super().modify_frequency(1650, 1750, slider_value)
-        elif slider == 8:
-            super().modify_frequency(1750, 1850, slider_value)
-        elif slider == 9:
-            super().modify_frequency(1850, 1950, slider_value)
-        else:
-            super().modify_frequency(1950, 2050, slider_value)
+        min_freq, max_freq = self.frequency_ranges[slider]
+        super().modify_frequency(min_freq, min_freq, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
@@ -54,16 +36,10 @@ class MusicalMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
-
+        self.frequency_ranges = {1 : (64, 125), 2 : (125, 1000), 3 : (1000, 2000), 4 : (2000, 4000)}
     def modify_frequency(self, slider_value: int, slider: int):
-        if slider == 1:
-            super().modify_frequency(64, 125, slider_value)
-        elif slider == 2:
-            super().modify_frequency(125, 1000, slider_value)
-        elif slider == 3:
-            super().modify_frequency(1000, 2000, slider_value)
-        else:
-            super().modify_frequency(2000, 4000, slider_value)
+        min_freq, max_freq = self.frequency_ranges[slider]
+        super().modify_frequency(min_freq, min_freq, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
@@ -84,16 +60,11 @@ class AnimalMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
+        self.frequency_ranges = {1: (64, 500), 2: (500, 1010), 3: (1010, 2010), 4: (2010, 8000)}
 
     def modify_frequency(self, slider_value: int, slider: int):
-        if slider == 1:
-            super().modify_frequency(64, 500, slider_value)
-        elif slider == 2:
-            super().modify_frequency(500, 1010, slider_value)
-        elif slider == 3:
-            super().modify_frequency(1010, 2010, slider_value)
-        else:
-            super().modify_frequency(2010, 8000, slider_value)
+        min_freq, max_freq = self.frequency_ranges[slider]
+        super().modify_frequency(min_freq, max_freq, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Animals_Sounds_Play_Pause_Button)
@@ -114,16 +85,10 @@ class ECGMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         self.duration = None
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
-        self.is_sound = False
+        self.frequency_ranges = {1: (0, 50), 2: (50, 100), 3: (50, 450), 4: (50, 400)}
     def modify_frequency(self, slider_value: int, slider: int):
-        if slider == 1:
-            super().modify_frequency(0, 50, slider_value) # P54 rec2
-        elif slider == 2:
-            super().modify_frequency(50, 100, slider_value) # Atrial Fibrillation
-        elif slider == 3:
-            super().modify_frequency(50, 450, slider_value) # Myocardial infarction
-        else:
-            super().modify_frequency(50, 400, slider_value) # Arrhythmia Fetus
+        min_freq, max_freq = self.frequency_ranges[slider]
+        super().modify_frequency(min_freq, min_freq, slider_value)
 
     def load_signal(self):
         self.input_graph.clear()

@@ -10,14 +10,6 @@ class Ui_SignalEqualizer(object):
         self.ui_smoothing = Ui_Smoothing_Window()
         self.window = QtWidgets.QWidget()
         self.ui_smoothing.setupUi(self.window)
-        
-    def open_Smoothing_Window(self):
-        self.window.show()
-        
-    
-    def close_Smoothing_Window(self):
-        self.window.close()
-
 
     def setupUi(self, SignalEqualizer):
         SignalEqualizer.setObjectName("SignalEqualizer")
@@ -268,7 +260,7 @@ class Ui_SignalEqualizer(object):
         self.label_24.setStyleSheet("color: \"white\";")
         self.label_24.setObjectName("label_24")
         self.gridLayout.addWidget(self.label_24, 0, 7, 1, 1)
-        self.Uniform_Range_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_7,clicked=lambda: self.open_Smoothing_Window())
+        self.Uniform_Range_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_7,clicked=lambda: self.window.show())
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(130)
         sizePolicy.setVerticalStretch(0)
@@ -929,7 +921,7 @@ class Ui_SignalEqualizer(object):
         self.label_28.setStyleSheet("color: \"white\";")
         self.label_28.setObjectName("label_28")
         self.gridLayout_6.addWidget(self.label_28, 0, 7, 1, 1)
-        self.Musical_Instruments_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_8,clicked=lambda: self.open_Smoothing_Window())
+        self.Musical_Instruments_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_8,clicked=lambda: self.window.show())
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(130)
         sizePolicy.setVerticalStretch(0)
@@ -1434,7 +1426,7 @@ class Ui_SignalEqualizer(object):
         self.label_26.setObjectName("label_26")
         self.gridLayout_8.addWidget(self.label_26, 0, 7, 1, 1)
         self.Animals_Sounds_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_9,
-                                                                            clicked=lambda: self.open_Smoothing_Window())
+                                                                            clicked=lambda: self.window.show())
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(130)
         sizePolicy.setVerticalStretch(0)
@@ -1932,7 +1924,7 @@ class Ui_SignalEqualizer(object):
         self.label_27.setStyleSheet("color: \"white\";")
         self.label_27.setObjectName("label_27")
         self.gridLayout_11.addWidget(self.label_27, 0, 7, 1, 1)
-        self.ECG_Abnormalities_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_10,clicked=lambda: self.open_Smoothing_Window())
+        self.ECG_Abnormalities_Smoothing_Window_Button = QtWidgets.QPushButton(self.groupBox_10,clicked=lambda: self.window.show())
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(130)
         sizePolicy.setVerticalStretch(0)
@@ -2254,12 +2246,12 @@ class Ui_SignalEqualizer(object):
         
     def smoothing_connection(self, mode, uiSmoothing):
         uiSmoothing.apply_button.clicked.connect(lambda: mode.plot_smoothing())
-        uiSmoothing.apply_button.clicked.connect(lambda: self.close_Smoothing_Window())
+        uiSmoothing.apply_button.clicked.connect(lambda: self.window.close())
         uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Hamming_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
         uiSmoothing.Smoothing_Window_Hanning_Radio_Button.clicked.connect(lambda: mode.plot_smoothing())
-        uiSmoothing.Std_Dev_slider.valueChanged.connect(lambda value: mode.plot_gauss(value))
+        uiSmoothing.Std_Dev_slider.valueChanged.connect(lambda value: mode.plot_smoothing(value))
 
     def retranslateUi(self, SignalEqualizer):
         _translate = QtCore.QCoreApplication.translate

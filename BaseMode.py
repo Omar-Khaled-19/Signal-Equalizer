@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QFileDialog
-import numpy as np, bisect, math, librosa, soundfile as sf
+import numpy as np, bisect, librosa, soundfile as sf
 from scipy.signal.windows import get_window
 from scipy.signal.windows import boxcar
 import pyqtgraph as pg
@@ -57,12 +57,9 @@ class BaseMode(ABC):
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates >= min_freq) & (self.freq_domain_X_coordinates <= max_freq)] *= self.current_smoothing
         self.modified_freq_domain_Y_coordinates[(self.freq_domain_X_coordinates <= -min_freq) & (self.freq_domain_X_coordinates >= -max_freq)] *= self.current_smoothing
         self.plot_frequency_domain(smoothing_flag=1)
-        
-    
+
     def load_signal(self):
-        self.input_graph.clear()
-        self.frequency_graph.clear()
-        self.output_graph.clear()
+        self.clear_graphs()
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
         self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
@@ -87,7 +84,6 @@ class BaseMode(ABC):
         self.calculate_frequency_domain()
 
     def update_plot_data(self):
-        
         if not self.paused and not self.stopped:             
             sound_position = self.player.position()
             sound_duration = self.player.duration()
@@ -131,12 +127,7 @@ class BaseMode(ABC):
     def stop(self):
         self.player.stop()
         self.stopped = True
-        self.input_graph.clear()
-        self.input_graph.getViewBox().setXRange(0,4)
-        self.output_graph.clear()
-        self.output_graph.getViewBox().setXRange(0,4)
-        self.frequency_graph.clear()
-        self.frequency_graph.getViewBox().setXRange(0,4)
+        self.clear_graphs()
 
     def zoomin(self):
         self.input_graph.getViewBox().scaleBy((0.9, 0.9))
@@ -145,47 +136,35 @@ class BaseMode(ABC):
         self.input_graph.getViewBox().scaleBy((1.1,1.1))
 
     def smoothing_window(self, width= 100 , height = 10):
-        # Check which radio button is selected
+        self.uiSmoothing.Std_Dev_slider.setEnabled(False)
+        # Check which radio button is selected and choose the proper window
         if self.uiSmoothing.Smoothing_Window_Hamming_Radio_Button.isChecked():
-            # Generate Hamming window
-            hamming_window = get_window('hamming', width)
-            # Scale the Hamming window to the desired amplitude
-            scaled_hamming_window = height * hamming_window / np.max(hamming_window)
-            return scaled_hamming_window
-
+            window = get_window('hamming', width)
         elif self.uiSmoothing.Smoothing_Window_Hanning_Radio_Button.isChecked():
-            # Generate Hanning window
-            hanning_window = get_window('hann', width)
-            # Scale the Hanning window to the desired amplitude
-            scaled_hanning_window = height * hanning_window / np.max(hanning_window)
-            return scaled_hanning_window
-
+            window = get_window('hann', width)
         elif self.uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.isChecked():
-            # generate and adjust the height as desired
-            rectangle_window = boxcar(width) * height
-            return rectangle_window
-
+            window = boxcar(width) * height
         elif self.uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.isChecked():
             self.uiSmoothing.Std_Dev_slider.setEnabled(True)
-            # std_dev = width / (2 * math.sqrt(2 * math.log(2)))
-            gaussian_window = get_window(('gaussian', 6), 100) * 10
-            return gaussian_window
-        return None
+            window = get_window(('gaussian', 6), 100) * 10
+        else:
+            return None
+        scaled_window = height * window / np.max(window)
+        return scaled_window
  
-    def plot_smoothing(self, width = 100, height = 10):
-        self.current_smoothing = self.smoothing_window(width, height)
+    def plot_smoothing(self, slider_value = None):
+        if slider_value is not None and self.uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.isChecked():
+            self.current_smoothing = get_window(('gaussian', slider_value), 100) * 10
+        else:
+            self.current_smoothing = self.smoothing_window(100, 10)
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
         self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
 
-    def plot_gauss(self, slider_value : int):
-        self.current_smoothing = get_window(('gaussian', slider_value), 100) * 10
-        self.uiSmoothing.Smoothing_Window_PlotWidget_2.clear()
-        self.uiSmoothing.Smoothing_Window_PlotWidget_2.plot(self.current_smoothing)
     def apply_selector(self):
         # Create a smoothing window box
         selector = pg.LinearRegionItem()
         selector.setRegion([self.min_range, self.max_range])
-        selector.setMovable(False)  # Set movable property to False
+        selector.setMovable(False)
         self.frequency_graph.addItem(selector)
 
     def plot_frequency_domain(self, smoothing_flag=1, minX = 0, maxX = 1000):
@@ -226,18 +205,11 @@ class BaseMode(ABC):
         self.plot_frequency_domain()
 
     def toggle_hide(self):
-        if not self.hidden:
-            self.hidden = not self.hidden
-            self.input_spectrogram.setVisible(False)
-            self.Original_Spectrogram_Label.setVisible(False)
-            self.output_spectrogram.setVisible(False)
-            self.Modified_Spectrogram_Label.setVisible(False)
-        else:
-            self.hidden = not self.hidden
-            self.input_spectrogram.setVisible(True)
-            self.Original_Spectrogram_Label.setVisible(True)
-            self.output_spectrogram.setVisible(True)
-            self.Modified_Spectrogram_Label.setVisible(True)
+        self.input_spectrogram.setVisible(self.hidden)
+        self.Original_Spectrogram_Label.setVisible(self.hidden)
+        self.output_spectrogram.setVisible(self.hidden)
+        self.Modified_Spectrogram_Label.setVisible(self.hidden)
+        self.hidden = not self.hidden
 
     def toggle_sound(self,radio):
         Original = {self.ui.Uniform_Range_Original_Signal_Sound_Radio_Button, self.ui.Musical_Instruments_Original_Signal_Sound_Radio_Button,
@@ -275,3 +247,11 @@ class BaseMode(ABC):
             icon.addPixmap(QtGui.QPixmap("Assets/eye.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             button.setIcon(icon)  
             button.setText(_translate("Form", "   Show Spectrogram"))  
+
+    def clear_graphs(self):
+        self.input_graph.clear()
+        self.frequency_graph.clear()
+        self.output_graph.clear()
+        self.input_graph.getViewBox().setXRange(0, 4)
+        self.output_graph.getViewBox().setXRange(0, 4)
+        self.frequency_graph.getViewBox().setXRange(0, 4)
