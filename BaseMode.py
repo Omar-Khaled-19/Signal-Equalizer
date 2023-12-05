@@ -174,6 +174,7 @@ class BaseMode(ABC):
         if smoothing_flag == 1:
             self.apply_selector()
         self.frequency_graph.setLimits(xMin = minX, xMax = maxX)
+        self.frequency_graph.getViewBox().setXRange(minX, maxX)
         self.frequency_graph.setLimits(yMin = min(self.modified_freq_domain_Y_coordinates), yMax = max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.setYRange(min(self.modified_freq_domain_Y_coordinates), max(self.modified_freq_domain_Y_coordinates))
         self.frequency_graph.plot(self.freq_domain_X_coordinates, self.modified_freq_domain_Y_coordinates)
