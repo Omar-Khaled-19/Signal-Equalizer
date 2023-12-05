@@ -13,6 +13,7 @@ class UniformMode(BaseMode.BaseMode):
         self.slider10 = ui.Uniform_Range_Frequency_Range_10_Slider
 
 
+
     def modify_frequency(self, slider_value: int, slider: int):
         if slider == 1:
             super().modify_frequency(1050, 1150, slider_value)
