@@ -703,7 +703,7 @@ class Ui_SignalEqualizer(object):
         self.Uniform_Range_Frequency_Range_10_Slider.setObjectName("Uniform_Range_Frequency_Range_10_Slider")
         self.verticalLayout_16.addWidget(self.Uniform_Range_Frequency_Range_10_Slider)
         self.Uniform_Range_Frequency_Range_10_Label = QtWidgets.QLabel(self.groupBox_3)
-        self.Uniform_Range_Frequency_Range_10_Label.setMaximumSize(QtCore.QSize(55, 16777215))
+        self.Uniform_Range_Frequency_Range_10_Label.setMaximumSize(QtCore.QSize(61, 16777215))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)

@@ -144,9 +144,11 @@ class BaseMode(ABC):
             window = get_window('hann', width)
         elif self.uiSmoothing.Smoothing_Window_Rectangle_Radio_Button.isChecked():
             window = boxcar(width) * height
+            return window
         elif self.uiSmoothing.Smoothing_Window_Gaussian_Radio_Button.isChecked():
             self.uiSmoothing.Std_Dev_slider.setEnabled(True)
             window = get_window(('gaussian', 6), 100) * 10
+            return window
         else:
             return None
         scaled_window = height * window / np.max(window)

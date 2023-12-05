@@ -16,7 +16,7 @@ class UniformMode(BaseMode.BaseMode):
 
     def modify_frequency(self, slider_value: int, slider: int):
         min_freq, max_freq = self.frequency_ranges[slider]
-        super().modify_frequency(min_freq, min_freq, slider_value)
+        super().modify_frequency(min_freq, max_freq, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Uniform_Range_Play_Pause_Button)
@@ -37,10 +37,10 @@ class MusicalMode(BaseMode.BaseMode):
 
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
-        self.frequency_ranges = {1 : (64, 125), 2 : (125, 1000), 3 : (1000, 2000), 4 : (2000, 4000)}
+        self.frequency_ranges = {1 : (0, 600), 2 : (600, 1000), 3 : (1000, 2000), 4 : (2000, 8000)}
     def modify_frequency(self, slider_value: int, slider: int):
         min_freq, max_freq = self.frequency_ranges[slider]
-        super().modify_frequency(min_freq, min_freq, slider_value)
+        super().modify_frequency(min_freq, max_freq, slider_value)
 
     def load_signal(self):
         self.change_pause_icon(self.ui.Musical_Instruments_Play_Pause_Button)
@@ -89,7 +89,7 @@ class ECGMode(BaseMode.BaseMode):
         self.frequency_ranges = {1: (0, 50), 2: (50, 100), 3: (50, 450), 4: (50, 400)}
     def modify_frequency(self, slider_value: int, slider: int):
         min_freq, max_freq = self.frequency_ranges[slider]
-        super().modify_frequency(min_freq, min_freq, slider_value)
+        super().modify_frequency(min_freq, max_freq, slider_value)
 
     def load_signal(self):
         self.input_graph.clear()
