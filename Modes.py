@@ -86,7 +86,7 @@ class ECGMode(BaseMode.BaseMode):
     def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label):
         self.duration = None
         super().__init__(ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, uismoothing, original_spectrogram_label, modified_spectrogram_label)
-        self.frequency_ranges = {1: (0, 50), 2: (50, 100), 3: (50, 450), 4: (50, 400)}
+        self.frequency_ranges = {1: (0, 50), 2: (50, 100), 3: (50, 450), 4: (0, 8)}
     def modify_frequency(self, slider_value: int, slider: int):
         min_freq, max_freq = self.frequency_ranges[slider]
         super().modify_frequency(min_freq, max_freq, slider_value)
@@ -99,7 +99,11 @@ class ECGMode(BaseMode.BaseMode):
         self.change_pause_icon(self.ui.ECG_Abnormalities_Play_Pause_Button)
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
         if self.File_Path:
-            record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[0])
+            self.Normal_ECG = 'ecg-id-database-1.0.0'
+            if self.Normal_ECG in self.File_Path:
+                record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[1])
+            else:
+                record_data, record_fields = wfdb.rdsamp(self.File_Path[:-4], channels=[0])
             self.sample_rate = record_fields['fs']
             self.duration = record_fields['sig_len'] / self.sample_rate  # Duration in seconds
             self.time_domain_Y_coordinates = list(record_data[:, 0])
@@ -116,6 +120,7 @@ class ECGMode(BaseMode.BaseMode):
 
             self.input_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
             self.output_graph.getViewBox().setXRange(max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]) - 5, max(self.time_domain_X_coordinates[0: self.X_Points_Plotted + 1]))
+            # self.frequency_graph.getViewBox().setYRange(0,2000)
 
             if not self.hidden:
                 self.input_spectrogram.canvas.plot_spectrogram(self.time_domain_Y_coordinates[:self.X_Points_Plotted + 1],self.sample_rate)

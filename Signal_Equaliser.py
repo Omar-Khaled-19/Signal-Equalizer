@@ -2351,7 +2351,7 @@ class Ui_SignalEqualizer(object):
         self.ECG_Abnormalities_Normal_ECG_Label.setText(_translate("SignalEqualizer", "     Normal ECG"))
         self.ECG_Abnormalities_Abnormal_ECG_1_Label.setText(_translate("SignalEqualizer", "Atrial Fibrillation"))
         self.ECG_Abnormalities_Abnormal_ECG_2_Label.setText(_translate("SignalEqualizer", "Myocardial inf"))
-        self.ECG_Abnormalities_Abnormal_ECG_3_Label.setText(_translate("SignalEqualizer", "Fetus Arrhythmia"))
+        self.ECG_Abnormalities_Abnormal_ECG_3_Label.setText(_translate("SignalEqualizer", "Sinus Rhythm"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.ECG_Abnormalities_Tab),_translate("SignalEqualizer", "ECG Abnormalities"))
 
 
