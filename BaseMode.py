@@ -61,15 +61,16 @@ class BaseMode(ABC):
     def load_signal(self):
         self.clear_graphs()
         self.File_Path, _ = QFileDialog.getOpenFileName(None, "Browse Signal", "", "All Files (*)")
-        self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
-        self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
-        self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
+        if self.File_Path:
+            self.time_domain_Y_coordinates, self.sample_rate = librosa.load(self.File_Path)
+            self.time_domain_X_coordinates = np.arange(len(self.time_domain_Y_coordinates)) / self.sample_rate
+            self.time_domain_signal_modified = self.time_domain_Y_coordinates.copy()
 
-        self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.File_Path)))
-        self.player.play()
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(self.File_Path)))
+            self.player.play()
 
-        self.stopped = False
-        self.plot_signals()
+            self.stopped = False
+            self.plot_signals()
            
     def plot_signals(self):
         self.input_graph.setLimits(xMin=0, xMax=float('inf'))
