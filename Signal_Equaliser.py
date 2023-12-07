@@ -2217,6 +2217,22 @@ class Ui_SignalEqualizer(object):
         self.ECG_Abnormalities_Signal_Speed_Slider.valueChanged['int'].connect(
             self.ECG_Abnormalities_Signal_Speed_LCD.display)  # type: ignore
         QtCore.QMetaObject.connectSlotsByName(SignalEqualizer)
+        self.frequency_sliders = {
+            "Uniform": [self.Uniform_Range_Frequency_Range_1_Slider, self.Uniform_Range_Frequency_Range_2_Slider,
+                        self.Uniform_Range_Frequency_Range_3_Slider, self.Uniform_Range_Frequency_Range_4_Slider,
+                        self.Uniform_Range_Frequency_Range_5_Slider, self.Uniform_Range_Frequency_Range_6_Slider,
+                        self.Uniform_Range_Frequency_Range_7_Slider, self.Uniform_Range_Frequency_Range_8_Slider,
+                        self.Uniform_Range_Frequency_Range_9_Slider, self.Uniform_Range_Frequency_Range_10_Slider],
+            "Animals": [self.Animals_Sounds_Animal_1_Frequency_Slider, self.Animals_Sounds_Animal_2_Frequency_Slider,
+                        self.Animals_Sounds_Animal_3_Frequency_Slider, self.Animals_Sounds_Animal_4_Frequency_Slider],
+            "Musical": [self.Musical_Instruments_Instrument_1_Frequency__Slider,
+                        self.Musical_Instruments_Instrument_2_Frequency__Slider,
+                        self.Musical_Instruments_Instrument_3_Frequency__Slider,
+                        self.Musical_Instruments_Instrument_4_Frequency__Slider],
+            "ECG": [self.ECG_Abnormalities_Normal_ECG_Frequency_Slider,
+                    self.ECG_Abnormalities_Abnormal_ECG_1_Frequency_Slider,
+                    self.ECG_Abnormalities_Abnormal_ECG_2_Frequency_Slider,
+                    self.ECG_Abnormalities_Abnormal_ECG_3_Frequency_Slider]}
         
     def tab_connections(self, mode, load, play, reset, stop, zooming_in, zooming_out, slider, hide, slider1, slider2, slider3, slider4, radio_m = None , radio_o = None):
         load.clicked.connect(lambda: mode.load_signal())
@@ -2242,7 +2258,7 @@ class Ui_SignalEqualizer(object):
             self.Uniform_Range_Frequency_Range_7_Slider.valueChanged.connect(lambda value: mode.modify_frequency(value, 7))
             self.Uniform_Range_Frequency_Range_8_Slider.valueChanged.connect(lambda value: mode.modify_frequency(value, 8))
             self.Uniform_Range_Frequency_Range_9_Slider.valueChanged.connect(lambda value: mode.modify_frequency(value, 9))
-            self.Uniform_Range_Frequency_Range_10_Slider.valueChanged.connect(lambda value: mode.modify_frequency(value, 10))  
+            self.Uniform_Range_Frequency_Range_10_Slider.valueChanged.connect(lambda value: mode.modify_frequency(value, 10))
         
     def smoothing_connection(self, mode, uiSmoothing):
         uiSmoothing.apply_button.clicked.connect(lambda: mode.plot_smoothing())
@@ -2365,10 +2381,10 @@ if __name__ == "__main__":
     uiSmoothing = ui.ui_smoothing
     ui.setupUi(SignalEqualizer)
     
-    UniformMode = Modes.UniformMode(ui, ui.Uniform_Range_Original_Signal_PlotWidget, ui.Uniform_Range_Modified_Signal_PlotWidget, ui.Uniform_Range_Frequency_Domain_PlotWidget, ui.Uniform_Range_Original_Signal_Spectrogram, ui.Uniform_Range_Modified_Signal_Spectrogram, ui.Uniform_Range_Frequency_Range_1_Slider, ui.Uniform_Range_Frequency_Range_2_Slider, ui.Uniform_Range_Frequency_Range_3_Slider, ui.Uniform_Range_Frequency_Range_4_Slider, uiSmoothing, ui.label_4, ui.label_6)
-    MusicMode = Modes.MusicalMode(ui, ui.Musical_Instruments_Original_Signal_PlotWidget, ui.Musical_Instruments_Modified_Signal_PlotWidget, ui.Musical_Instruments_Frequency_Domain_PlotWidget, ui.Musical_Instruments_Original_Signal_Spectrogram, ui.Musical_Instruments_Modified_Signal_Spectrogram, ui.Musical_Instruments_Instrument_1_Frequency__Slider, ui.Musical_Instruments_Instrument_2_Frequency__Slider, ui.Musical_Instruments_Instrument_3_Frequency__Slider, ui.Musical_Instruments_Instrument_4_Frequency__Slider, uiSmoothing, ui.label_8, ui.label_11)
-    AnimalMode = Modes.AnimalMode(ui, ui.Animals_Sounds_Original_Signal_PlotWidget, ui.Animals_Sounds_Modified_Signal_PlotWidget, ui.Animals_Sounds_Frequency_Domain_PlotWidget, ui.Animals_Sounds_Original_Signal_Spectrogram, ui.Animals_Sounds_Modified_Signal_Spectrogram, ui.Animals_Sounds_Animal_1_Frequency_Slider, ui.Animals_Sounds_Animal_2_Frequency_Slider, ui.Animals_Sounds_Animal_3_Frequency_Slider, ui.Animals_Sounds_Animal_4_Frequency_Slider, uiSmoothing, ui.label_17, ui.label_20)
-    ECGMode = Modes.ECGMode(ui, ui.ECG_Abnormalities_Original_Signal_PlotWidget, ui.ECG_Abnormalities_Output_Signal_PlotWidget, ui.ECG_Abnormalities_Frequency_Domain_PlotWidget, ui.ECG_Abnormalities_Original_Signal_Spectrogram, ui.ECG_Abnormalities_Output_Signal_Spectrogram, ui.ECG_Abnormalities_Normal_ECG_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_1_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_2_Frequency_Slider, ui.ECG_Abnormalities_Abnormal_ECG_3_Frequency_Slider, uiSmoothing, ui.label_22, ui.label_30)
+    UniformMode = Modes.UniformMode(ui, ui.Uniform_Range_Original_Signal_PlotWidget, ui.Uniform_Range_Modified_Signal_PlotWidget, ui.Uniform_Range_Frequency_Domain_PlotWidget, ui.Uniform_Range_Original_Signal_Spectrogram, ui.Uniform_Range_Modified_Signal_Spectrogram, ui.frequency_sliders["Uniform"], uiSmoothing, ui.label_4, ui.label_6)
+    MusicMode = Modes.MusicalMode(ui, ui.Musical_Instruments_Original_Signal_PlotWidget, ui.Musical_Instruments_Modified_Signal_PlotWidget, ui.Musical_Instruments_Frequency_Domain_PlotWidget, ui.Musical_Instruments_Original_Signal_Spectrogram, ui.Musical_Instruments_Modified_Signal_Spectrogram, ui.frequency_sliders["Musical"], uiSmoothing, ui.label_8, ui.label_11)
+    AnimalMode = Modes.AnimalMode(ui, ui.Animals_Sounds_Original_Signal_PlotWidget, ui.Animals_Sounds_Modified_Signal_PlotWidget, ui.Animals_Sounds_Frequency_Domain_PlotWidget, ui.Animals_Sounds_Original_Signal_Spectrogram, ui.Animals_Sounds_Modified_Signal_Spectrogram, ui.frequency_sliders["Animals"], uiSmoothing, ui.label_17, ui.label_20)
+    ECGMode = Modes.ECGMode(ui, ui.ECG_Abnormalities_Original_Signal_PlotWidget, ui.ECG_Abnormalities_Output_Signal_PlotWidget, ui.ECG_Abnormalities_Frequency_Domain_PlotWidget, ui.ECG_Abnormalities_Original_Signal_Spectrogram, ui.ECG_Abnormalities_Output_Signal_Spectrogram, ui.frequency_sliders["ECG"], uiSmoothing, ui.label_22, ui.label_30)
     ui.smoothing_connection(AnimalMode, uiSmoothing)
     ui.smoothing_connection(ECGMode, uiSmoothing)
     ui.smoothing_connection(MusicMode, uiSmoothing)

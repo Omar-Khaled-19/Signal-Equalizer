@@ -10,7 +10,7 @@ import pyqtgraph as pg
 import os
 
 class BaseMode(ABC):
-    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, slider1, slider2, slider3, slider4, ui_smoothing, Original_Spectrogram_Label, Modified_Spectrogram_Label):
+    def __init__(self, ui, input_time_graph, output_time_graph, frequency_graph, input_spectro, output_spectro, frequency_sliders, ui_smoothing, Original_Spectrogram_Label, Modified_Spectrogram_Label):
         self.ui = ui
         self.input_graph = input_time_graph
         self.output_graph = output_time_graph
@@ -23,10 +23,6 @@ class BaseMode(ABC):
         self.freq_domain_Y_coordinates = []
         self.modified_freq_domain_Y_coordinates = []
         self.time_domain_signal_modified = []
-        self.slider1 = slider1
-        self.slider2 = slider2
-        self.slider3 = slider3
-        self.slider4 = slider4
         self.phases = []
         self.current_smoothing = 0
         self.uiSmoothing = ui_smoothing
@@ -45,6 +41,7 @@ class BaseMode(ABC):
         self.File_Path = None
         self.Original_Spectrogram_Label = Original_Spectrogram_Label
         self.Modified_Spectrogram_Label = Modified_Spectrogram_Label
+        self.frequency_sliders = frequency_sliders
        
     @abstractmethod
     def modify_frequency(self, min_freq: int, max_freq: int, factor: int):
