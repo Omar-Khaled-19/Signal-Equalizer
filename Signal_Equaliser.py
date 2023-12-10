@@ -1,4 +1,4 @@
-import sys, Modes, time
+import sys, Modes
 from pyqtgraph import PlotWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Smoothing_Window import Ui_Smoothing_Window
